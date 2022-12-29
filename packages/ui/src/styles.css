@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.fa-link-btn {
+  border-radius: 3px;
+  /*padding: 2px 4px;*/
+  cursor: pointer;
+  transition: all ease-in-out 0.3s;
+}
+
+.fa-link-btn:hover {
+  background-color: #ddd;
+}
