@@ -43,5 +43,5 @@ export function hasPermission(permissions?: string[], permissionCode?: string | 
 }
 
 export function isImg(type: string) {
-  return ["png", "jpg", "jpeg"].indexOf(type) > -1
+  return ["png", "jpg", "jpeg", "gif"].indexOf(type) > -1
 }
