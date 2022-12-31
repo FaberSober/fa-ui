@@ -2,8 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color: red;
+  /* 使用 tailwind-config/tailwind.config.js 中的theme配置 */
+  --primary-color: theme('colors.blue');
+  --primary-dark: theme('colors.blueDark');
+  --fa-bg-grey: #fafafa;
+  --fa-hover-bg: #e1e1e1;
+  --fa-transition: all ease-in-out 0.3s;
+  --fa-border-radius: 3px;
+  --fa-border-color: #eee;
+  --fa-subtitle-color: #666;
+  --fa-box-shadow: 0 2px 4px 4px #eeeeeeee;
+}
+
 .fa-link-btn {
-  border-radius: 3px;
+  border-radius: var(--fa-border-radius);
   /*padding: 2px 4px;*/
   cursor: pointer;
   transition: all ease-in-out 0.3s;

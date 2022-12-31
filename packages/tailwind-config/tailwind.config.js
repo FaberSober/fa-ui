@@ -10,8 +10,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        brandblue: colors.blue[500],
-        brandred: colors.red[500],
+        blue: colors.blue[500],
+        blueDark: colors.blue[900],
+        red: colors.red[500],
+        redDark: colors.red[900],
+      },
+      borderRadius: {
+        '4xl': '2rem',
       },
     },
   },
