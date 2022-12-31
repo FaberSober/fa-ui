@@ -41,7 +41,7 @@ export default function TreeTransfer({ targetKeys, serviceApi, extraEffectArgs =
     serviceApi
       .allTree()
       .then((res) => {
-        let treeArr = TreeUtils.parseAntdNode(res.data) || [];
+        const treeArr = TreeUtils.parseAntdNode(res.data) || [];
         setTreeData(treeArr as any[]);
         setLoading(false);
       })
