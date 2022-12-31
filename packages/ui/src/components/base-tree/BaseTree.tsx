@@ -273,7 +273,7 @@ export default function BaseTree<RecordType extends object = any, KeyType = numb
 
       {/* main tree */}
       <div className="fa-base-tree-div" style={{ flex: 1, overflowY: 'auto' }}>
-        <div style={{ padding: '0 12px', ...treeStyle }}>
+        <div style={{ paddingLeft: 7, ...treeStyle }}>
           <Spin spinning={loading}>
             <Tree
               blockNode
