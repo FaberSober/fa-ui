@@ -61,3 +61,50 @@ export function trimObj(obj: any): any {
   });
   return newObj;
 }
+
+
+export function tryHexToRgba(hex: string | undefined) {
+  // console.log('hex', hex)
+  if (hex === undefined) return '#FFF';
+  if (hex === null) return '#FFF';
+  let color = hex;
+  if (hex.indexOf('#') === 0) {
+    const rgb = hexToRgba(hex);
+    color = rgb.RGBA;
+  }
+  return color;
+}
+
+// 将hex颜色转成rgb
+export function hexToRgba(hex: string, opacity = 1) {
+  let hexfull = hex;
+  // 如果是#FFF这种缩写模式，转换为完整写法#FFFFFF
+  if (hexfull.length === 4) {
+    hexfull += hexfull.substring(1, 4);
+  }
+  // eslint-disable-next-line prefer-template
+  const RGBA =
+    // eslint-disable-next-line prefer-template
+    'rgba(' +
+    // eslint-disable-next-line prefer-template
+    parseInt('0x' + hexfull.slice(1, 3), 16) +
+    ',' +
+    // eslint-disable-next-line prefer-template
+    parseInt('0x' + hexfull.slice(3, 5), 16) +
+    ',' +
+    // eslint-disable-next-line prefer-template
+    parseInt('0x' + hexfull.slice(5, 7), 16) +
+    ',' +
+    opacity +
+    ')';
+  return {
+    // eslint-disable-next-line prefer-template
+    r: parseInt('0x' + hexfull.slice(1, 3), 16),
+    // eslint-disable-next-line prefer-template
+    g: parseInt('0x' + hexfull.slice(3, 5), 16),
+    // eslint-disable-next-line prefer-template
+    b: parseInt('0x' + hexfull.slice(5, 7), 16),
+    a: opacity,
+    RGBA,
+  };
+}

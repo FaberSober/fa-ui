@@ -7,6 +7,7 @@ export * from '@/components/base-drag';
 export * from '@/components/base-drawer';
 export * from '@/components/base-editor';
 export * from '@/components/base-entity-log';
+export * from '@/components/base-field';
 export * from '@/components/base-input';
 export * from '@/components/base-layout';
 export * from '@/components/base-modal';
@@ -27,6 +28,7 @@ export * from '@/hooks';
 export * from '@/services';
 
 export * from '@/types';
+export * from '@/utils';
 
 // 添加fontawesome icons图标
 console.log('添加fontawesome icons图标');
