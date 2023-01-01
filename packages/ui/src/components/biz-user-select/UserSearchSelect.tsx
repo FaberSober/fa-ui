@@ -1,6 +1,6 @@
 import React from 'react';
-import { BaseSearchSelect, BaseSearchSelectProps } from '@fa/ui';
-import modalService from '@/services/admin/user';
+import { BaseSearchSelect, BaseSearchSelectProps } from '@/components/base-search-select';
+import {userApi} from '@/services';
 import { Admin } from '@/types';
 
 export interface UserSearchSelectProps extends Omit<BaseSearchSelectProps<Admin.User, string>, 'serviceApi'> {}
@@ -15,9 +15,9 @@ export default function UserSearchSelect(props: UserSearchSelectProps) {
       valueKey="id"
       labelKey="name"
       serviceApi={{
-        search: (searchValue) => modalService.page({ current: 1, pageSize: 20, query: { name: searchValue } }),
-        getById: (value) => modalService.getById(value),
-        findList: (ids) => modalService.list({ 'id#$in': [...ids] }),
+        search: (searchValue) => userApi.page({ current: 1, pageSize: 20, query: { name: searchValue } }),
+        getById: (value) => userApi.getById(value),
+        findList: (ids) => userApi.list({ 'id#$in': [...ids] }),
       }}
       placeholder="请输入员工名称进行搜索"
       {...props}

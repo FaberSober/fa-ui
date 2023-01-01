@@ -1,8 +1,8 @@
 import React from 'react';
-import ConditionQuery from '@/components/condition-query/interface';
+import ConditionQuery from './ConditionQuery';
 import { Tag } from 'antd';
 import { remove } from 'lodash';
-import styles from './SceneManageModal.module.scss';
+import './SceneManageModal.css';
 
 export interface CondGroupShowProps {
   condGroup: ConditionQuery.CondGroup;
@@ -25,7 +25,7 @@ export default function CondGroupShow({ condGroup, onChange }: CondGroupShowProp
   }
 
   return (
-    <div className={styles.faCondGroupShow}>
+    <div className="fa-cond-group-show">
       {condGroup.condList.map((cond, index) => {
         const { id, key, opr, value, begin, end, name } = cond;
         let condStr;

@@ -1,19 +1,20 @@
-import React, { ReactNode, useContext, useEffect, useState } from 'react';
-import { find, isNil, sortBy } from 'lodash';
-import { Button, Checkbox, Drawer, Input } from 'antd';
-import { showResponse } from '@/utils/utils';
-import { ModalProps } from 'antd/es/modal';
-import { FaberTable } from '@/components/base-table';
+import React, {ReactNode, useContext, useEffect, useState} from 'react';
+import {find, isNil, sortBy} from 'lodash';
+import {Button, Checkbox, Drawer, Input} from 'antd';
+import {showResponse} from '@/utils/utils';
+import {ModalProps} from 'antd/es/modal';
+import {FaberTable} from '@/components/base-table';
 import * as BaseTableUtils from '@/components/base-table/utils';
-import { Admin } from '@/types';
-import configApi from '@/services/admin/config';
-import { FaFlexRestLayout, FaSortList, Fa, FaEnums } from '@fa/ui';
-import styles from './TableColConfigModal.module.scss';
-import { ApiEffectLayoutContext } from '@/layout/ApiEffectLayout';
+import {Admin, Fa, FaEnums} from '@/types';
+import {configApi} from '@/services';
+import {ApiEffectLayoutContext} from "@/layout";
+import './TableColConfigModal.css';
+import {FaFlexRestLayout} from "@/components/base-layout";
+import {FaSortList} from "@/components/base-drag";
 
 const colWidthCache: { [key: string]: number } = {};
 
-interface IProps<T> extends ModalProps {
+export interface TableColConfigModalProps<T> extends ModalProps {
   columns: FaberTable.ColumnsProp<T>[]; // 配置字段
   biz: string; // Config#biz业务模块
   onConfigChange: (v: FaberTable.ColumnsProp<T>[]) => void; // 排序结束
@@ -24,7 +25,7 @@ interface IProps<T> extends ModalProps {
  * 表格自定义列Modal
  * 1. 操作一栏不进行排序，默认放在最后一排
  */
-function TableColConfigModal<T>({ columns = [], biz, onConfigChange, children, ...restProps }: IProps<T>) {
+function TableColConfigModal<T>({ columns = [], biz, onConfigChange, children, ...restProps }: TableColConfigModalProps<T>) {
   const { loadingEffect } = useContext(ApiEffectLayoutContext);
   const [config, setConfig] = useState<Admin.Config<FaberTable.ColumnsProp<any>[]>>();
   const [open, setOpen] = useState(false);
@@ -150,20 +151,20 @@ function TableColConfigModal<T>({ columns = [], biz, onConfigChange, children, .
       >
         <div className="fa-full-content-p12 fa-flex-column">
           <div className="fa-flex-row-center" style={{ borderBottom: '1px solid #ccc', padding: '8px 0' }}>
-            <div className={styles.tableColTheadItem} style={{ flex: 1, borderRight: '1px solid #ccc' }}>
+            <div className="fa-table-col-thead-item" style={{ flex: 1, borderRight: '1px solid #ccc' }}>
               字段
             </div>
-            <div className={styles.tableColTheadItem} style={{ width: 100 }}>
+            <div className="fa-table-col-thead-item" style={{ width: 100 }}>
               宽度(px)
             </div>
-            <div className={styles.tableColTheadItem} style={{ width: 31 }} />
+            <div className="fa-table-col-thead-item" style={{ width: 31 }} />
           </div>
           <FaFlexRestLayout>
             <FaSortList
               list={items.filter((i) => i.tcType !== 'menu')}
               rowKey="dataIndex"
               renderItem={(item) => (
-                <div className={styles.itemContainer}>
+                <div className="fa-table-col-item">
                   <Checkbox
                     disabled={item.tcRequired}
                     checked={item.tcRequired || item.tcChecked}

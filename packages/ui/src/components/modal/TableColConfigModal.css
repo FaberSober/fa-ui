@@ -1,4 +1,4 @@
-.itemContainer {
+.fa-table-col-item {
   display: flex;
   align-items: center;
   padding: 4px 8px;
@@ -8,10 +8,10 @@
   z-index: 1001;
 }
 
-.itemContainer:hover {
+.fa-table-col-item:hover {
   background-color: #e6f7ff;
 }
 
-.tableColTheadItem {
+.fa-table-col-thead-item {
   padding: 0 8px;
 }

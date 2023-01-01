@@ -1,12 +1,12 @@
 import React, { CSSProperties, useRef } from 'react';
-import { FaberTable } from '@/components/base-table';
 import { Button, Space } from 'antd';
 import { FilterOutlined } from '@ant-design/icons';
 import ConditionQueryModal from './ConditionQueryModal';
 import SceneDropMenu from './SceneDropMenu';
-import ConditionQuery from '@/components/condition-query/interface';
+import { FaberTable } from '@/components/base-table';
+import ConditionQuery from './interface';
 
-interface IProps<T> {
+export interface ComplexQueryProps<T> {
   biz: string;
   columns: FaberTable.ColumnsProp<T>[];
   onSceneChange: (key: string, label: string) => void; // 场景变化
@@ -17,7 +17,7 @@ interface IProps<T> {
 /**
  * 场景查询&高级筛选联合组件
  */
-export default function ComplexQuery<T>({ columns, biz, onSceneChange, onConditionChange, style }: IProps<T>) {
+export default function ComplexQuery<T>({ columns, biz, onSceneChange, onConditionChange, style }: ComplexQueryProps<T>) {
   const sceneDropMenuRef = useRef<any | null>(null);
 
   /** 高级查询-筛选条件变更 */

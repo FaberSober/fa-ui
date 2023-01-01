@@ -1,16 +1,17 @@
 import React, { useImperativeHandle, useState } from 'react';
-import { DragModal, DragModalProps } from '@fa/ui';
-import configService from '@/services/admin/configScene';
+import { DragModal, DragModalProps } from '@/components/base-modal';
+import {configSceneApi} from '@/services';
 import { showResponse } from '@/utils/utils';
 import { EditOutlined } from '@ant-design/icons';
 import { Checkbox, Space } from 'antd';
 import { Admin } from '@/types';
 import ConditionQueryModal from '@/components/condition-query/ConditionQueryModal';
 import { FaberTable } from '@/components/base-table';
-import styles from './SceneManageModal.module.scss';
-import { AuthDelBtn, FaSortList } from '@fa/ui';
+import './SceneManageModal.css';
+import {FaSortList} from "@/components/base-drag";
+import {AuthDelBtn} from "@/components/decorator";
 
-interface IProps<T> extends DragModalProps {
+export interface SceneManageModalProps<T> extends DragModalProps {
   biz: string;
   columns: FaberTable.ColumnsProp<T>[];
   onOk?: () => void;
@@ -21,7 +22,7 @@ interface IProps<T> extends DragModalProps {
  * 1. 场景排序；
  * 2. 场景编辑、删除；
  */
-function SceneManageModal<T>({ biz, columns, onOk, ...restProps }: IProps<T>, ref: any) {
+function SceneManageModal<T>({ biz, columns, onOk, ...restProps }: SceneManageModalProps<T>, ref: any) {
   const [loading, setLoading] = useState(false);
   const [configList, setConfigList] = useState<Admin.ConfigScene[]>([]);
 
@@ -34,7 +35,7 @@ function SceneManageModal<T>({ biz, columns, onOk, ...restProps }: IProps<T>, re
   /** 获取远程配置 */
   function fetchRemoteConfig() {
     if (biz === undefined) return;
-    configService.findAllScene({ biz }).then((res) => {
+    configSceneApi.findAllScene({ biz }).then((res) => {
       setConfigList(res.data);
     });
   }
@@ -43,7 +44,7 @@ function SceneManageModal<T>({ biz, columns, onOk, ...restProps }: IProps<T>, re
   async function handleSave() {
     setLoading(true);
     const params = configList.map((item, index) => ({ ...item, sort: index + 1 }));
-    const res = await configService.updateBatch(params);
+    const res = await configSceneApi.updateBatch(params);
     showResponse(res, '更新场景配置');
     if (onOk) onOk();
     setLoading(false);
@@ -51,7 +52,7 @@ function SceneManageModal<T>({ biz, columns, onOk, ...restProps }: IProps<T>, re
 
   /** 删除Item */
   function handleDelete(id: number) {
-    configService.remove(id).then((res) => {
+    configSceneApi.remove(id).then((res) => {
       showResponse(res, '删除场景配置');
       fetchRemoteConfig();
     });
@@ -80,7 +81,7 @@ function SceneManageModal<T>({ biz, columns, onOk, ...restProps }: IProps<T>, re
         <FaSortList
           list={configList}
           renderItem={(item) => (
-            <div className={styles.itemContainer}>
+            <div className="fa-scene-item">
               <Checkbox
                 style={{ width: 40 }}
                 disabled={item.system}

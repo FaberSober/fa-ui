@@ -1,5 +1,5 @@
 import React from 'react';
-import ConditionQuery from '@/components/condition-query/interface';
+import ConditionQuery from './ConditionQuery';
 import { Button, Input, Radio, Select, Space } from 'antd';
 import { each, find, remove } from 'lodash';
 import { CloseCircleFilled, DeleteOutlined, PlusOutlined } from '@ant-design/icons';

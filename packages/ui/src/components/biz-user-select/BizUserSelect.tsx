@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {BaseTree, CommonModalProps, DragModal, FaLabel} from "@fa/ui";
-import departmentService from "@/services/admin/department";
+import {departmentApi, userApi} from "@/services";
 import {Admin} from "@/types";
 import {Button, Col, Form, Input, Row, Space} from "antd";
 import {SearchOutlined} from "@ant-design/icons";
-import {clearForm, useTableQueryParams} from "@/utils/myHooks";
-import modelService from "@/services/admin/user";
-import BaseBizTable, {BaseTableUtils, FaberTable} from "@/components/base-table";
+import {clearForm, useTableQueryParams} from "@/hooks";
+import {BaseBizTable, BaseTableUtils, FaberTable} from "@/components/base-table";
 import SelectedUserList from "@/components/biz-user-select/SelectedUserList";
+import {BaseTree} from "@/components/base-tree";
+import {FaLabel} from "@/components/decorator";
+import {CommonModalProps, DragModal} from '../base-modal';
 
 
 export interface SelectedUser {
@@ -47,7 +48,7 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
     list,
     paginationProps,
   } = useTableQueryParams<Admin.UserWeb>(
-    modelService.page,
+    userApi.page,
     { extraParams: { departmentId: dept?.id }, sorter: { field: 'crtTime', order: 'descend' } },
     '用户',
   );
@@ -132,7 +133,7 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
               onSelect={onTreeDeptSelect}
               // 自定义配置
               serviceName="部门"
-              serviceApi={departmentService}
+              serviceApi={departmentApi}
               showTopBtn={false}
               treeStyle={{padding: 0}}
               className="fa-border"
@@ -163,7 +164,7 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
                 rowKey={(item) => item.id}
                 onChange={handleTableChange}
                 refreshList={() => fetchPageList()}
-                batchDelete={(ids) => modelService.removeBatchByIds(ids)}
+                batchDelete={(ids) => userApi.removeBatchByIds(ids)}
                 showComplexQuery={false}
                 showBatchBelBtn={false}
                 showTableColConfigBtn={false}

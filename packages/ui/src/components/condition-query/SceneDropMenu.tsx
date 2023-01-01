@@ -5,11 +5,11 @@ import { DownOutlined, SettingOutlined } from '@ant-design/icons';
 import SceneManageModal from '@/components/condition-query/SceneManageModal';
 import { Admin } from '@/types';
 import { FaberTable } from '@/components/base-table';
-import configService from '@/services/admin/configScene';
+import {configSceneApi} from '@/services';
 
 const allSceneLabel = '全部数据';
 
-interface IProps<T> {
+export interface SceneDropMenuProps<T> {
   biz: string;
   columns: FaberTable.ColumnsProp<T>[];
   onChange: (key: string, label: string) => void;
@@ -18,7 +18,7 @@ interface IProps<T> {
 /**
  * 场景下拉菜单组件
  */
-function SceneDropMenu<T>({ biz, columns, onChange }: IProps<T>, ref: any) {
+function SceneDropMenu<T>({ biz, columns, onChange }: SceneDropMenuProps<T>, ref: any) {
   const manageModalRef = useRef<any | null>(null);
 
   const [configList, setConfigList] = useState<Admin.ConfigScene[]>([]);
@@ -34,7 +34,7 @@ function SceneDropMenu<T>({ biz, columns, onChange }: IProps<T>, ref: any) {
 
   function refreshConfigList() {
     if (biz) {
-      configService.findAllScene({ biz }).then((res) => {
+      configSceneApi.findAllScene({ biz }).then((res) => {
         setConfigList(res.data);
       });
     }

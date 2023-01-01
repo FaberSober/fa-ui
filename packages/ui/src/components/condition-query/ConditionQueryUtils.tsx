@@ -9,7 +9,7 @@ import { FaberTable } from '@/components/base-table';
 const { RangePicker } = DatePicker;
 
 /* --------------------------------------- DatePicker --------------------------------------- */
-export function renderDatePicker({ index, value, callback, ...props }: FaberTable.TcCondProp) {
+export function renderDatePicker({ index, value, callback, mode, ...props }: FaberTable.TcCondProp) {
   return <DatePicker value={getInitialTimeValue(value)} onChange={(v) => callback(getDateStr(v), index)} {...props} />;
 }
 
@@ -26,7 +26,7 @@ export function renderDateRangerPicker({ index, value, callback, ...props }: Fab
 }
 
 /* --------------------------------------- TimePicker --------------------------------------- */
-export function renderTimePicker({ index, value, callback, ...props }: FaberTable.TcCondProp) {
+export function renderTimePicker({ index, value, callback, mode, ...props }: FaberTable.TcCondProp) {
   return (
     <DatePicker
       showTime

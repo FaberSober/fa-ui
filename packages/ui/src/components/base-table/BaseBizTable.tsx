@@ -8,8 +8,9 @@ import { dataIndexToString, useScrollY } from './utils';
 import ComplexQuery from '@/components/condition-query/ComplexQuery';
 import { TableRowSelection } from 'antd/es/table/interface';
 import { v4 } from 'uuid';
-import { FaFlexRestLayout } from '@fa/ui';
 import TableColConfigModal from '../modal/TableColConfigModal';
+import {FaFlexRestLayout} from "@/components/base-layout";
+
 
 /**
  * 基础业务表格组件

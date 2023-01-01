@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {userApi} from "@/services/admin";
+import {userApi} from "@/services";
 import {Admin} from "@/types";
 import {Button, Space, Table} from "antd";
 import {isNil} from "lodash";

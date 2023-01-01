@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { getDateStr, optionsToLabel, toLine, tryToFixed } from '@/utils/utils';
-import { Badge } from 'antd';
-import { find, isEmpty, trim } from 'lodash';
+import React, {useEffect, useState} from 'react';
+import {getDateStr, optionsToLabel, toLine, tryToFixed} from '@/utils/utils';
+import {Badge} from 'antd';
+import {find, isEmpty, trim} from 'lodash';
 import {
   renderDatePicker,
   renderDateRangerPicker,
   renderTimePicker,
   renderTimeRangePicker,
 } from '@/components/condition-query/ConditionQueryUtils';
-import { FaberTable } from '@/components/base-table/index';
-import { BaseBoolSelector, DictDataSelector, DictEnumSelector, Fa } from '@fa/ui';
-import { SortOrder } from 'antd/es/table/interface';
-import UserSearchSelect from '@/pages/admin/system/hr/user/helper/UserSearchSelect';
-import { useSize } from 'ahooks';
+import {FaberTable} from '@/components/base-table/index';
+import {BaseBoolSelector, DictDataSelector, DictEnumSelector} from '@/components/base-dict';
+import {SortOrder} from 'antd/es/table/interface';
+import {UserSearchSelect} from '@/components/biz-user-select';
+import {useSize} from 'ahooks';
+import {Fa} from "@/types";
 
 export function dataIndexToString(dataIndex: string | string[]) {
   if (dataIndex instanceof Array) {

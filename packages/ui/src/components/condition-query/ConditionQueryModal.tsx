@@ -2,9 +2,9 @@ import React, { ReactNode, useState } from 'react';
 import { trim } from 'lodash';
 import { v1 as uuidv1 } from 'uuid';
 import { Checkbox, Divider, Input, message } from 'antd';
-import { DragModal } from '@fa/ui';
-import ConditionQuery from '@/components/condition-query/interface';
-import configService from '@/services/admin/configScene';
+import { DragModal } from '@/components/base-modal';
+import ConditionQuery from './ConditionQuery';
+import {configApi} from '@/services';
 import { Admin } from '@/types';
 import { showResponse } from '@/utils/utils';
 import { FaberTable } from '@/components/base-table';
@@ -113,10 +113,10 @@ export default function ConditionQueryModal<T>({
       };
       setLoading(true);
       if (record) {
-        const response = await configService.update(record.id, { ...record, ...params });
+        const response = await configApi.update(record.id, { ...record, ...params });
         showResponse(response, '更新场景');
       } else {
-        const response = await configService.save(params);
+        const response = await configApi.save(params);
         showResponse(response, '新增场景');
       }
       setLoading(false);

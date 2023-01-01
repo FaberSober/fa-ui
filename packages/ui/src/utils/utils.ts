@@ -1,6 +1,7 @@
 import {message} from 'antd';
 import {Fa} from '@/types';
 import {findIndex, isNil, isUndefined, map, trim} from 'lodash';
+import dayjs from "dayjs";
 
 /**
  * 展示服务端返回数据提示
@@ -108,3 +109,79 @@ export function hexToRgba(hex: string, opacity = 1) {
     RGBA,
   };
 }
+
+/**
+ * date('YYYY-MM-DD')格式化str
+ * @param {*} date
+ * @param {*} format
+ */
+export function getDateStr(date: string | any | null | undefined, format?: string) {
+  return date === null || date === undefined ? '' : dayjs(date).format(format || 'YYYY-MM-DD');
+}
+
+/**
+ * date('YYYY-MM-DD HH:mm:ss')格式化str
+ * @param {*} date
+ */
+export function getDateFullStr(date: string | any | null | undefined) {
+  return getDateStr(date, 'YYYY-MM-DD HH:mm:ss');
+}
+
+/**
+ * 获取时间类型初始值
+ * @param {*} date
+ * @param {*} defaultValue
+ */
+export function getInitialTimeValue(date: string | any | null | undefined, defaultValue = undefined): any {
+  return date === null || date === undefined ? defaultValue : dayjs(date); // eslint-disable-line
+}
+
+/**
+ * 解析antd DateRangerPick选择
+ * @param {*} rangeDate
+ * @param {*} index
+ * @param {*} suffix
+ */
+export function parseRangeDateSuffix(rangeDate: any, index: number, suffix: string) {
+  if (rangeDate && rangeDate[index] !== null && rangeDate[index] !== undefined) {
+    const date = rangeDate[index];
+    if (date !== null) {
+      return `${date.format('YYYY-MM-DD')} ${suffix}`;
+    }
+  }
+  return '';
+}
+
+/**
+ * 将Select选中的options解析为字符串，用于前段展示
+ * @param option
+ */
+export function optionsToLabel(option: any): string {
+  if (option instanceof Array) {
+    return (option || []).map((i) => i.label).join();
+  }
+  return option && option.label;
+}
+
+/**
+ * 驼峰转换下划线
+ */
+export function toLine(name: string) {
+  return name.replace(/([A-Z])/g, '_$1').toLowerCase();
+}
+
+export function tryToFixed(value: any, num = 6) {
+  if (value === undefined) {
+    return value;
+  }
+  if (typeof value === 'number') {
+    return value.toFixed(num);
+  }
+  if (typeof value === 'string') {
+    return Number(value).toFixed(num);
+  }
+  return value;
+}
+
+export const formItemFullLayout = { labelCol: { span: 4 }, wrapperCol: { span: 19 } };
+

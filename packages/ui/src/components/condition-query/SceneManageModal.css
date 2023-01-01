@@ -1,4 +1,4 @@
-.itemContainer {
+.fa-scene-item {
   display: flex;
   padding: 4px 8px;
   //border-bottom: 1px solid #ccc;
@@ -7,16 +7,16 @@
   width: 100%;
 }
 
-.itemContainer:hover {
+.fa-scene-item:hover {
   background-color: #e6f7ff;
 }
 
-.faCondGroupShow {
+.fa-cond-group-show {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
 
-  .ant-tag {
-    margin-right: 0 !important;
-  }
+.fa-cond-group-show .ant-tag {
+  margin-right: 0 !important;
 }
