@@ -1,6 +1,6 @@
-import { GATE_APP } from '@/configs';
-import { BaseApi } from '@/service';
-import { Fa, Admin } from '@/types';
+import {GATE_APP} from '@/configs';
+import {BaseApi} from '@/services';
+import {Admin, Fa} from '@/types';
 
 /** ------------------------------------------ xx 操作接口 ------------------------------------------ */
 const serviceModule = 'area';

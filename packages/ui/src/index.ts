@@ -20,7 +20,8 @@ export * from '@/components/icons';
 
 export { default as Button } from '@/components/Button';
 
-export * from '@/utils/index';
+export * from '@/components/icons';
+export * from '@/services';
 
 export * from '@/types';
 

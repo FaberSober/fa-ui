@@ -3,7 +3,7 @@ import {cloneDeep, isNil, remove} from 'lodash';
 import {Cascader, message} from 'antd';
 import {Admin, Fa} from '@/types';
 import {BaseCascaderProps} from "@/components/base-cascader";
-import {areaApi} from "@/service";
+import {areaApi} from "@/services";
 
 
 function getLastValue(values: number[]) {
