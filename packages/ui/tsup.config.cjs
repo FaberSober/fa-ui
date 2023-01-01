@@ -16,6 +16,7 @@ export default defineConfig({
     '@fortawesome/react-fontawesome',
     'axios',
     'antd',
+    'dayjs',
     'lodash',
     'react',
     'react-contexify',
