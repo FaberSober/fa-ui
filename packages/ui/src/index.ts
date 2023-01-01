@@ -5,6 +5,7 @@ export * from '@/components/base-cascader';
 export * from '@/components/base-dict';
 export * from '@/components/base-drag';
 export * from '@/components/base-drawer';
+export * from '@/components/base-editor';
 export * from '@/components/base-input';
 export * from '@/components/base-layout';
 export * from '@/components/base-modal';
@@ -21,7 +22,7 @@ export * from '@/components/icons';
 
 export { default as Button } from '@/components/Button';
 
-export * from '@/components/icons';
+export * from '@/hooks';
 export * from '@/services';
 
 export * from '@/types';
