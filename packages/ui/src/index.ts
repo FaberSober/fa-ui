@@ -1,10 +1,5 @@
-// import DragModalProps from '@/components/modal/DragModal';
-import * as FaUtils from "@/utils/utils"
-
-
-// export type { DragModalProps }
-
 export * from '@/components/antd-pro';
+export * from '@/components/area-cascader';
 export * from '@/components/auth';
 export * from '@/components/base-cascader';
 export * from '@/components/base-drag';
@@ -24,7 +19,8 @@ export * from '@/components/decorator';
 export * from '@/components/icons';
 
 export { default as Button } from '@/components/Button';
-export { FaUtils }
+
+export * from '@/utils/index';
 
 export * from '@/types';
 

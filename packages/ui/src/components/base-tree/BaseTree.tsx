@@ -3,7 +3,7 @@ import { each, find, get } from 'lodash';
 import { Modal, Space, Spin, Tree } from 'antd';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { showResponse } from '@/utils/utils';
-import BaseTreeProps from '@/types/BaseTreeProps';
+import BaseTreeProps from '@/types/core/BaseTreeProps';
 import * as TreeUtils from './utils';
 import { Fa } from '@/types';
 import { TreeProps } from 'antd/es/tree';

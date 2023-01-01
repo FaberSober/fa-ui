@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import ConditionQuery from '@/types/ConditionQuery';
+import ConditionQuery from '@/types/core/ConditionQuery';
 
 namespace Fa {
   // ------------------------------------- Constant -------------------------------------

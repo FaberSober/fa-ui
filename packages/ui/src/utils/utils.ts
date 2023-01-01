@@ -1,6 +1,6 @@
-import { message } from 'antd';
-import { Fa } from '@/types';
-import { findIndex, isNil, isUndefined, trim } from 'lodash';
+import {message} from 'antd';
+import {Fa} from '@/types';
+import {findIndex, isNil, isUndefined, map, trim} from 'lodash';
 
 /**
  * 展示服务端返回数据提示
@@ -44,4 +44,20 @@ export function hasPermission(permissions?: string[], permissionCode?: string | 
 
 export function isImg(type: string) {
   return ["png", "jpg", "jpeg", "gif"].indexOf(type) > -1
+}
+
+/**
+ * 将obj/list中undefined的值，设置为null。解决undefined值丢失的情况
+ * @param obj
+ */
+export function trimObj(obj: any): any {
+  if (obj instanceof Array) {
+    return obj.map((i) => trimObj(i));
+  }
+
+  const newObj: any = {};
+  map(obj, (v, k) => {
+    newObj[k] = v === undefined ? null : v;
+  });
+  return newObj;
 }
