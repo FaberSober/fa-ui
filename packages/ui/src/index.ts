@@ -11,6 +11,7 @@ export * from '@/components/base-field';
 export * from '@/components/base-input';
 export * from '@/components/base-layout';
 export * from '@/components/base-modal';
+export * from '@/components/base-notice';
 export * from '@/components/base-search-select';
 export * from '@/components/base-select';
 export * from '@/components/base-title';
