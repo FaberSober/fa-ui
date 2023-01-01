@@ -6,3 +6,16 @@ export const GATE_APP = {
   rbac: '/api/base/rbac',
 };
 
+/** -------------------------------- declare global -------------------------------- */
+declare global {
+  interface Window {
+    /** 高德地图JS API */
+    AMap: any;
+    /** 高德地图UI组件库 */
+    AMapUI: any;
+    /** 七牛 */
+    qiniu: any;
+    /** 七牛-区域 */
+    FA_QINIU_ZONE: any;
+  }
+}

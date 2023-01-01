@@ -18,6 +18,7 @@ export * from '@/components/base-title';
 export * from '@/components/base-transfer';
 export * from '@/components/base-tree';
 export * from '@/components/base-tree-select';
+export * from '@/components/base-uploader';
 export * from '@/components/container';
 export * from '@/components/context';
 export * from '@/components/decorator';

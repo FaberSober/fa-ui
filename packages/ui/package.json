@@ -40,6 +40,7 @@
     "autoprefixer": "10.4.13",
     "axios": "1.2.1",
     "concurrently": "7.6.0",
+    "dayjs": "1.11.7",
     "eslint": "8.30.0",
     "fa-cron-react-editor": "0.0.13",
     "lodash": "4.17.21",
