@@ -6,6 +6,7 @@ export * from '@/components/base-dict';
 export * from '@/components/base-drag';
 export * from '@/components/base-drawer';
 export * from '@/components/base-editor';
+export * from '@/components/base-entity-log';
 export * from '@/components/base-input';
 export * from '@/components/base-layout';
 export * from '@/components/base-modal';
