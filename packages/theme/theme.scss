@@ -25,7 +25,7 @@ $subtitle-color: (
   }
 }
 
-.app {
+.root {
   @include themify('background-color', $bg-color);
 }
 

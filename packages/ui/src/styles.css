@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+body {
   /* 使用 tailwind-config/tailwind.config.js 中的theme配置 */
   --primary-color: theme('colors.blue');
   --primary-dark: theme('colors.blueDark');
@@ -13,7 +13,7 @@
   --fa-border-color: #eee;
   --fa-subtitle-color: #666;
   --fa-box-shadow: 0 2px 4px 4px #eeeeeeee;
-  --focus-border: theme('colors.blue') !important;
+  --focus-border: var(--primary-color) !important;
   --separator-border: #eee;
 }
 
