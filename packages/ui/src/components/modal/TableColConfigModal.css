@@ -3,7 +3,6 @@
   align-items: center;
   padding: 4px 8px;
   width: 100%;
-  //border-bottom: 1px solid #ccc;
   cursor: pointer;
   z-index: 1001;
 }

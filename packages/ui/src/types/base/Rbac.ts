@@ -1,4 +1,4 @@
-import { Fa, FaEnums } from 'dist';
+import { Fa, FaEnums } from '@/types';
 
 namespace Rbac {
   /** BASE-权限表 */
