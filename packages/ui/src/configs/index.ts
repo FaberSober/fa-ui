@@ -17,5 +17,7 @@ declare global {
     qiniu: any;
     /** 七牛-区域 */
     FA_QINIU_ZONE: any;
+    /** socket.io */
+    io: any;
   }
 }

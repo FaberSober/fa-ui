@@ -24,6 +24,7 @@ export default defineConfig({
     'react',
     'react-color',
     'react-contexify',
+    'react-router-dom',
     'uuid',
     'use-bus',
     '@ant-design/icons',
