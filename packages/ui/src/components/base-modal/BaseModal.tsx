@@ -14,6 +14,13 @@ export interface CommonModalProps<T> extends DragModalProps {
   onOpen?: () => void;
 }
 
+/**
+ * 通用entity新增、编辑弹框的属性
+ */
+export interface CommonViewIdModalProps<T> extends DragModalProps {
+  id: T;
+}
+
 export interface BaseModalProps<T> extends CommonModalProps<T> {
   triggerDom?: ReactNode;
 }
