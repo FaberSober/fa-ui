@@ -1,4 +1,5 @@
 export { default as areaApi } from './area';
+export { default as authApi } from './auth';
 export { default as configApi } from './config';
 export { default as configSceneApi } from './configScene';
 export { default as configSysApi } from './configSys';

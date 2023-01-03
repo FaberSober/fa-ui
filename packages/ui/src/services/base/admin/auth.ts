@@ -1,11 +1,11 @@
-import {Fa} from '@/types';
-import {requestPost} from '@/utils/request';
+import { Fa } from '@/types';
+import { BaseZeroApi } from "@/services";
+import { GATE_APP } from "@/configs";
 
-/**
- * 用户登录
- * @param username
- * @param password
- */
-export function login(username: string, password: string): Promise<Fa.Ret<string>> {
-  return requestPost('/api/base/auth/login', { username, password });
+class Api extends BaseZeroApi {
+  /** 登录 */
+  login = (username: string, password: string): Promise<Fa.Ret<string>> => this.post('login', { username, password });
+
 }
+
+export default new Api(GATE_APP.admin, 'auth');
