@@ -1,5 +1,4 @@
 export * from '@/components/antd-pro';
-export * from '@/components/area-cascader';
 export * from '@/components/auth';
 export * from '@/components/base-cascader';
 export * from '@/components/base-dict';
