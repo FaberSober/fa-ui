@@ -111,6 +111,30 @@ export function hexToRgba(hex: string, opacity = 1) {
 }
 
 /**
+ * date('YYYY-MM-DD HH:mm:ss')str
+ */
+export function getCurDateTime(format = 'YYYY-MM-DD HH:mm:ss') {
+  return dayjs().format(format);
+}
+
+/**
+ * date('HH:mm:ss')str
+ */
+export function getCurTime(format = 'HH:mm:ss.SSS') {
+  return dayjs().format(format);
+}
+
+
+/**
+ * date('YYYY-MM-DD')格式化str
+ * @param {*} date
+ * @param {*} format
+ */
+export function getDateStr000(date: string | any | null | undefined, format = 'YYYY-MM-DD 00:00:00') {
+  return date === null || date === undefined ? undefined : dayjs(date).format(format);
+}
+
+/**
  * date('YYYY-MM-DD')格式化str
  * @param {*} date
  * @param {*} format
@@ -134,6 +158,10 @@ export function getDateFullStr(date: string | any | null | undefined) {
  */
 export function getInitialTimeValue(date: string | any | null | undefined, defaultValue = undefined): any {
   return date === null || date === undefined ? defaultValue : dayjs(date); // eslint-disable-line
+}
+
+export function getInitialKeyTimeValue(record: any, key: string, defaultValue: any = undefined) {
+  return record && record[key] ? dayjs(record[key]) : defaultValue; // eslint-disable-line
 }
 
 /**
@@ -181,6 +209,45 @@ export function tryToFixed(value: any, num = 6) {
     return Number(value).toFixed(num);
   }
   return value;
+}
+
+
+
+/** * 是否为mac系统（包含iphone手机） * */
+export function isMac() {
+  return /macintosh|mac os x/i.test(navigator.userAgent);
+}
+
+/** * 是否为windows系统 * */
+export function isWindows() {
+  return /windows|win32/i.test(navigator.userAgent);
+}
+
+/**
+ * 判断str是否是json
+ * @param input
+ */
+export function isJson(input: string | undefined): boolean {
+  if (input === undefined) return false;
+  try {
+    // json格式化
+    JSON.stringify(JSON.parse(input), null, '\t');
+    return true;
+  } catch (err) {
+    // console.error(err)
+  }
+  return false;
+}
+
+export function tryFormatJson(input: string | undefined): string {
+  if (input === undefined) return '';
+  try {
+    // json格式化
+    return JSON.stringify(JSON.parse(input), null, '\t');
+  } catch (err) {
+    // console.error(err)
+  }
+  return input;
 }
 
 export const formItemFullLayout = { labelCol: { span: 4 }, wrapperCol: { span: 19 } };
