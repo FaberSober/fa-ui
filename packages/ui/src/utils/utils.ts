@@ -2,6 +2,7 @@ import {message} from 'antd';
 import {Fa} from '@/types';
 import {findIndex, isNil, isUndefined, map, trim} from 'lodash';
 import dayjs from "dayjs";
+import { filesize } from "filesize";
 
 /**
  * 展示服务端返回数据提示
@@ -41,6 +42,19 @@ export function hasPermission(permissions?: string[], permissionCode?: string | 
   if (isUndefined(permissionCode)) return true;
   if (isUndefined(permissions) || permissions.length === 0) return false;
   return findIndex(permissions, (e) => e === permissionCode) > -1;
+}
+
+/**
+ * 判断连接是否为图片
+ * @param url
+ */
+export function isUrlImg(url: string) {
+  if (url === undefined || url === null) return false;
+  if (url.indexOf('.') === -1) return false;
+
+  const suffix = url.substr(url.lastIndexOf('.') + 1).toLowerCase();
+
+  return ['png', 'jpg', 'jpeg', 'ico', 'bmp', 'gif'].indexOf(suffix) > -1;
 }
 
 export function isImg(type: string) {
@@ -191,6 +205,15 @@ export function optionsToLabel(option: any): string {
   return option && option.label;
 }
 
+
+/**
+ * 下划线转换驼峰
+ * @param {*} name
+ */
+export function toHump(name: string) {
+  return name.replace(/_(\w)/g, (_, letter) => letter.toUpperCase());
+}
+
 /**
  * 驼峰转换下划线
  */
@@ -250,5 +273,125 @@ export function tryFormatJson(input: string | undefined): string {
   return input;
 }
 
+/**
+ * 将canvas转换为文件
+ * @param canvas
+ * @param quality
+ * @param fn
+ */
+export function canvasResizeToFile(canvas: any, quality: any, fn: any) {
+  canvas.toBlob(
+    (blob: any) => {
+      fn(blob);
+    },
+    'image/jpeg',
+    quality,
+  );
+}
+
+/**
+ * 字符超过省略
+ * @param val
+ * @param maxLength
+ */
+export function ellipsis(val: string | undefined, maxLength = 55): string {
+  if (isNil(val)) return '';
+  if (val.length > maxLength) {
+    return `${val.substr(0, maxLength)}...`;
+  }
+  return val;
+}
+
+
+export function arrayMoveMutable(array: any[], fromIndex: number, toIndex: number) {
+  const startIndex = fromIndex < 0 ? array.length + fromIndex : fromIndex;
+
+  if (startIndex >= 0 && startIndex < array.length) {
+    const endIndex = toIndex < 0 ? array.length + toIndex : toIndex;
+
+    const [item] = array.splice(fromIndex, 1);
+    array.splice(endIndex, 0, item);
+  }
+}
+
+export function arrayMoveImmutable(array: any[], fromIndex: number, toIndex: number) {
+  const newArray = [...array];
+  arrayMoveMutable(newArray, fromIndex, toIndex);
+  return newArray;
+}
+
+/**
+ * 数组移动
+ * @param arr
+ * @param fromIndex
+ * @param toIndex
+ */
+export function arrayMove(arr: any[], fromIndex: number, toIndex: number) {
+  // 直接使用array-move第三方组件
+  return arrayMoveImmutable(arr, fromIndex, toIndex);
+
+  // 老方法，有bug
+  //如果当前元素在拖动目标位置的下方，先将当前元素从数组拿出，数组长度-1，我们直接给数组拖动目标位置的地方新增一个和当前元素值一样的元素，
+  //我们再把数组之前的那个拖动的元素删除掉，所以要len+1
+  // if (index > tindex) {
+  // 	arr.splice(tindex, 0, arr[index]);
+  // 	arr.splice(index + 1, 1);
+  // } else {
+  // 	//如果当前元素在拖动目标位置的上方，先将当前元素从数组拿出，数组长度-1，我们直接给数组拖动目标位置+1的地方新增一个和当前元素值一样的元素，
+  // 	//这时，数组len不变，我们再把数组之前的那个拖动的元素删除掉，下标还是index
+  // 	arr.splice(tindex + 1, 0, arr[index]);
+  // 	arr.splice(index, 1);
+  // }
+}
+
+export function judgeGoBack(noHistoryNavigate: () => void) {
+  if (window.history.length > 0) {
+    window.history.go(-1);
+  } else {
+    if (noHistoryNavigate) {
+      noHistoryNavigate();
+    }
+  }
+}
+
+/**
+ * 七牛云的图片预览
+ * @param url 七牛云图片url
+ * @param width 预览图片宽
+ * @param height 预览图片高
+ */
+export function previewImageQiniu(url: string, width = 200, height?: number) {
+  let previewUrl = `${url}?imageView2/3/w/${width}`;
+  if (height) {
+    previewUrl += `/h/${height}`;
+  }
+  return previewUrl;
+}
+
+/**
+ * 文件大小可视化
+ * @param size
+ */
+export function sizeToHuman(size: number, base = 2): string {
+  return filesize(size, { base, standard: 'jedec' }) as string;
+}
+
+export const FormRules = {
+  PATTERN_WORD: { pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]*$/, message: '只能输入中英文字符、数字' },
+  PATTERN_CHAR_AND_NUM: { pattern: /^[a-zA-Z]+[a-zA-Z0-9_-]*$/, message: '只能输入英文字符、数字、下划线、中划线' },
+  PATTERN_WORD_ZH_ONLY: { pattern: /^[\u4e00-\u9fa5]*$/, message: '只能输入中文字符' },
+  PATTERN_CHAR_UPPER_AND_NUM: { pattern: /^[A-Z0-9]*$/, message: '只能输入英文字符、数字' },
+};
+
+/**
+ * file的accept属性（文件上传的类型）
+ * https://blog.csdn.net/weixin_44599143/article/details/107932099
+ */
+export const FileAccept = {
+  EXCEL: '.csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  PDF: 'application/pdf',
+};
+
+export const REGEX_TEL_NO = /^(13[0-9]|14[5-9]|15[012356789]|166|17[0-8]|18[0-9]|19[8-9])[0-9]{8}$/;
 export const formItemFullLayout = { labelCol: { span: 4 }, wrapperCol: { span: 19 } };
 
