@@ -22,7 +22,7 @@ export interface BaseCascaderProps<T, KeyType = number> extends Omit<CascaderPro
     vList: KeyType[],
     itemList: T[],
   ) => void;
-  onChangeWithItem?: (key: KeyType | undefined, data: T | undefined) => void;
+  onChangeWithItem?: (key: KeyType | undefined, data: T | undefined, vList: KeyType[], itemList: Fa.TreeNode<T, KeyType>[],) => void;
   rootId?: KeyType;
   rootName?: string;
   extraParams?: any; // 补充副作用参数，变更会触发cascader重新拉取api tree数据
@@ -93,7 +93,7 @@ export default function BaseCascader<RecordType extends object = any, KeyType = 
         newValue,
         selectedOptions.map((i) => i.sourceData),
       );
-    if (onChangeWithItem) onChangeWithItem(lastValue, lastItem.sourceData);
+    if (onChangeWithItem) onChangeWithItem(lastValue, lastItem.sourceData, newValue, selectedOptions.map((i) => i),);
   }
 
   return (
