@@ -15,13 +15,13 @@ import './BaseTree.css';
 
 export interface BaseTreeContextProps {
   renderCount: number;
-  updateRenderCount: () => void;
+  updateRenderCount?: () => void;
 }
 
 export const BaseTreeContext = createContext<BaseTreeContextProps>({ renderCount: 1, updateRenderCount: () => {} });
 const MENU_ID = 'base-tree-menu';
 
-interface IProps<T, KeyType = number> extends TreeProps {
+export interface BaseTreeProps<T, KeyType = number> extends TreeProps {
   showRoot?: boolean; // 是否展示操作按钮
   showTopBtn?: boolean; // 是否展示操作按钮
   showTopAddBtn?: boolean; // 是否展示操作按钮
@@ -80,7 +80,7 @@ export default function BaseTree<RecordType extends object = any, KeyType = numb
   renderTreeLabel,
   extraEffectArgs = [],
   ...props
-}: IProps<RecordType, KeyType>) {
+}: BaseTreeProps<RecordType, KeyType>) {
   const { renderCount } = useContext(BaseTreeContext);
 
   const [loading, setLoading] = useState(false);
