@@ -1,0 +1,228 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    /* 使用 tailwind-config/tailwind.config.js 中的theme配置 */
+    --primary-color: theme('colors.blue');
+    --primary-dark: theme('colors.blueDark');
+    --fa-bg-grey: #fafafa;
+    --fa-hover-bg: #e1e1e1;
+    --fa-transition: all ease-in-out 0.3s;
+    --fa-border-radius: 3px;
+    --fa-border-color: #eee;
+    --fa-subtitle-color: #666;
+    --fa-box-shadow: 0 2px 4px 4px #eeeeeeee;
+    --focus-border: var(--primary-color) !important;
+    --separator-border: #eee;
+}
+
+#root, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: var(--primary-color);
+}
+
+ul {
+    margin: 0;
+}
+
+.ant-modal-content {
+    padding: 12px !important;
+}
+
+.ant-card-body {
+    padding: 12px !important;
+}
+
+.ant-modal-close {
+    top: 12px !important;
+    right: 12px !important;
+}
+
+.ant-form-item .ant-picker {
+    width: 100%;
+}
+
+.ant-drawer-close {
+    padding: 0;
+}
+
+.ant-drawer-title {
+    font-weight: 600;
+}
+
+.ant-drawer-header {
+    padding: 12px !important;
+}
+
+.ant-drawer-body {
+    padding: 12px !important;
+    position: relative;
+}
+
+.ant-pagination {
+    margin: 8px !important;
+}
+
+.ant-descriptions-item-label, .ant-descriptions-item-content {
+    padding: 6px !important;
+}
+
+/*----------------------------------------- 全局通用自定义样式 -----------------------------------------*/
+.fa-full-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.fa-full-content-p12 {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+}
+
+.fa-flex-1 {
+    flex: 1;
+    position: relative;
+}
+
+.fa-bg-white {
+    background-color: #ffffff;
+}
+
+.fa-bg-grey {
+    background-color: var(--fa-bg-grey);
+}
+
+.fa-card {
+    padding: 12px;
+    background-color: #ffffff;
+    border-radius: var(--fa-border-radius);
+    border: 1px solid var(--fa-border-color);
+}
+
+.fa-p12 {
+    padding: 12px;
+}
+
+.fa-p8 {
+    padding: 8px;
+}
+
+.fa-mt12 {
+    margin-top: 12px;
+}
+
+.fa-mb12 {
+    margin-bottom: 12px;
+}
+
+.fa-mr4 {
+    margin-right: 4px;
+}
+
+.fa-mr8 {
+    margin-right: 8px;
+}
+
+.fa-full-w {
+    width: 100%;
+}
+
+.fa-full {
+    width: 100%;
+    height: 100%;
+}
+
+.fa-flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.fa-flex-center {
+    align-items: center;
+    justify-content: center;
+}
+
+.fa-flex-row-center {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.fa-flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.fa-flex-column-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.fa-flex-center {
+    align-items: center;
+    justify-content: center;
+}
+
+.fa-flex-wrap {
+    flex-wrap: wrap;
+}
+
+.fa-main {
+    padding: 8px;
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
+    height: 100%;
+}
+
+.fa-border {
+    border: 1px solid var(--fa-border-color);
+    border-radius: var(--fa-border-radius);
+}
+
+.fa-border-r {
+    border-right: 1px solid var(--fa-border-color);
+}
+
+.fa-border-b {
+    border-bottom: 1px solid var(--fa-border-color);
+}
+
+.fa-form-underline > input {
+    border: none !important;
+    border-radius: 0 !important;
+    border-bottom: 1px solid var(--fa-border-color) !important;
+}
+
+.fa-table-subtitle {
+    line-height: 30px;
+    color: var(--fa-subtitle-color);
+    margin-left: 6px;
+    height: 25px;
+    display: flex;
+}
+
+.fa-link-btn {
+    border-radius: var(--fa-border-radius);
+    /*padding: 2px 4px;*/
+    cursor: pointer;
+    transition: all ease-in-out 0.3s;
+}
+
+.fa-link-btn:hover {
+    background-color: #ddd;
+}

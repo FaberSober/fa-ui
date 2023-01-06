@@ -2,11 +2,18 @@
   "name": "@fa/ui",
   "version": "0.0.1",
   "main": "./index.tsx",
-  "types": "./index.tsx",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist",
+    "./styles.css": "./dist/styles.css",
+    "./index.css": "./dist/index.css"
+  },
   "license": "MIT",
   "scripts": {
     "postinstall": "rimraf /s/d dist && rimraf /s/d .turbo",
     "ncu": "ncu -u --timeout 120000",
+    "dev": "concurrently \"tsup --watch\" \"tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch\"",
+    "build": "concurrently \"tsup\" \"tailwindcss -i ./src/styles.css -o ./dist/styles.css\"",
     "dev:tsup": "tsup --watch",
     "build:tsup": "tsup",
     "lint": "eslint \"**/*.{ts,tsx}\""

@@ -1,5 +1,5 @@
 import { get, isNil } from 'lodash';
-import { dayjs } from '@ui/components';
+import dayjs from 'dayjs';
 import { fileSaveApi } from '@ui/services';
 import { ApiQiniuLoader } from '@ui/utils';
 

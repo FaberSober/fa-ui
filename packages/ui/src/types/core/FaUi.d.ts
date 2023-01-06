@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 
 declare namespace FaUi {
   export interface ClassA {
@@ -9,6 +9,7 @@ declare namespace FaUi {
   export interface Button {
     title?: string;
     children?: ReactNode;
+    style?: CSSProperties;
   }
 }
 
