@@ -23,7 +23,6 @@ export * from './biz-user-select';
 export * from './container';
 export * from './context';
 export * from './decorator';
-export * from './icons';
 export * from './modal';
 
 export { default as Button } from './Button';

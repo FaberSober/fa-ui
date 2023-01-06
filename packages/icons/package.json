@@ -11,6 +11,7 @@
   },
   "license": "MIT",
   "scripts": {
+    "postinstall": "rimraf /s/d node_modules/.vite && rimraf /s/d .turbo",
     "ncu": "ncu -u --timeout 120000",
     "dev": "tsup --watch",
     "build": "tsup",
