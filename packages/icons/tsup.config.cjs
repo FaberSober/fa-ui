@@ -9,10 +9,6 @@ export default defineConfig({
   watch: false,
   format: ['esm', 'cjs'],
   external: [
-    // '@fortawesome/fontawesome-svg-core',
-    // '@fortawesome/free-regular-svg-icons',
-    // '@fortawesome/free-solid-svg-icons',
-    // '@fortawesome/react-fontawesome',
     'lodash',
     'react',
   ],
