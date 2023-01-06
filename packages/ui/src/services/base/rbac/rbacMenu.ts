@@ -1,6 +1,6 @@
-import { GATE_APP } from '@/configs';
-import { BaseTreeApi } from '@/services';
-import { Rbac } from '@/types';
+import { GATE_APP } from '@ui/configs';
+import { BaseTreeApi } from '@ui/services';
+import { Rbac } from '@ui/types';
 
 /** ------------------------------------------ xx 操作接口 ------------------------------------------ */
 class RbacMenuApi extends BaseTreeApi<Rbac.RbacMenu, string> {}

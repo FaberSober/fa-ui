@@ -1,5 +1,5 @@
 import { isNil, trim } from 'lodash';
-import { Fa } from '@/types';
+import { Fa } from '@ui/types';
 
 export function parseNode<T = any>(nodeList: Fa.TreeNode<T, any>[] | undefined): Fa.BaseTreeNode<T>[] | undefined {
   if (isNil(nodeList) || nodeList.length === 0) return undefined;

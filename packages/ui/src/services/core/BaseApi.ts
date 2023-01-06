@@ -1,5 +1,5 @@
-import { Fa } from '@/types';
-import { trimObj } from '@/utils/utils';
+import { Fa } from '@ui/types';
+import { trimObj } from '@ui/utils/utils';
 import BaseZeroApi from './BaseZeroApi';
 
 export default class BaseApi<T, KeyType, PageT = T> extends BaseZeroApi {

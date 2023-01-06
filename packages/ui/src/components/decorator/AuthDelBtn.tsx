@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShiroPermissionContainer } from '@/components/auth';
+import { ShiroPermissionContainer } from '@ui/components/auth';
 import { Popconfirm } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 

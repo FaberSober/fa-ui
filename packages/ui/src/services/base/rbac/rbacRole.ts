@@ -1,6 +1,6 @@
-import { GATE_APP } from '@/configs';
-import { BaseApi } from '@/services';
-import { Rbac } from '@/types';
+import { GATE_APP } from '@ui/configs';
+import { BaseApi } from '@ui/services';
+import { Rbac } from '@ui/types';
 
 /** ------------------------------------------ xx 操作接口 ------------------------------------------ */
 class RbacRoleApi extends BaseApi<Rbac.RbacRole, string> {}

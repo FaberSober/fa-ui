@@ -1,16 +1,16 @@
 import React, {ReactNode, useContext, useEffect, useState} from 'react';
 import {find, isNil, sortBy} from 'lodash';
 import {Button, Checkbox, Drawer, Input} from 'antd';
-import {showResponse} from '@/utils/utils';
+import {showResponse} from '@ui/utils/utils';
 import {ModalProps} from 'antd/es/modal';
-import {FaberTable} from '@/components/base-table';
-import * as BaseTableUtils from '@/components/base-table/utils';
-import {Admin, Fa, FaEnums} from '@/types';
-import {configApi} from '@/services';
-import {ApiEffectLayoutContext} from "@/layout";
+import {FaberTable} from '@ui/components/base-table';
+import * as BaseTableUtils from '@ui/components/base-table/utils';
+import {Admin, Fa, FaEnums} from '@ui/types';
+import {configApi} from '@ui/services';
+import {ApiEffectLayoutContext} from "@ui/layout";
 import './TableColConfigModal.css';
-import {FaFlexRestLayout} from "@/components/base-layout";
-import {FaSortList} from "@/components/base-drag";
+import {FaFlexRestLayout} from "@ui/components/base-layout";
+import {FaSortList} from "@ui/components/base-drag";
 
 const colWidthCache: { [key: string]: number } = {};
 

@@ -3,7 +3,7 @@ import ConditionQuery from './ConditionQuery';
 import { Button, Input, Radio, Select, Space } from 'antd';
 import { each, find, remove } from 'lodash';
 import { CloseCircleFilled, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { BaseTableUtils, FaberTable } from '@/components/base-table';
+import { BaseTableUtils, FaberTable } from '@ui/components/base-table';
 import { v1 as uuidv1 } from 'uuid';
 
 export interface CondGroupEditProps<T> {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Select } from 'antd';
 import { SelectProps } from 'antd/es/select';
-import { useEnum } from '@/components/base-dict/hooks';
+import { useEnum } from '@ui/components/base-dict/hooks';
 
 interface IProps extends SelectProps<any> {
   enumName: string; // 枚举名称

@@ -1,8 +1,8 @@
 import {TablePaginationConfig} from "antd";
 import {useEffect, useState} from "react";
 import {get, hasIn, isEqual} from "lodash";
-import {BaseTableUtils} from "@/components/base-table";
-import {ConditionQuery, Fa} from "@/types";
+import {BaseTableUtils} from "@ui/components/base-table";
+import {ConditionQuery, Fa} from "@ui/types";
 
 
 export interface UseTableQueryParamsProps<T> {

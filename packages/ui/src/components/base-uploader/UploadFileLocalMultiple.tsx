@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { find } from 'lodash';
 import { Button, Upload, UploadProps } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import {fileSaveApi} from '@/services';
-import { getToken } from '@/utils/cache';
+import {fileSaveApi} from '@ui/services';
+import { getToken } from '@ui/utils/cache';
 import { UploadChangeParam } from 'antd/es/upload/interface';
-import { Fa } from '@/types';
+import { Fa } from '@ui/types';
 
 export interface UploadFileLocalMultipleProps extends Omit<UploadProps, 'onChange'> {
   children?: any;

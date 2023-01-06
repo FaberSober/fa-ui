@@ -1,9 +1,9 @@
 import React from 'react';
 import { Input, Popover } from 'antd';
-import { tryHexToRgba } from '@/utils/utils';
+import { tryHexToRgba } from '@ui/utils/utils';
 import { BgColorsOutlined } from '@ant-design/icons';
 import { SketchPicker } from 'react-color';
-import { Fa } from '@/types';
+import { Fa } from '@ui/types';
 
 /**
  * 配置面板输入组件-颜色选择

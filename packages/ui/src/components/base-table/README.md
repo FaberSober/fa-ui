@@ -1,3 +1,3 @@
 ```js
-import BaseBizTable, { BaseTableUtils, FaberTable } from '@/components/base-table';
+import BaseBizTable, { BaseTableUtils, FaberTable } from '@ui/components/base-table';
 ```

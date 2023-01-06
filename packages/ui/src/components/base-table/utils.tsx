@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {getDateStr, optionsToLabel, toLine, tryToFixed} from '@/utils/utils';
+import {getDateStr, optionsToLabel, toLine, tryToFixed} from '@ui/utils/utils';
 import {Badge} from 'antd';
 import {find, isEmpty, trim} from 'lodash';
 import {
@@ -7,13 +7,13 @@ import {
   renderDateRangerPicker,
   renderTimePicker,
   renderTimeRangePicker,
-} from '@/components/condition-query/ConditionQueryUtils';
-import {FaberTable} from '@/components/base-table/index';
-import {BaseBoolSelector, DictDataSelector, DictEnumSelector} from '@/components/base-dict';
+} from '@ui/components/condition-query/ConditionQueryUtils';
+import {FaberTable} from '@ui/components/base-table/index';
+import {BaseBoolSelector, DictDataSelector, DictEnumSelector} from '@ui/components/base-dict';
 import {SortOrder} from 'antd/es/table/interface';
-import {UserSearchSelect} from '@/components/biz-user-select';
+import {UserSearchSelect} from '@ui/components/biz-user-select';
 import {useSize} from 'ahooks';
-import {Fa} from "@/types";
+import {Fa} from "@ui/types";
 
 export function dataIndexToString(dataIndex: string | string[]) {
   if (dataIndex instanceof Array) {

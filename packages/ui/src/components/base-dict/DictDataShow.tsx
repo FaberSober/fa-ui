@@ -1,6 +1,6 @@
 import React from 'react';
 import {find} from 'lodash'
-import {useDict} from "@/components/base-dict/hooks";
+import {useDict} from "@ui/components/base-dict/hooks";
 
 export interface DictDataShowProps {
   dictLabel: string;

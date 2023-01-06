@@ -1,5 +1,5 @@
-import { Fa, FaEnums } from '@/types';
-// import ConditionQuery from '@/components/condition-query/interface';
+import { Fa, FaEnums } from '@ui/types';
+// import ConditionQuery from '@ui/components/condition-query/interface';
 
 namespace Admin {
   // -------------------------------------------- 系统-配置表 --------------------------------------------

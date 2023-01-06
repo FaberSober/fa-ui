@@ -1,7 +1,7 @@
 import React from 'react';
 import {Radio} from 'antd';
 import {RadioProps} from "antd/es/radio";
-import {useEnum} from "@/components/base-dict/hooks";
+import {useEnum} from "@ui/components/base-dict/hooks";
 
 
 interface IProps extends RadioProps  {

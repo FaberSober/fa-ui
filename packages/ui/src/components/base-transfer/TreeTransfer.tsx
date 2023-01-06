@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {Transfer, Tree} from 'antd';
 import type {TransferDirection, TransferItem} from 'antd/es/transfer';
 import type {DataNode} from 'antd/es/tree';
-import {Fa} from "@/types";
-import * as TreeUtils from "@/components/base-tree/utils";
+import {Fa} from "@ui/types";
+import * as TreeUtils from "@ui/components/base-tree/utils";
 
 export interface TreeTransferProps {
   targetKeys: string[];

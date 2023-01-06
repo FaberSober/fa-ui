@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {departmentApi, userApi} from "@/services";
-import {Admin} from "@/types";
+import {departmentApi, userApi} from "@ui/services";
+import {Admin} from "@ui/types";
 import {Button, Col, Form, Input, Row, Space} from "antd";
 import {SearchOutlined} from "@ant-design/icons";
-import {clearForm, useTableQueryParams} from "@/hooks";
-import {BaseBizTable, BaseTableUtils, FaberTable} from "@/components/base-table";
-import SelectedUserList from "@/components/biz-user-select/SelectedUserList";
-import {BaseTree} from "@/components/base-tree";
-import {FaLabel} from "@/components/decorator";
+import {clearForm, useTableQueryParams} from "@ui/hooks";
+import {BaseBizTable, BaseTableUtils, FaberTable} from "@ui/components/base-table";
+import SelectedUserList from "@ui/components/biz-user-select/SelectedUserList";
+import {BaseTree} from "@ui/components/base-tree";
+import {FaLabel} from "@ui/components/decorator";
 import {CommonModalProps, DragModal} from '../base-modal';
 
 

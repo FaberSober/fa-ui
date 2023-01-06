@@ -1,6 +1,6 @@
 import { cloneDeep, get, isNil, trim } from 'lodash';
-import { Fa } from '@/types';
-import BaseTreeProps from '@/types/core/BaseTreeProps';
+import { Fa } from '@ui/types';
+import BaseTreeProps from '@ui/types/core/BaseTreeProps';
 import {DataNode} from "antd/es/tree";
 
 export function parseNode<T = any>(

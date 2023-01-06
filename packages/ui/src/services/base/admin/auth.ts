@@ -1,6 +1,6 @@
-import { Fa } from '@/types';
-import { BaseZeroApi } from "@/services";
-import { GATE_APP } from "@/configs";
+import { Fa } from '@ui/types';
+import { BaseZeroApi } from "@ui/services";
+import { GATE_APP } from "@ui/configs";
 
 class Api extends BaseZeroApi {
   /** 登录 */

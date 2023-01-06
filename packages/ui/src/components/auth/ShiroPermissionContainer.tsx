@@ -1,6 +1,6 @@
 import React, { ReactNode, useContext } from 'react';
-import { hasPermission } from '@/utils/utils';
-import { FaUiContext } from '@/components/context';
+import { hasPermission } from '@ui/utils/utils';
+import { FaUiContext } from '@ui/components/context';
 
 interface IProps {
   children: ReactNode;

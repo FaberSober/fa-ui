@@ -1,5 +1,5 @@
 import React from 'react';
-import { handleClipboard } from '@/utils/utils';
+import { handleClipboard } from '@ui/utils/utils';
 import { LinkOutlined } from '@ant-design/icons';
 import './FaLink.css';
 

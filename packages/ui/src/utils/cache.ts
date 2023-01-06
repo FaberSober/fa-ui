@@ -1,4 +1,4 @@
-import { Fa } from '@/types';
+import { Fa } from '@ui/types';
 
 export function getToken(): string | null {
   return localStorage.getItem(Fa.Constant.TOKEN_KEY);

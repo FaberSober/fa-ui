@@ -3,9 +3,20 @@
   "version": "0.0.0",
   "private": true,
   "description": "",
-  "main": "index.js",
+  "main": "./index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postinstall": "rimraf /s/d dist && rimraf /s/d .turbo",
+    "ncu": "ncu -u --timeout 120000",
+    "dev:lib": "tailwindcss -i ./styles.css -o ./dist/styles.css --watch",
+    "build:lib": "tailwindcss -i ./styles.css -o ./dist/styles.css"
+  },
+  "devDependencies": {
+    "@fa/tailwind-config": "workspace:*",
+    "@fa/tsconfig": "workspace:*",
+    "autoprefixer": "10.4.13",
+    "postcss": "8.4.20",
+    "postcss-scss": "^4.0.6",
+    "tailwindcss": "3.2.4"
   },
   "keywords": [],
   "author": "",

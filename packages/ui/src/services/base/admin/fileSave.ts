@@ -1,7 +1,7 @@
-import {GATE_APP} from '@/configs';
-import {BaseApi} from '@/services';
+import {GATE_APP} from '@ui/configs';
+import {BaseApi} from '@ui/services';
 import {trim} from 'lodash';
-import {Admin, Fa} from '@/types';
+import {Admin, Fa} from '@ui/types';
 
 interface UploadToken {
   token: string;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal } from 'antd';
 import { ModalProps } from 'antd/es/modal';
-import FaDragItem from '@/components/base-drag/FaDragItem';
+import FaDragItem from '@ui/components/base-drag/FaDragItem';
 
 export interface DragModalProps extends ModalProps {
   children?: JSX.Element;

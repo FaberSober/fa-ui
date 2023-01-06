@@ -1,6 +1,6 @@
 import {useState} from "react";
-import {BaseTableUtils} from "@/components/base-table";
-import {Fa} from "@/types";
+import {BaseTableUtils} from "@ui/components/base-table";
+import {Fa} from "@ui/types";
 
 
 /**

@@ -2,14 +2,14 @@ import React, { ReactNode, useState } from 'react';
 import { trim } from 'lodash';
 import { v1 as uuidv1 } from 'uuid';
 import { Checkbox, Divider, Input, message } from 'antd';
-import { DragModal } from '@/components/base-modal';
+import { DragModal } from '@ui/components/base-modal';
 import ConditionQuery from './ConditionQuery';
-import {configApi} from '@/services';
-import { Admin } from '@/types';
-import { showResponse } from '@/utils/utils';
-import { FaberTable } from '@/components/base-table';
-import CondGroupShow from '@/components/condition-query/CondGroupShow';
-import CondGroupEdit from '@/components/condition-query/CondGroupEdit';
+import {configApi} from '@ui/services';
+import { Admin } from '@ui/types';
+import { showResponse } from '@ui/utils/utils';
+import { FaberTable } from '@ui/components/base-table';
+import CondGroupShow from '@ui/components/condition-query/CondGroupShow';
+import CondGroupEdit from '@ui/components/condition-query/CondGroupEdit';
 import { PlusOutlined } from '@ant-design/icons';
 
 export interface ConditionQueryModalProps<T> {

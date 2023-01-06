@@ -2,10 +2,10 @@ import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from
 import { find } from 'lodash';
 import { Dropdown } from 'antd';
 import { DownOutlined, SettingOutlined } from '@ant-design/icons';
-import SceneManageModal from '@/components/condition-query/SceneManageModal';
-import { Admin } from '@/types';
-import { FaberTable } from '@/components/base-table';
-import {configSceneApi} from '@/services';
+import SceneManageModal from '@ui/components/condition-query/SceneManageModal';
+import { Admin } from '@ui/types';
+import { FaberTable } from '@ui/components/base-table';
+import {configSceneApi} from '@ui/services';
 
 const allSceneLabel = '全部数据';
 

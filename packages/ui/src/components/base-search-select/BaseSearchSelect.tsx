@@ -2,7 +2,7 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import { get, remove, trim } from 'lodash';
 import { Select, SelectProps } from 'antd';
 import { useDebounce } from 'react-use';
-import { Fa } from '@/types';
+import { Fa } from '@ui/types';
 
 export interface BaseSearchSelectProps<T, KeyType = number> extends SelectProps<T> {
   labelKey?: string | ((record: T) => string | ReactNode);

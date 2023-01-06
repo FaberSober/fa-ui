@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { DragModal, DragModalProps } from '@/components/base-modal';
+import { DragModal, DragModalProps } from '@ui/components/base-modal';
 import { trim } from 'lodash';
 import { CronEditor } from 'fa-cron-react-editor';
-import {jobApi} from '@/services';
+import {jobApi} from '@ui/services';
 import 'fa-cron-react-editor/dist/index.css';
 
 export interface CronModalProps extends DragModalProps {

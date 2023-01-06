@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { dictApi } from '@/services';
-import { Admin, Fa } from '@/types';
+import { dictApi } from '@ui/services';
+import { Admin, Fa } from '@ui/types';
 
 
 export function useDict(

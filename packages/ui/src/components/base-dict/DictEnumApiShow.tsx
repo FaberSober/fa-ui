@@ -1,6 +1,6 @@
 import React from 'react';
 import {find, trim} from 'lodash';
-import {useEnum} from "@/components/base-dict/hooks";
+import {useEnum} from "@ui/components/base-dict/hooks";
 
 interface IProps  {
   value: any;

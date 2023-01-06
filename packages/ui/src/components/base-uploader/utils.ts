@@ -1,6 +1,6 @@
 import {get, isNil} from 'lodash';
-import {fileSaveApi} from '@/services';
-import {ApiQiniuLoader} from '@/utils';
+import {fileSaveApi} from '@ui/services';
+import {ApiQiniuLoader} from '@ui/utils';
 import dayjs from 'dayjs';
 
 

@@ -3,7 +3,7 @@ import { get } from 'lodash';
 import { message } from 'antd';
 import { getToken } from './cache';
 import { dispatch } from 'use-bus';
-import { Fa } from '@/types';
+import { Fa } from '@ui/types';
 
 // Set config defaults when creating the instance
 const instance = axios.create({

@@ -2,12 +2,12 @@ import React, { createContext, CSSProperties, ReactNode, useContext, useEffect, 
 import { each, find, get } from 'lodash';
 import { Modal, Space, Spin, Tree } from 'antd';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { showResponse } from '@/utils/utils';
-import BaseTreeProps from '@/types/core/BaseTreeProps';
+import { showResponse } from '@ui/utils/utils';
+import BaseTreeProps from '@ui/types/core/BaseTreeProps';
 import * as TreeUtils from './utils';
-import { Fa } from '@/types';
+import { Fa } from '@ui/types';
 import { TreeProps } from 'antd/es/tree';
-import { FaHref } from '@/components/decorator';
+import { FaHref } from '@ui/components/decorator';
 import { Item, ItemParams, Menu, useContextMenu } from 'react-contexify';
 import 'react-contexify/ReactContexify.css';
 import useBus from 'use-bus';

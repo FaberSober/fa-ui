@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CronEditor } from 'fa-cron-react-editor';
-import {jobApi} from '@/services';
+import {jobApi} from '@ui/services';
 
 import 'fa-cron-react-editor/dist/index.css';
 

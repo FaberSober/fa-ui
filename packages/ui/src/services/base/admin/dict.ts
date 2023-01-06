@@ -1,6 +1,6 @@
-import {GATE_APP} from '@/configs';
-import {BaseTreeApi} from '@/services';
-import {Admin, Fa} from '@/types';
+import {GATE_APP} from '@ui/configs';
+import {BaseTreeApi} from '@ui/services';
+import {Admin, Fa} from '@ui/types';
 
 /** ------------------------------------------ xx 操作接口 ------------------------------------------ */
 const serviceModule = 'dict';

@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { DoubleLeftOutlined, DoubleRightOutlined } from '@ant-design/icons';
-import { FaFlexRestLayout } from '@/components/base-layout';
+import { FaFlexRestLayout } from '@ui/components/base-layout';
 import './SiderLayout.css';
 
 export interface SiderLayoutProps {

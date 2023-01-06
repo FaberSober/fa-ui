@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { isNil } from 'lodash';
-import { Fa } from '@/types';
+import { Fa } from '@ui/types';
 import { CascaderProps } from 'antd/es/cascader';
 import { Cascader } from 'antd';
-import * as BaseTreeUtils from '@/components/base-tree/utils';
-import { setTreeDisabled } from '@/components/base-tree/utils';
+import * as BaseTreeUtils from '@ui/components/base-tree/utils';
+import { setTreeDisabled } from '@ui/components/base-tree/utils';
 
 export interface BaseCascaderProps<T, KeyType = number> extends Omit<CascaderProps<T>, 'options' | 'onChange'> {
   showRoot?: boolean;

@@ -1,15 +1,15 @@
 import React, { useImperativeHandle, useState } from 'react';
-import { DragModal, DragModalProps } from '@/components/base-modal';
-import {configSceneApi} from '@/services';
-import { showResponse } from '@/utils/utils';
+import { DragModal, DragModalProps } from '@ui/components/base-modal';
+import {configSceneApi} from '@ui/services';
+import { showResponse } from '@ui/utils/utils';
 import { EditOutlined } from '@ant-design/icons';
 import { Checkbox, Space } from 'antd';
-import { Admin } from '@/types';
-import ConditionQueryModal from '@/components/condition-query/ConditionQueryModal';
-import { FaberTable } from '@/components/base-table';
+import { Admin } from '@ui/types';
+import ConditionQueryModal from '@ui/components/condition-query/ConditionQueryModal';
+import { FaberTable } from '@ui/components/base-table';
 import './SceneManageModal.css';
-import {FaSortList} from "@/components/base-drag";
-import {AuthDelBtn} from "@/components/decorator";
+import {FaSortList} from "@ui/components/base-drag";
+import {AuthDelBtn} from "@ui/components/decorator";
 
 export interface SceneManageModalProps<T> extends DragModalProps {
   biz: string;

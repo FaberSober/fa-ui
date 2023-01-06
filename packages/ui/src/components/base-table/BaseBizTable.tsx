@@ -3,13 +3,13 @@ import {find, get, isNumber, sumBy} from 'lodash';
 import { ClearOutlined, DeleteOutlined, SettingOutlined } from '@ant-design/icons';
 import { Button, Modal, Space, Table } from 'antd';
 import FaberTable from './FaberTable';
-import { showResponse } from '@/utils/utils';
+import { showResponse } from '@ui/utils/utils';
 import { dataIndexToString, useScrollY } from './utils';
-import ComplexQuery from '@/components/condition-query/ComplexQuery';
+import ComplexQuery from '@ui/components/condition-query/ComplexQuery';
 import { TableRowSelection } from 'antd/es/table/interface';
 import { v4 } from 'uuid';
 import TableColConfigModal from '../modal/TableColConfigModal';
-import {FaFlexRestLayout} from "@/components/base-layout";
+import {FaFlexRestLayout} from "@ui/components/base-layout";
 
 
 /**

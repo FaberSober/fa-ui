@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import ConditionQuery from '@/components/condition-query/interface';
+import ConditionQuery from '@ui/components/condition-query/interface';
 import { ColumnProps, TableProps } from 'antd/es/table';
 import { Fa } from '@fa/ui';
 

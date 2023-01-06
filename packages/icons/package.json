@@ -5,7 +5,7 @@
   "types": "./index.tsx",
   "license": "MIT",
   "scripts": {
-    "postinstall": "rimraf /s/d node_modules/.vite && rimraf /s/d .turbo",
+    "postinstall": "rimraf /s/d dist && rimraf /s/d .turbo",
     "ncu": "ncu -u --timeout 120000",
     "lint": "eslint \"**/*.{ts,tsx}\""
   },

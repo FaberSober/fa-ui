@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Timeline} from 'antd';
 import useBus from 'use-bus';
-import {Admin, FaEnums} from '@/types';
-import {entityLogApi} from '@/services';
+import {Admin, FaEnums} from '@ui/types';
+import {entityLogApi} from '@ui/services';
 import UpdateLogTable from './UpdateLogTable';
 
 

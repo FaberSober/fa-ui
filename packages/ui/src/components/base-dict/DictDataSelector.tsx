@@ -1,7 +1,7 @@
 import React from 'react';
 import { Select } from 'antd';
 import { SelectProps } from 'antd/es/select';
-import { useDict } from '@/components/base-dict/hooks';
+import { useDict } from '@ui/components/base-dict/hooks';
 
 interface IProps extends SelectProps<any> {
   dictLabel: string; // 字典分组编码

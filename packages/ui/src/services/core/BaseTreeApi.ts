@@ -1,4 +1,4 @@
-import { Fa } from '@/types';
+import { Fa } from '@ui/types';
 import BaseApi from './BaseApi';
 
 export default class BaseTreeApi<T, KeyType, PageT = T> extends BaseApi<T, KeyType, PageT> {

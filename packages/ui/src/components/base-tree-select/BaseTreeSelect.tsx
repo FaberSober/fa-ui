@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { TreeSelect } from 'antd';
-import { Fa } from '@/types';
+import { Fa } from '@ui/types';
 import { TreeSelectProps } from 'antd/es/tree-select';
-import * as BaseTreeUtils from '@/components/base-tree/utils';
-import BaseTreeProps from '@/types/core/BaseTreeProps';
+import * as BaseTreeUtils from '@ui/components/base-tree/utils';
+import BaseTreeProps from '@ui/types/core/BaseTreeProps';
 
 export interface BaseTreeSelectProps<T, KeyType = number> extends Omit<TreeSelectProps<T>, 'options'> {
   value?: any;

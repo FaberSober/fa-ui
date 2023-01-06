@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+// 引入主题文件
+@import "theme";
+
 body {
   /* 使用 tailwind-config/tailwind.config.js 中的theme配置 */
   --primary-color: theme('colors.blue');

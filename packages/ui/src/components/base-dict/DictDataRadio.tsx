@@ -1,7 +1,7 @@
 import React from 'react';
 import {Radio} from 'antd';
 import {RadioProps} from 'antd/es/radio';
-import {useDict} from "@/components/base-dict/hooks";
+import {useDict} from "@ui/components/base-dict/hooks";
 
 
 export interface IProps extends RadioProps {

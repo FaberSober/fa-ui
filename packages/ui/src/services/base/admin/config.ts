@@ -1,6 +1,6 @@
-import {GATE_APP} from '@/configs';
-import {BaseApi} from '@/services';
-import {Admin, Fa} from '@/types';
+import {GATE_APP} from '@ui/configs';
+import {BaseApi} from '@ui/services';
+import {Admin, Fa} from '@ui/types';
 
 /** ------------------------------------------ xx 操作接口 ------------------------------------------ */
 class Api extends BaseApi<Admin.Config<any>, number> {

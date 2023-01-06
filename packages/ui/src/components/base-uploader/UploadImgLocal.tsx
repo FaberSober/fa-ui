@@ -1,12 +1,12 @@
 import React, { CSSProperties, useEffect, useState } from 'react';
 import { Image, message, Upload, UploadProps } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import {fileSaveApi} from '@/services';
-import { getToken } from '@/utils/cache';
+import {fileSaveApi} from '@ui/services';
+import { getToken } from '@ui/utils/cache';
 import { RcFile } from 'antd/es/upload';
 import { UploadChangeParam } from 'antd/lib/upload/interface';
 import { UploadFile } from 'antd/es/upload/interface';
-import { Fa } from '@/types';
+import { Fa } from '@ui/types';
 
 export interface UploadImgLocalProps extends Omit<UploadProps, 'onChange'> {
   value?: string;

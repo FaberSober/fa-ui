@@ -1,5 +1,5 @@
-import {Fa} from "@/types";
-import {showResponse} from "@/utils/utils";
+import {Fa} from "@ui/types";
+import {showResponse} from "@ui/utils/utils";
 
 /**
  * 删除单个Item

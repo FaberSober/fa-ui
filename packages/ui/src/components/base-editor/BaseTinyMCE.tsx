@@ -1,8 +1,8 @@
 import React, { CSSProperties, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { trim } from 'lodash';
-import { fileSaveApi } from '@/services';
-import {useHeight} from '@/hooks';
+import { fileSaveApi } from '@ui/services';
+import {useHeight} from '@ui/hooks';
 
 export interface BaseTinyMCEProps {
   value?: string | undefined;

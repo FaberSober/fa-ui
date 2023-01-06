@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Alert } from 'antd';
-import {noticeApi} from '@/services';
-import { Admin } from '@/types';
+import {noticeApi} from '@ui/services';
+import { Admin } from '@ui/types';
 
 /**
  * 全局公告-强提醒-顶部固定展示

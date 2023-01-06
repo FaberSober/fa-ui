@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {userApi} from "@/services";
-import {Admin} from "@/types";
+import {userApi} from "@ui/services";
+import {Admin} from "@ui/types";
 import {Button, Space, Table} from "antd";
 import {isNil} from "lodash";
 import {SelectedUser} from "./BizUserSelect";
