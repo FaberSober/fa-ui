@@ -1,7 +1,7 @@
 import {message} from 'antd';
 import {Fa} from '@ui/types';
 import {findIndex, isNil, isUndefined, map, trim} from 'lodash';
-import dayjs from "dayjs";
+import { dayjs } from "@ui/components";
 import { filesize } from "filesize";
 
 /**
