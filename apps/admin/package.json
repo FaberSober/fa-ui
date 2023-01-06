@@ -6,6 +6,7 @@
   "scripts": {
     "postinstall": "rimraf /s/d node_modules/.vite",
     "ncu": "ncu -u --timeout 120000",
+    "clean": "rimraf /s/d node_modules dist .turbo",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",

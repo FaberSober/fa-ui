@@ -4,7 +4,8 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "ncu": "ncu -u"
+    "ncu": "ncu -u",
+    "clean": "rimraf /s/d node_modules dist .turbo"
   },
   "devDependencies": {
     "tailwindcss": "3.2.4"

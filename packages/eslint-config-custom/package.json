@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
-    "ncu": "ncu -u"
+    "ncu": "ncu -u",
+    "clean": "rimraf /s/d node_modules dist .turbo"
   },
   "license": "MIT",
   "dependencies": {

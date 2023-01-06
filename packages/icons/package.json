@@ -7,6 +7,7 @@
   "scripts": {
     "postinstall": "rimraf /s/d dist && rimraf /s/d .turbo",
     "ncu": "ncu -u --timeout 120000",
+    "clean": "rimraf /s/d node_modules dist .turbo",
     "lint": "eslint \"**/*.{ts,tsx}\""
   },
   "dependencies": {

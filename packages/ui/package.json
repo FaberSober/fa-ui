@@ -12,6 +12,7 @@
   "scripts": {
     "postinstall": "rimraf /s/d dist && rimraf /s/d .turbo",
     "ncu": "ncu -u --timeout 120000",
+    "clean": "rimraf /s/d node_modules dist .turbo",
     "dev": "concurrently \"tsup --watch\" \"tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch\"",
     "build": "concurrently \"tsup\" \"tailwindcss -i ./src/styles.css -o ./dist/styles.css\"",
     "dev:tsup": "tsup --watch",
