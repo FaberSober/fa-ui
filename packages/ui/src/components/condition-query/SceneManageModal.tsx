@@ -1,6 +1,6 @@
 import React, { useImperativeHandle, useState } from 'react';
 import { DragModal, DragModalProps } from '@ui/components/base-modal';
-import {configSceneApi} from '@ui/services';
+import {configSceneApi} from '@ui/services/base';
 import { showResponse } from '@ui/utils/utils';
 import { EditOutlined } from '@ant-design/icons';
 import { Checkbox, Space } from 'antd';

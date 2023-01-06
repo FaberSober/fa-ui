@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { find } from 'lodash';
 import { Button, Upload, UploadProps } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import {fileSaveApi} from '@ui/services';
+import {fileSaveApi} from '@ui/services/base';
 import { getToken } from '@ui/utils/cache';
 import { UploadChangeParam } from 'antd/es/upload/interface';
 import { Fa } from '@ui/types';

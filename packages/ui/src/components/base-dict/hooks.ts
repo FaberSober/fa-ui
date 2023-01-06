@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { dictApi } from '@ui/services';
+import { dictApi } from '@ui/services/base';
 import { Admin, Fa } from '@ui/types';
 
 

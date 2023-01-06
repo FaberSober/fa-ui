@@ -1,7 +1,7 @@
 import React, { CSSProperties, useEffect, useState } from 'react';
 import { Image, message, Upload, UploadProps } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import {fileSaveApi} from '@ui/services';
+import {fileSaveApi} from '@ui/services/base';
 import { getToken } from '@ui/utils/cache';
 import { RcFile } from 'antd/es/upload';
 import { UploadChangeParam } from 'antd/lib/upload/interface';

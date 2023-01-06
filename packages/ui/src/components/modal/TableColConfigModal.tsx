@@ -6,7 +6,7 @@ import {ModalProps} from 'antd/es/modal';
 import {FaberTable} from '@ui/components/base-table';
 import * as BaseTableUtils from '@ui/components/base-table/utils';
 import {Admin, Fa, FaEnums} from '@ui/types';
-import {configApi} from '@ui/services';
+import {configApi} from '@ui/services/base';
 import {ApiEffectLayoutContext} from "@ui/layout";
 import './TableColConfigModal.css';
 import {FaFlexRestLayout} from "@ui/components/base-layout";

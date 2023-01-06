@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Timeline} from 'antd';
 import useBus from 'use-bus';
 import {Admin, FaEnums} from '@ui/types';
-import {entityLogApi} from '@ui/services';
+import {entityLogApi} from '@ui/services/base';
 import UpdateLogTable from './UpdateLogTable';
 
 

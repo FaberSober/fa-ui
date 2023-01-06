@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Alert } from 'antd';
-import {noticeApi} from '@ui/services';
+import {noticeApi} from '@ui/services/base';
 import { Admin } from '@ui/types';
 
 /**

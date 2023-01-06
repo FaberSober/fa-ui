@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {departmentApi, userApi} from "@ui/services";
+import {departmentApi, userApi} from "@ui/services/base";
 import {Admin} from "@ui/types";
 import {Button, Col, Form, Input, Row, Space} from "antd";
 import {SearchOutlined} from "@ant-design/icons";

@@ -5,7 +5,7 @@ import { DownOutlined, SettingOutlined } from '@ant-design/icons';
 import SceneManageModal from '@ui/components/condition-query/SceneManageModal';
 import { Admin } from '@ui/types';
 import { FaberTable } from '@ui/components/base-table';
-import {configSceneApi} from '@ui/services';
+import {configSceneApi} from '@ui/services/base';
 
 const allSceneLabel = '全部数据';
 

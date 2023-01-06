@@ -1,6 +1,6 @@
 import React from 'react';
 import { BaseSearchSelect, BaseSearchSelectProps } from '@ui/components/base-search-select';
-import {userApi} from '@ui/services';
+import {userApi} from '@ui/services/base';
 import { Admin } from '@ui/types';
 
 export interface UserSearchSelectProps extends Omit<BaseSearchSelectProps<Admin.User, string>, 'serviceApi'> {}

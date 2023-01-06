@@ -4,7 +4,7 @@ import { v1 as uuidv1 } from 'uuid';
 import { Checkbox, Divider, Input, message } from 'antd';
 import { DragModal } from '@ui/components/base-modal';
 import ConditionQuery from './ConditionQuery';
-import {configApi} from '@ui/services';
+import {configApi} from '@ui/services/base';
 import { Admin } from '@ui/types';
 import { showResponse } from '@ui/utils/utils';
 import { FaberTable } from '@ui/components/base-table';
