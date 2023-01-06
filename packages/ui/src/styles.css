@@ -226,3 +226,11 @@ ul {
 .fa-link-btn:hover {
     background-color: #ddd;
 }
+
+.fa-rich-div img {
+    max-width: 800px;
+}
+
+.fa-rich-div-sm img {
+    max-width: 400px;
+}
