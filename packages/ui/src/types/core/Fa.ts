@@ -28,6 +28,11 @@ namespace Fa {
     hasChildren: true,
   };
 
+  // ------------------------------------- CONFIG -------------------------------------
+  export interface ConfigApp {
+    GATE_APP: any; // 网管
+  }
+
   // ------------------------------------- ENTITY -------------------------------------
   export interface BaseCrtEntity {
     /** 创建时间 */
