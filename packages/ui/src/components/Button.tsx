@@ -2,7 +2,7 @@ import * as React from 'react';
 import FaUi from '@/types/core/FaUi';
 
 const classA: FaUi.ClassA = { name: 'foo' };
-console.log('Button', 'classA', classA);
+// console.log('Button', 'classA', classA);
 
 export default function Button(props: FaUi.Button) {
   console.log('Hello Button from @fa/ui', props);
