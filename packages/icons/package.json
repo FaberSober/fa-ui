@@ -1,20 +1,12 @@
 {
   "name": "@fa/icons",
   "version": "0.0.1",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": "./dist",
-    "./src": "./src",
-    "./styles.css": "./dist/styles.css",
-    "./index.css": "./dist/index.css"
-  },
+  "main": "./index.tsx",
+  "types": "./index.tsx",
   "license": "MIT",
   "scripts": {
     "postinstall": "rimraf /s/d node_modules/.vite && rimraf /s/d .turbo",
     "ncu": "ncu -u --timeout 120000",
-    "dev": "tsup --watch",
-    "build": "tsup",
     "lint": "eslint \"**/*.{ts,tsx}\""
   },
   "dependencies": {

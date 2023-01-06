@@ -1,4 +1,5 @@
-export * from './components'
+import * as React from "react";
+export * from './src/components'
 
 
 // 添加fontawesome icons图标
