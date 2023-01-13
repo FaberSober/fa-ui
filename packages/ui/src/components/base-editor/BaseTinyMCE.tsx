@@ -101,7 +101,7 @@ function BaseTinyMCE({ value, onChange, style, editorInit, editorProps }: BaseTi
               fileSaveApi
                 .uploadFileForm(formData, (pe) => progress((pe.loaded / pe.total) * 100))
                 .then((res) => {
-                  resolve(res.data.localUrl);
+                  resolve(fileSaveApi.genLocalGetFile(res.data.id));
                 });
             }),
           /* enable title field in the Image dialog*/
@@ -128,7 +128,7 @@ function BaseTinyMCE({ value, onChange, style, editorInit, editorProps }: BaseTi
               reader.addEventListener('load', () => {
                 // 走自己服务器上传，会占据自己服务器带宽
                 fileSaveApi.uploadFile(file).then((res) => {
-                  cb(res.data.localUrl, { title: file.name });
+                  cb(fileSaveApi.genLocalGetFile(res.data.id), { title: file.name });
                 });
 
                 // 走七牛云服务器上传，节省自己服务器带宽
