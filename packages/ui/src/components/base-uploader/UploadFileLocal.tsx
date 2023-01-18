@@ -30,7 +30,7 @@ export default function UploadFileLocal({ children, description, onChange, value
     fileSaveApi.getById(value).then((res) => {
       setLoading(false);
       const fileData = res.data;
-      setArray([{ uid: fileData.id, size: fileData.size, name: fileData.name, url: fileSaveApi.genLocalGetFile(fileData.id) }]);
+      setArray([{ uid: fileData.id, size: fileData.size, name: fileData.originalFilename, url: fileSaveApi.genLocalGetFile(fileData.id) }]);
     }).catch(() => setLoading(false));
   }, [value]);
 

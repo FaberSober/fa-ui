@@ -190,11 +190,40 @@ namespace Admin {
   export interface FileSave extends Fa.BaseDelEntity {
     /** ID */
     id: string;
-    name: string;
+    /** 文件访问地址 */
     url: string;
-    localUrl: string;
-    size: number;
-    drive: FaEnums.FileSaveDriveEnum;
+    /** 文件大小，单位字节 */
+    size: string;
+    /** 文件名 */
+    filename: string;
+    /** 原始文件名 */
+    originalFilename: string;
+    /** 基础存储路径 */
+    basePath: string;
+    /** 存储路径 */
+    path: string;
+    /** 文件扩展名 */
+    ext: string;
+    /** MIME类型 */
+    contentType: string;
+    /** 存储平台 */
+    platform: string;
+    /** 缩略图访问路径 */
+    thUrl: string;
+    /** 缩略图名称 */
+    thFilename: string;
+    /** 缩略图大小，单位字节 */
+    thSize: string;
+    /** 缩略图MIME类型 */
+    thContentType: string;
+    /** 文件所属对象id */
+    objectId: string;
+    /** 文件所属对象类型，例如用户头像，评价图片 */
+    objectType: string;
+    /** 附加属性 */
+    attr: string;
+    /** md5 */
+    md5: string;
   }
 
   // -------------------------------------------- 系统-通知与公告 --------------------------------------------
