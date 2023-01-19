@@ -38,7 +38,7 @@ export default function UploadImgLocal({ value, onChange, style, ...props }: Upl
           {
             uid: fileData.id,
             size: fileData.size,
-            name: fileData.name,
+            name: fileData.originalFilename,
             url: fileSaveApi.genLocalGetFilePreview(fileData.id),
             originUrl: fileSaveApi.genLocalGetFile(fileData.id),
           },

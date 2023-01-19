@@ -35,7 +35,7 @@ export default function UploadFileLocalMultiple({ children, description, onChang
         id: i.id,
         uid: i.id,
         size: i.size,
-        name: i.name,
+        name: i.originalFilename,
         url: fileSaveApi.genLocalGetFile(i.id),
         status: 'done', // 状态有：uploading done error removed，被 beforeUpload 拦截的文件没有 status 属性
       }));
