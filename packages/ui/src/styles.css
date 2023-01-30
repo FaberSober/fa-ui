@@ -234,3 +234,8 @@ ul {
 .fa-rich-div-sm img {
     max-width: 400px;
 }
+
+.fa-break-word {
+    word-break:break-all; /* 英文 */
+    white-space:pre-wrap; /* 中文 */
+}
