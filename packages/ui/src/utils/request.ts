@@ -40,6 +40,9 @@ instance.interceptors.request.use(
     if (token) {
       config.headers[Fa.Constant.TOKEN_KEY] = token;
     }
+    config.headers[Fa.Constant.FA_FROM] = window.FaFrom;
+    config.headers[Fa.Constant.FA_VERSION_CODE] = window.FaVersionCode;
+    config.headers[Fa.Constant.FA_VERSION_NAME] = window.FaVersionName;
 
     // axios 拦截器统一在接口增加时间戳参数，防止走缓存。
     // if (config.method == 'post') {

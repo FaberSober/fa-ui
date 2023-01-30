@@ -14,6 +14,12 @@ namespace Fa {
     TREE_SUPER_ROOT_LABEL: '根节点',
     /** Token Header字段名 */
     TOKEN_KEY: 'Authorization',
+    /** 添加到请求的Header中，标识请求来源 */
+    FA_FROM: "FaFrom",
+    /** 添加到请求的Header中，标识客户端版本号 */
+    FA_VERSION_CODE: "FaVersionCode",
+    /** 添加到请求的Header中，标识客户端版本名 */
+    FA_VERSION_NAME: "FaVersionName",
   };
 
   export const ROOT_DEFAULT = {
