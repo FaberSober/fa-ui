@@ -111,6 +111,14 @@ ul {
     border: 1px solid var(--fa-border-color);
 }
 
+.fa-h1 {
+    font-size: 24px;
+}
+
+.fa-h2 {
+    font-size: 20px;
+}
+
 .fa-p12 {
     padding: 12px;
 }
