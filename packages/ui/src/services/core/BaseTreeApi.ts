@@ -9,7 +9,7 @@ export default class BaseTreeApi<T, KeyType, PageT = T> extends BaseApi<T, KeyTy
   allTree = (): Promise<Fa.Ret<Fa.TreeNode<T, KeyType>[]>> => this.get(`allTree`);
 
   /** 获取所有实体列表Tree */
-  getTree = (params: any = {}): Promise<Fa.Ret<Fa.TreeNode<T, KeyType>[]>> => this.post(`getTree`, params);
+  getTree = (params: Fa.BaseQueryParams = {}): Promise<Fa.Ret<Fa.TreeNode<T, KeyType>[]>> => this.post(`getTree`, params);
 
   /** 改变实体列表位置[排序、父节点] */
   changePos = (list: Fa.TreePosChangeVo[]): Promise<Fa.Ret<any>> => this.post(`changePos`, list);
