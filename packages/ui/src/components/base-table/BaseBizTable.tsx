@@ -94,15 +94,14 @@ export default function BaseBizTable<RecordType extends object = any>({
       content: `确认删除勾选中的 ${selectedRowKeys.length} 条数据？`,
       okText: '删除',
       okType: 'danger',
-      onOk: (close) => {
+      onOk: () => {
         if (batchDelete) {
           setBatchDeleting(true);
-          batchDelete(selectedRowKeys)
+          return batchDelete(selectedRowKeys)
             .then((res) => {
               setBatchDeleting(false);
               showResponse(res, '批量删除');
               refreshList();
-              close();
             })
             .catch(() => setBatchDeleting(false));
         }
