@@ -119,6 +119,12 @@ ul {
     font-size: 20px;
 }
 
+.fa-h3 {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
 .fa-p12 {
     padding: 12px;
 }
@@ -136,7 +142,7 @@ ul {
 }
 
 .fa-ml12 {
-    margin-bottom: 12px;
+    margin-left: 12px;
 }
 
 .fa-pl12 {

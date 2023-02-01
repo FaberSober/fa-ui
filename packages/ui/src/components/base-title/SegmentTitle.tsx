@@ -24,7 +24,7 @@ export default function SegmentTitle({ title, style, extra, ribbonColor = '#1890
         marginBottom: 12,
         display: 'flex',
         alignItems: 'center',
-        width: '100%',
+        // width: '100%',
         ...style,
       }}
       {...props}
