@@ -97,7 +97,7 @@ export default function UploadFileLocal({ children, description, onChange, value
         <span>{children}</span>
       ) : (
         <>
-          <Button loading={loading}>
+          <Button loading={loading} disabled={props.disabled}>
             <UploadOutlined /> 选择文件
           </Button>
           {description && <span>{description}</span>}
