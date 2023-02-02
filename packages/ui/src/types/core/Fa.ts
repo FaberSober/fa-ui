@@ -239,6 +239,12 @@ namespace Fa {
     onChange?: (v: T[]) => void;
   }
 
+  // ------------------------------------- input field -------------------------------------
+  export interface ChartArrayData {
+    name: string;
+    value: number;
+  }
+
 }
 
 export default Fa;
