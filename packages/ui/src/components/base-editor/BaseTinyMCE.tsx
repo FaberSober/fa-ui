@@ -87,7 +87,7 @@ function BaseTinyMCE({ value, onChange, style, editorInit, editorProps }: BaseTi
             'wordcount',
             'emoticons',
           ],
-          toolbar: 'blocks bold italic forecolor bullist numlist table link image charmap emoticons fullscreen help',
+          toolbar: 'blocks bold italic forecolor bullist numlist table link image media charmap emoticons fullscreen help',
           content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
           /**
            * 需要在后台提供对应API的接口，参考：https://www.tiny.cloud/docs/advanced/php-upload-handler/
@@ -119,7 +119,7 @@ function BaseTinyMCE({ value, onChange, style, editorInit, editorProps }: BaseTi
           file_picker_callback: (cb) => {
             const input = document.createElement('input');
             input.setAttribute('type', 'file');
-            input.setAttribute('accept', 'image/*');
+            input.setAttribute('accept', 'image/*,video/*');
 
             input.addEventListener('change', (e: any) => {
               const file = e.target.files[0];
