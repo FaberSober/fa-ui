@@ -59,6 +59,19 @@ namespace FaEnums {
     TEAM = 'TEAM',
   }
 
+  /**
+   *     NUM(1, "必须包含数字"),
+   *     CHAR(2, "必须包含字母"),
+   *     NUM_CHAR(3, "必须包含数字+字母"),
+   *     NUM_CHAR_SPEC(4, "必须包含数字+字母+特殊字符");
+   */
+  export enum ConfigSysSafePasswordTypeEnum {
+    NUM = 1,
+    CHAR = 2,
+    NUM_CHAR = 3,
+    NUM_CHAR_SPEC = 4,
+  }
+
   // ------------------------------------ RBAC ------------------------------------
   export enum RbacMenuLevelEnum {
     APP = 0,
