@@ -376,11 +376,16 @@ export function sizeToHuman(size: number, base = 2): string {
   return filesize(size, { base, standard: 'jedec' }) as string;
 }
 
+export const REGEX_TEL_NO = /^(13[0-9]|14[5-9]|15[012356789]|166|17[0-8]|18[0-9]|19[8-9])[0-9]{8}$/;
+export const REGEX_CHAR_NUM = /^[0-9a-zA-Z]+$/;
+export const formItemFullLayout = { labelCol: { span: 4 }, wrapperCol: { span: 19 } };
+
 export const FormRules = {
   PATTERN_WORD: { pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]*$/, message: '只能输入中英文字符、数字' },
   PATTERN_CHAR_AND_NUM: { pattern: /^[a-zA-Z]+[a-zA-Z0-9_-]*$/, message: '只能输入英文字符、数字、下划线、中划线' },
   PATTERN_WORD_ZH_ONLY: { pattern: /^[\u4e00-\u9fa5]*$/, message: '只能输入中文字符' },
   PATTERN_CHAR_UPPER_AND_NUM: { pattern: /^[A-Z0-9]*$/, message: '只能输入英文字符、数字' },
+  PATTERN_TEL: { pattern: REGEX_TEL_NO, message: '请输入正确格式的手机号' },
 };
 
 /**
@@ -391,8 +396,4 @@ export const FileAccept = {
   EXCEL: '.csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   PDF: 'application/pdf',
 };
-
-export const REGEX_TEL_NO = /^(13[0-9]|14[5-9]|15[012356789]|166|17[0-8]|18[0-9]|19[8-9])[0-9]{8}$/;
-export const REGEX_CHAR_NUM = /^[0-9a-zA-Z]+$/;
-export const formItemFullLayout = { labelCol: { span: 4 }, wrapperCol: { span: 19 } };
 
