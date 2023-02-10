@@ -48,10 +48,10 @@ export default function UploadImgLocal({ value, onChange, style, ...props }: Upl
   }, [value]);
 
   function beforeUpload(file: RcFile) {
-    if (file.name && file.name.indexOf(' ') > -1) {
-      message.error('文件名不能包含空格！');
-      return false;
-    }
+    // if (file.name && file.name.indexOf(' ') > -1) {
+    //   message.error('文件名不能包含空格！');
+    //   return false;
+    // }
     const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJPG) {
       message.error('你只能上传图片文件！');
