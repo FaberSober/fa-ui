@@ -20,6 +20,9 @@ class FileSaveApi extends BaseApi<Admin.FileSave, string> {
   uploadFileForm = (formData: any, callback?: (progressEvent: any) => void): Promise<Fa.Ret<Admin.FileSave>> =>
     this.postForm('upload', formData, { onUploadProgress: callback });
 
+  /** 文件字符获取 */
+  getFileStr = (fileId: string): Promise<Fa.Ret<string>> => this.get(`getFileStr/${fileId}`);
+
   uploadApi = this.getUrl(`upload`);
 
   genLocalGetFile = (fileId: string) => {
