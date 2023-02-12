@@ -53,7 +53,7 @@ export default function InputColor({ value, onChange, inputStyle, cubeStyle }: I
             border: '1px solid #f1f1f1',
             cursor: 'pointer',
             color: '#FFF',
-            height: '100%',
+            // height: '100%',
             ...cubeStyle,
           }}
         >
