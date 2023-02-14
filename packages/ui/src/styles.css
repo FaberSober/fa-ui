@@ -261,3 +261,9 @@ ul {
     word-break:break-all; /* 英文 */
     white-space:pre-wrap; /* 中文 */
 }
+
+.fa-input-underline {
+    border-width: 0;
+    border-bottom-width: 1px;
+    border-radius: 0;
+}
