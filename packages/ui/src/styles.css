@@ -74,6 +74,10 @@ ul {
     padding: 6px !important;
 }
 
+.ant-popconfirm-buttons {
+    display: flex;
+}
+
 /*----------------------------------------- 全局通用自定义样式 -----------------------------------------*/
 .fa-full-content {
     position: absolute;
