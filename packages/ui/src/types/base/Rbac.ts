@@ -60,7 +60,7 @@ namespace Rbac {
   // ------------------------------------------------- VO -------------------------------------------------
   export interface RoleMenuVo {
     roleId: string;
-    checkedRoleIds: number[];
+    checkedMenuIds: number[];
     halfCheckedRoleIds: number[];
   }
 
