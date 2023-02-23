@@ -4,7 +4,7 @@ import { v1 as uuidv1 } from 'uuid';
 import { Checkbox, Divider, Input, message } from 'antd';
 import { DragModal } from '@ui/components/base-modal';
 import ConditionQuery from './ConditionQuery';
-import {configApi} from '@ui/services/base';
+import {configApi, configSceneApi} from '@ui/services/base';
 import { Admin } from '@ui/types';
 import { showResponse } from '@ui/utils/utils';
 import { FaberTable } from '@ui/components/base-table';
@@ -113,10 +113,10 @@ export default function ConditionQueryModal<T>({
       };
       setLoading(true);
       if (record) {
-        const response = await configApi.update(record.id, { ...record, ...params });
+        const response = await configSceneApi.update(record.id, { ...record, ...params });
         showResponse(response, '更新场景');
       } else {
-        const response = await configApi.save(params);
+        const response = await configSceneApi.save(params);
         showResponse(response, '新增场景');
       }
       setLoading(false);

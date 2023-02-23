@@ -41,6 +41,7 @@ namespace FaEnums {
 
   export enum ConfigType {
     TABLE_COLUMNS = '1',
+    SCENE = '2',
   }
 
   // ------------------------------------ Admin ------------------------------------
