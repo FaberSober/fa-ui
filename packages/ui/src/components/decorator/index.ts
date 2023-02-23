@@ -1,6 +1,7 @@
 import AuthDelBtn from './AuthDelBtn';
+import FaFullscreenBtn from './FaFullscreenBtn';
 import FaHref from './FaHref';
 import FaLabel from './FaLabel';
 import FaLink from './FaLink';
 
-export { AuthDelBtn, FaHref, FaLabel, FaLink };
+export { AuthDelBtn, FaFullscreenBtn, FaHref, FaLabel, FaLink };

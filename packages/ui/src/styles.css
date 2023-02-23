@@ -249,6 +249,21 @@ ul {
     background-color: #ddd;
 }
 
+.fa-normal-btn {
+    border-radius: var(--fa-border-radius);
+    cursor: pointer;
+    transition: all ease-in-out 0.3s;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+}
+
+.fa-normal-btn:hover {
+    background-color: #ddd;
+}
+
 .fa-rich-div img {
     max-width: 800px;
 }
