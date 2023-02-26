@@ -1,4 +1,4 @@
-import BaseDrawer, { BaseDrawerProps } from './BaseDrawer'
+import BaseDrawer, { BaseDrawerProps, BaseDrawerContext, BaseDrawerContextProps } from './BaseDrawer'
 
-export { BaseDrawer }
-export type { BaseDrawerProps }
+export { BaseDrawer, BaseDrawerContext }
+export type { BaseDrawerProps, BaseDrawerContextProps }

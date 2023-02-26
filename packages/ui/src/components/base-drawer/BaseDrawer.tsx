@@ -1,6 +1,11 @@
-import React, {ReactNode, useState} from 'react';
+import React, {createContext, ReactNode, useState} from 'react';
 import {Drawer, DrawerProps} from "antd";
 
+export interface BaseDrawerContextProps {
+  closeDrawer: () => void;
+}
+
+export const BaseDrawerContext = createContext<BaseDrawerContextProps>({ closeDrawer: () => {} });
 
 export interface BaseDrawerProps extends DrawerProps {
   triggerDom?: ReactNode;
@@ -14,11 +19,13 @@ export default function BaseDrawer({children, triggerDom, ...props }: BaseDrawer
   const [open, setOpen] = useState(false);
 
   return (
-    <span>
-      <span onClick={() => setOpen(true)}>{triggerDom}</span>
-      <Drawer title="查看详情" open={open} onClose={() => setOpen(false)} width={700} {...props}>
-        {open && children}
-      </Drawer>
-    </span>
+    <BaseDrawerContext.Provider value={{closeDrawer: () => setOpen(false)}}>
+      <span>
+        <span onClick={() => setOpen(true)}>{triggerDom}</span>
+        <Drawer title="查看详情" open={open} onClose={() => setOpen(false)} width={700} {...props}>
+          {open && children}
+        </Drawer>
+      </span>
+    </BaseDrawerContext.Provider>
   )
 }
