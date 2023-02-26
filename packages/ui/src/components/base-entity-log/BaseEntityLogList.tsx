@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {CSSProperties, useEffect, useState} from 'react';
 import {Timeline} from 'antd';
 import useBus from 'use-bus';
 import {Admin, FaEnums} from '@ui/types';
@@ -9,6 +9,7 @@ import UpdateLogTable from './UpdateLogTable';
 export interface BaseEntityLogListProps {
   bizId: any;
   bizType: string;
+  style?: CSSProperties;
 }
 
 const ITEM_COLOR = {
@@ -21,7 +22,7 @@ const ITEM_COLOR = {
  * @author xu.pengfei
  * @date 2022/10/13
  */
-export default function BaseEntityLogList({ bizId, bizType }: BaseEntityLogListProps) {
+export default function BaseEntityLogList({ bizId, bizType, style }: BaseEntityLogListProps) {
   const [list, setList] = useState<Admin.EntityLog[]>([]);
 
   useBus(
@@ -41,7 +42,7 @@ export default function BaseEntityLogList({ bizId, bizType }: BaseEntityLogListP
   }
 
   return (
-    <Timeline>
+    <Timeline style={style}>
       {list.map((i) => {
         return (
           <Timeline.Item key={i.id} color={ITEM_COLOR[i.action]}>

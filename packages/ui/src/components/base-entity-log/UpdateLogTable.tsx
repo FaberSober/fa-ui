@@ -31,7 +31,7 @@ export default function UpdateLogTable({ content }: UpdateLogTableProps) {
       showHeader={false}
       dataSource={array}
       columns={[
-        { dataIndex: 'name', title: '属性', width: 100 },
+        { dataIndex: 'name', title: '属性', width: 110 },
         { dataIndex: 'old', title: '变更前', render: (val, record) => renderVal(val, record.rich) },
         { dataIndex: 'field', title: 'field', render: () => <ArrowRightOutlined />, width: 30 },
         { dataIndex: 'new', title: '变更后', render: (val, record) => renderVal(val, record.rich) },
