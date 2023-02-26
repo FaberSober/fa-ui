@@ -1,6 +1,8 @@
 import React from 'react';
 import { Table } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons';
+import './UpdateLogTable.css'
+
 
 export interface UpdateLogTableProps {
   content: string;
@@ -20,7 +22,7 @@ export default function UpdateLogTable({ content }: UpdateLogTableProps) {
 
   function renderVal(value: any, rich: any) {
     if (rich) {
-      return <div style={{ minWidth: 100 }} dangerouslySetInnerHTML={{ __html: value }} />;
+      return <div className="fa-update-log-table" style={{ minWidth: 100, maxWidth: 400 }} dangerouslySetInnerHTML={{ __html: value }} />;
     }
     return <span>{value}</span>;
   }
