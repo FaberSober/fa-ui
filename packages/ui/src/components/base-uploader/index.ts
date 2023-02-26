@@ -4,6 +4,7 @@ import UploadFileQiniu, {UploadFileQiniuProps} from './UploadFileQiniu';
 import UploadImgLocal, {UploadImgLocalProps} from './UploadImgLocal';
 import UploadImgQiniu, {UploadImgQiniuProps} from './UploadImgQiniu';
 import { fetchUploadImgQiniu } from './utils';
+import UploadFileModal from "./UploadFileModal";
 
 export {
   fetchUploadImgQiniu,
@@ -12,6 +13,7 @@ export {
   UploadFileQiniu,
   UploadImgQiniu,
   UploadFileLocalMultiple,
+  UploadFileModal,
 };
 
 export type { UploadFileLocalProps, UploadFileLocalMultipleProps, UploadFileQiniuProps, UploadImgLocalProps, UploadImgQiniuProps }
