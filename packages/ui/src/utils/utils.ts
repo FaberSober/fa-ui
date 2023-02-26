@@ -378,7 +378,8 @@ export function sizeToHuman(size: number, base = 2): string {
 
 export const REGEX_TEL_NO = /^(13[0-9]|14[5-9]|15[012356789]|166|17[0-8]|18[0-9]|19[8-9])[0-9]{8}$/;
 export const REGEX_CHAR_NUM = /^[0-9a-zA-Z]+$/;
-export const formItemFullLayout = { labelCol: { span: 4 }, wrapperCol: { span: 19 } };
+export const formItemFullLayout = { labelCol: { span: 4 }, wrapperCol: { span: 20 } };
+export const formItemHalfLayout = { labelCol: { span: 8 }, wrapperCol: { span: 16 } };
 
 export const FormRules = {
   PATTERN_WORD: { pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]*$/, message: '只能输入中英文字符、数字' },
