@@ -7,6 +7,7 @@ body {
     --primary-color: theme('colors.blue');
     --primary-dark: theme('colors.blueDark');
     --fa-bg-grey: #fafafa;
+    --fa-bg-grey-darker: #e1e1e1;
     --fa-hover-bg: #e1e1e1;
     --fa-transition: all ease-in-out 0.3s;
     --fa-border-radius: 3px;
@@ -106,6 +107,10 @@ ul {
 
 .fa-bg-grey {
     background-color: var(--fa-bg-grey);
+}
+
+.fa-bg-grey-darker {
+    background-color: var(--fa-bg-grey-darker);
 }
 
 .fa-card {
