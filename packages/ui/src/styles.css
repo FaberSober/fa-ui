@@ -243,6 +243,10 @@ ul {
     display: flex;
 }
 
+.fa-subtitle {
+    color: var(--fa-subtitle-color);
+}
+
 .fa-link-btn {
     border-radius: var(--fa-border-radius);
     /*padding: 2px 4px;*/
