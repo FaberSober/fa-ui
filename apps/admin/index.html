@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+<!--    <link rel="icon" type="image/svg+xml" href="/vite.svg" />-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FaberAdmin</title>
 
@@ -15,16 +15,16 @@
     <script src="https://cdn.bootcss.com/socket.io/2.2.0/socket.io.js"></script>
   </head>
   <body data-theme="light">
-    <div id="app" class="app"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <div id="root" class="root"></div>
+    <script type="module" src="/src/app.tsx"></script>
   </body>
 
   <script>
     var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?9347ac3a28fc05c0d59f32e4e85ece3f";
-      var s = document.getElementsByTagName("script")[0];
+    (function () {
+      var hm = document.createElement('script');
+      hm.src = 'https://hm.baidu.com/hm.js?9347ac3a28fc05c0d59f32e4e85ece3f';
+      var s = document.getElementsByTagName('script')[0];
       s.parentNode.insertBefore(hm, s);
     })();
   </script>

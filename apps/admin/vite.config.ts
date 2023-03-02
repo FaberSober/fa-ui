@@ -1,7 +1,7 @@
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import Pages from 'vite-plugin-pages';
-import { visualizer } from 'rollup-plugin-visualizer';
+// import { visualizer } from 'rollup-plugin-visualizer';
 import * as path from 'path';
 
 // https://vitejs.dev/config/
@@ -12,13 +12,17 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       Pages({
+        dirs: [
+          { dir: 'src/pages', baseRoute: '' },
+          { dir: 'features/*/pages', baseRoute: '' },
+        ],
         exclude: ['**/components/*.tsx', '**/modal/*.tsx', '**/cube/*.tsx', '**/drawer/*.tsx', '**/helper/*.tsx'],
       }),
-      visualizer({
-        open: true, //注意这里要设置为true，否则无效
-        gzipSize: true,
-        brotliSize: true,
-      }),
+      // visualizer({
+      //   open: true, //注意这里要设置为true，否则无效
+      //   gzipSize: true,
+      //   brotliSize: true,
+      // }),
     ],
     //* css模块化
     css: {
@@ -39,9 +43,8 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: [
         { find: /^~@/, replacement: path.resolve(__dirname, 'src') },
-        // { find: /^~/, replacement: '' },
         { find: '@', replacement: path.resolve(__dirname, 'src') },
-        // fix less import by: @import ~
+        { find: '@features', replacement: path.resolve(__dirname, 'features') },
       ],
     },
     build: {
@@ -60,11 +63,13 @@ export default defineConfig(({ mode }) => {
           manualChunks: {
             lodash: ['lodash'],
             'react-dom': ['react-dom'],
-            fortawesome: [
-              '@fortawesome/fontawesome-svg-core',
-              '@fortawesome/free-solid-svg-icons',
-              '@fortawesome/free-regular-svg-icons',
-            ],
+            // fortawesome: [
+            //   '@fortawesome/fontawesome-svg-core',
+            //   '@fortawesome/free-solid-svg-icons',
+            //   '@fortawesome/free-regular-svg-icons',
+            // ],
+            '@fa/ui': ['@fa/ui'],
+            '@fa/icons': ['@fa/icons'],
           },
           // manualChunks(id) {
           //   if (id.includes('node_modules')) {
