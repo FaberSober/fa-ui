@@ -172,7 +172,7 @@ export function genDictSorterColumn(
 export function genEnumSorterColumn(
   title: string,
   dataIndex: string,
-  width: number,
+  width: number | undefined,
   sorter: Fa.Sorter,
   dicts: Fa.PageDict,
   tcChecked = true,

@@ -157,7 +157,7 @@ function TableColConfigModal<T>({ columns = [], biz, onConfigChange, children, .
             <div className="fa-table-col-thead-item" style={{ width: 100 }}>
               宽度(px)
             </div>
-            <div className="fa-table-col-thead-item" style={{ width: 31 }} />
+            <div className="fa-table-col-thead-item" style={{ width: 10 }} />
           </div>
           <FaFlexRestLayout>
             <FaSortList
