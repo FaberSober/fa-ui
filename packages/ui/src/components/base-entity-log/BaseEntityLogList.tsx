@@ -41,18 +41,19 @@ export default function BaseEntityLogList({ bizId, bizType, style }: BaseEntityL
     entityLogApi.list({ query: { bizId, bizType }, sorter: 'id DESC' }).then((res) => setList(res.data));
   }
 
+  const items = list.map(i => {
+    return {
+      color: ITEM_COLOR[i.action],
+      children: (
+        <div>
+          <div>{i.crtTime} / {i.crtName} / {FaEnums.EntityLogActionEnumMap[i.action]}</div>
+          {i.action === FaEnums.EntityLogActionEnum.UPDATE && <UpdateLogTable content={i.content} />}
+        </div>
+      ),
+    }
+  })
+
   return (
-    <Timeline style={style}>
-      {list.map((i) => {
-        return (
-          <Timeline.Item key={i.id} color={ITEM_COLOR[i.action]}>
-            <div>
-              {i.crtTime} / {i.crtName} / {FaEnums.EntityLogActionEnumMap[i.action]}
-            </div>
-            {i.action === FaEnums.EntityLogActionEnum.UPDATE && <UpdateLogTable content={i.content} />}
-          </Timeline.Item>
-        );
-      })}
-    </Timeline>
+    <Timeline style={style} items={items} />
   );
 }
