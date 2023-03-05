@@ -22,6 +22,7 @@ function BaseTinyMCE({ value, onChange, style, editorInit, editorProps }: BaseTi
 
   const divRef = useRef<any | null>();
   const height = useHeight(divRef);
+  const [ready, setReady] = useState(false);
   const [innerValue, setInnerValue] = useState(value);
 
   useImperativeHandle(ref, () => ({
@@ -40,6 +41,7 @@ function BaseTinyMCE({ value, onChange, style, editorInit, editorProps }: BaseTi
   }));
 
   useEffect(() => {
+    if (!ready) return;
     if (value !== innerValue) {
       if (editorRef.current) {
         console.log('update innerValue from props.value = ', value);
@@ -47,7 +49,7 @@ function BaseTinyMCE({ value, onChange, style, editorInit, editorProps }: BaseTi
         editorRef.current.setContent(trim(value));
       }
     }
-  }, [value]);
+  }, [value, ready]);
 
   const editor = useMemo(() => {
     // console.log('useMemo.editor', height)
@@ -60,6 +62,7 @@ function BaseTinyMCE({ value, onChange, style, editorInit, editorProps }: BaseTi
         onInit={(_, editor) => {
           // console.log('BaseTinyMCE#onInit')
           editorRef.current = editor;
+          setReady(true)
         }}
         initialValue={value}
         init={{
