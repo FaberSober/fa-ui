@@ -50,6 +50,10 @@ ul {
     width: 100%;
 }
 
+.ant-input-number-group-wrapper {
+    width: 100%;
+}
+
 .ant-drawer-close {
     padding: 0;
 }
