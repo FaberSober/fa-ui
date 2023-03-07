@@ -51,7 +51,7 @@ namespace Fa {
     crtHost?: string;
   }
 
-  export interface BaseOprEntity extends BaseCrtEntity {
+  export interface BaseUpdEntity extends BaseCrtEntity {
     /** 更新时间 */
     updTime?: string;
     /** 更新人ID */
@@ -62,9 +62,31 @@ namespace Fa {
     updHost?: string;
   }
 
-  export interface BaseDelEntity extends BaseOprEntity {
+  export interface BaseDelEntity extends BaseUpdEntity {
     /** 删除状态 */
     deleted?: boolean;
+  }
+
+  // ------------------------------------- Tenant ENTITY -------------------------------------
+  export interface TnBaseCrtEntity extends BaseCrtEntity {
+    /** 企业ID */
+    corpId?: number;
+    /** 租户ID */
+    tenantId?: number;
+  }
+
+  export interface TnBaseUpdEntity extends BaseUpdEntity {
+    /** 企业ID */
+    corpId?: number;
+    /** 租户ID */
+    tenantId?: number;
+  }
+
+  export interface TnBaseDelEntity extends BaseDelEntity {
+    /** 企业ID */
+    corpId?: number;
+    /** 租户ID */
+    tenantId?: number;
   }
 
   export interface Option {
