@@ -22,7 +22,7 @@ export default function BaseDrawer({children, triggerDom, ...props }: BaseDrawer
     <BaseDrawerContext.Provider value={{closeDrawer: () => setOpen(false)}}>
       <span>
         <span onClick={() => setOpen(true)}>{triggerDom}</span>
-        <Drawer title="查看详情" open={open} onClose={() => setOpen(false)} width={700} {...props}>
+        <Drawer title="查看详情" open={open} onClose={() => setOpen(false)} width={700} bodyStyle={{position: 'relative'}} {...props}>
           {open && children}
         </Drawer>
       </span>
