@@ -16,6 +16,13 @@ export function showResponse(response: Fa.Ret, prefix: string) {
 /**
  * 复制文本到剪贴板
  */
+export function copyToClipboard(text: string, successMsg = '') {
+  handleClipboard(text, successMsg)
+}
+
+/**
+ * 复制文本到剪贴板
+ */
 export function handleClipboard(text: string, successMsg = '') {
   if (trim(text) === '') {
     return;
