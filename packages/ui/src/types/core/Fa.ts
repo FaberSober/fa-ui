@@ -185,6 +185,13 @@ namespace Fa {
     conditionList?: ConditionQuery.CondGroup[];
   }
 
+  export interface BasePageQuery<T> {
+    sorter?: string; // 排序
+    current?: number;
+    pageSize?: number;
+    query?: T;
+  }
+
   /**
    * 分页参数
    */
