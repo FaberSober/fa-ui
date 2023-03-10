@@ -5,7 +5,7 @@ namespace TnRbac {
   /** 租户-权限-菜单表 */
   export interface TenantRbacMenu extends Fa.BaseDelEntity {
     /** ID */
-    id: number;
+    id: string;
     /** 父级ID */
     parentId: string;
     /** 名称 */
@@ -27,7 +27,7 @@ namespace TnRbac {
   /** 租户-权限-角色表 */
   export interface TenantRbacRole extends Fa.TnBaseDelEntity {
     /** ID */
-    id: number;
+    id: string;
     /** 角色名称 */
     name: string;
     /** 角色描述 */
@@ -39,11 +39,11 @@ namespace TnRbac {
   /** 租户-权限-角色权限对应表 */
   export interface TenantRbacRoleMenu extends Fa.BaseDelEntity {
     /** ID */
-    id: number;
+    id: string;
     /** 角色ID */
-    roleId: number;
+    roleId: string;
     /** 权限ID */
-    menuId: number;
+    menuId: string;
     /** 是否半勾选 */
     halfChecked: boolean;
   }
@@ -51,11 +51,11 @@ namespace TnRbac {
   /** 租户-权限-租户授权权限表 */
   export interface TenantRbacTenantMenu extends Fa.BaseDelEntity {
     /** ID */
-    id: number;
+    id: string;
     /** 租户ID */
-    tenantId: number;
+    tenantId: string;
     /** 权限ID */
-    menuId: number;
+    menuId: string;
     /** 是否半勾选 */
     halfChecked: boolean;
   }
@@ -63,24 +63,24 @@ namespace TnRbac {
   /** 租户-权限-用户角色关联表 */
   export interface TenantRbacUserRole extends Fa.BaseDelEntity {
     /** ID */
-    id: number;
+    id: string;
     /** 用户ID */
-    userId: number;
+    userId: string;
     /** 角色ID */
-    roleId: number;
+    roleId: string;
   }
 
   // ------------------------------------------------- VO -------------------------------------------------
   export interface TenantRoleMenuVo {
-    roleId: number;
-    checkedMenuIds: number[];
-    halfCheckedMenuIds: number[];
+    roleId: string;
+    checkedMenuIds: string[];
+    halfCheckedMenuIds: string[];
   }
 
   export interface TenantTenantMenuVo {
-    tenantId: number;
-    checkedMenuIds: number[];
-    halfCheckedMenuIds: number[];
+    tenantId: string;
+    checkedMenuIds: string[];
+    halfCheckedMenuIds: string[];
   }
 
   export interface TenantRbacUserRoleRetVo extends TenantRbacUserRole {
@@ -90,7 +90,7 @@ namespace TnRbac {
 
   // ------------------------------------------------- VO-Query -------------------------------------------------
   export interface TenantRbacUserRoleQueryVo extends Fa.BasePageProps {
-    roleId: number;
+    roleId: string;
     name?: string;
     username?: string;
   }

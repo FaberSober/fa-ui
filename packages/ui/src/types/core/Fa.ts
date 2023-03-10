@@ -68,25 +68,38 @@ namespace Fa {
   }
 
   // ------------------------------------- Tenant ENTITY -------------------------------------
-  export interface TnBaseCrtEntity extends BaseCrtEntity {
+  export interface TnBaseEntity {
     /** 企业ID */
-    corpId?: number;
+    corpId?: string;
     /** 租户ID */
-    tenantId?: number;
+    tenantId?: string;
   }
 
-  export interface TnBaseUpdEntity extends BaseUpdEntity {
-    /** 企业ID */
-    corpId?: number;
-    /** 租户ID */
-    tenantId?: number;
+  export interface TnBaseCrtEntity extends TnBaseEntity {
+    /** 创建时间 */
+    crtTime?: string;
+    /** 创建人ID */
+    crtUser?: string;
+    /** 创建人 */
+    crtName?: string;
+    /** 创建IP */
+    crtHost?: string;
   }
 
-  export interface TnBaseDelEntity extends BaseDelEntity {
-    /** 企业ID */
-    corpId?: number;
-    /** 租户ID */
-    tenantId?: number;
+  export interface TnBaseUpdEntity extends TnBaseCrtEntity {
+    /** 更新时间 */
+    updTime?: string;
+    /** 更新人ID */
+    updUser?: string;
+    /** 更新人 */
+    updName?: string;
+    /** 更新IP */
+    updHost?: string;
+  }
+
+  export interface TnBaseDelEntity extends TnBaseUpdEntity {
+    /** 删除状态 */
+    deleted?: boolean;
   }
 
   export interface Option {

@@ -5,13 +5,13 @@ namespace Tn {
   /** 租户-租户表 */
   export interface Tenant extends Fa.BaseDelEntity {
     /** ID */
-    id: number;
+    id: string;
     /** 租户名称 */
     name: string;
     /** 租户状态[1-正常2-停用] */
     status: TnEnums.TenantStatusEnum;
     /** 所属用户ID */
-    ownerId: number;
+    ownerId: string;
     /** 所属用户 */
     ownerName: string;
     /** 所属用户 */
@@ -21,7 +21,7 @@ namespace Tn {
   /** 租户-用户表 */
   export interface TenantUser extends Fa.BaseDelEntity {
     /** ID */
-    id: number;
+    id: string;
     /** 名称 */
     name: string;
     /** 状态[1-正常2-停用] */
@@ -31,9 +31,9 @@ namespace Tn {
     /** 密码 */
     password: string;
     /** 当前选择的企业ID */
-    corpId: number;
+    corpId: string;
     /** 租户ID */
-    tenantId: number;
+    tenantId: string;
     /** 当前选择的企业ID */
     corpName: number;
     /** 租户ID */
@@ -43,21 +43,21 @@ namespace Tn {
   /** 租户-企业表 */
   export interface TenantCorp extends Fa.BaseDelEntity {
     /** ID */
-    id: number;
+    id: string;
     /** 名称 */
     name: string;
     /** 状态[1-正常2-停用] */
     status: TnEnums.TenantStatusEnum;
     /** 租户ID */
-    tenantId: number;
+    tenantId: string;
     /** 租户ID */
-    tenantName: number;
+    tenantName: string;
   }
 
   /** 租户-企业用户表 */
   export interface TenantCorpUser extends Fa.TnBaseDelEntity {
     /** ID */
-    id: number;
+    id: string;
     /** 租户用户ID */
     userId: string;
     /** 状态[1-正常2-停用] */
@@ -121,7 +121,7 @@ namespace Tn {
   /** 租户-登录日志 */
   export interface TenantLogLogin extends Fa.TnBaseDelEntity {
     /** ID */
-    id: number;
+    id: string;
     /** 访问客户端 */
     agent: string;
     /** 操作系统 */
@@ -142,6 +142,12 @@ namespace Tn {
     corpName: string;
     /** 租户名称 */
     tenantName: string;
+  }
+
+  export interface TenantConfig {
+    tenantName: string;
+    logo: string;
+    title: string;
   }
 }
 
