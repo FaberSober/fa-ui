@@ -22,6 +22,7 @@ namespace TnEnums {
     INNER = 1,
     OUT = 2,
   }
+
 }
 
 export default TnEnums;
