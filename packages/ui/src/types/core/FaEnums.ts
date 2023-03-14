@@ -73,6 +73,12 @@ namespace FaEnums {
     NUM_CHAR_SPEC = 4,
   }
 
+  export enum DocumentType {
+    word = 'word',
+    cell = 'cell',
+    slide = 'slide',
+  }
+
   // ------------------------------------ RBAC ------------------------------------
   export enum RbacMenuLevelEnum {
     APP = 0,

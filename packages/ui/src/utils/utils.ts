@@ -1,5 +1,5 @@
 import {message} from 'antd';
-import {Fa} from '@ui/types';
+import { Fa, FaEnums } from '@ui/types';
 import {findIndex, isNil, isUndefined, map, trim} from 'lodash';
 import dayjs from "dayjs";
 import { filesize } from "filesize";
@@ -405,3 +405,23 @@ export const FileAccept = {
   PDF: 'application/pdf',
 };
 
+export const FA_TYPE_WORD = [".doc", ".docx", ".docm",
+  ".dot", ".dotx", ".dotm",
+  ".odt", ".fodt", ".ott", ".rtf", ".txt",
+  ".html", ".htm", ".mht", ".xml",
+  ".pdf", ".djvu", ".fb2", ".epub", ".xps", ".oform"];
+
+export const FA_TYPE_EXCEL = [".xls", ".xlsx", ".xlsm", ".xlsb",
+  ".xlt", ".xltx", ".xltm",
+  ".ods", ".fods", ".ots", ".csv"];
+
+export const FA_TYPE_PPT = [".pps", ".ppsx", ".ppsm",
+  ".ppt", ".pptx", ".pptm",
+  ".pot", ".potx", ".potm",
+  ".odp", ".fodp", ".otp"];
+
+export function getDocumentType(ext: string):FaEnums.DocumentType|undefined {
+  if (FA_TYPE_WORD.indexOf('.' + ext) > -1) return FaEnums.DocumentType.word;
+  if (FA_TYPE_EXCEL.indexOf('.' + ext) > -1) return FaEnums.DocumentType.cell;
+  if (FA_TYPE_PPT.indexOf('.' + ext) > -1) return FaEnums.DocumentType.slide;
+}
