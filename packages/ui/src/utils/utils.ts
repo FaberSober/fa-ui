@@ -420,7 +420,14 @@ export const FA_TYPE_PPT = [".pps", ".ppsx", ".ppsm",
   ".pot", ".potx", ".potm",
   ".odp", ".fodp", ".otp"];
 
-export function getDocumentType(ext: string):FaEnums.DocumentType|undefined {
+export function getDocumentTypeByExt(ext: string):FaEnums.DocumentType|undefined {
+  if (FA_TYPE_WORD.indexOf('.' + ext) > -1) return FaEnums.DocumentType.word;
+  if (FA_TYPE_EXCEL.indexOf('.' + ext) > -1) return FaEnums.DocumentType.cell;
+  if (FA_TYPE_PPT.indexOf('.' + ext) > -1) return FaEnums.DocumentType.slide;
+}
+
+export function getDocumentTypeByName(fileName: string):FaEnums.DocumentType|undefined {
+  const ext = fileName.substring(fileName.lastIndexOf('.') + 1)
   if (FA_TYPE_WORD.indexOf('.' + ext) > -1) return FaEnums.DocumentType.word;
   if (FA_TYPE_EXCEL.indexOf('.' + ext) > -1) return FaEnums.DocumentType.cell;
   if (FA_TYPE_PPT.indexOf('.' + ext) > -1) return FaEnums.DocumentType.slide;
