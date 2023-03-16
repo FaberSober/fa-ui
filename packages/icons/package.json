@@ -22,7 +22,7 @@
     "@fa/tsconfig": "workspace:*",
     "@types/lodash": "4.14.191",
     "@types/react": "18.0.28",
-    "eslint": "8.35.0",
+    "eslint": "8.36.0",
     "lodash": "4.17.21",
     "react": "18.2.0",
     "tsup": "6.6.3",
