@@ -1,8 +1,8 @@
 import {message} from 'antd';
-import { Fa, FaEnums } from '@ui/types';
+import {Fa, FaEnums} from '@ui/types';
 import {findIndex, isNil, isUndefined, map, trim} from 'lodash';
 import dayjs from "dayjs";
-import { filesize } from "filesize";
+import {filesize} from "filesize";
 
 /**
  * 展示服务端返回数据提示
@@ -259,9 +259,24 @@ export function isWindows() {
  */
 export function isJson(input: string | undefined): boolean {
   if (input === undefined) return false;
+
   try {
     // json格式化
     JSON.stringify(JSON.parse(input), null, '\t');
+
+    if (/^[\],:{}\s]*$/.test(
+      input
+        .replace(/\\["\\\/bfnrtu]/g, '@')
+        .replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']')
+        .replace(/(?:^|:|,)(?:\s*\[)+/g, ''))
+    ) {
+      //the json is ok
+      return true;
+    }else{
+      //the json is not ok
+      return false;
+    }
+
     return true;
   } catch (err) {
     // console.error(err)
