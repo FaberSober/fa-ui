@@ -35,9 +35,9 @@ namespace Tn {
     /** 租户ID */
     tenantId: string;
     /** 当前选择的企业ID */
-    corpName: number;
+    corpName: string;
     /** 租户ID */
-    tenantName: number;
+    tenantName: string;
   }
 
   /** 租户-企业表 */
