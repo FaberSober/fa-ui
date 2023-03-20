@@ -18,5 +18,6 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'off', // 未使用的变量
     '@typescript-eslint/no-namespace': 'off', // 不可使用namespace
     '@typescript-eslint/ban-ts-comment': 'off', // 不可使用@ts-ignore
+    'no-useless-escape': 'off', // 不可使用@ts-ignore
   },
 };
