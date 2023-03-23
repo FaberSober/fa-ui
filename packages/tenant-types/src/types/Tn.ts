@@ -52,6 +52,8 @@ namespace Tn {
     wxCorpid: string;
     /** 第三方服务商企业id */
     openWxCorpid: string;
+    /** 永久授权码 */
+    permanentCode: string;
     /** 企业代码(企业统一社会信用代码) */
     socialCode: string;
     /** 企业通讯录secret */
