@@ -78,6 +78,8 @@ namespace Tn {
     id: string;
     /** 状态[1-正常2-停用] */
     status: TnEnums.TenantStatusEnum;
+    /** 开发模板套件ID */
+    suiteId: string;
     /** 微信应用ID */
     wxAgentId: string;
     /** 微信应用secret */
