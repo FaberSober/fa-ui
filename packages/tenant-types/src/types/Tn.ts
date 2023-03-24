@@ -70,6 +70,8 @@ namespace Tn {
     authType: string;
     /** 租户ID */
     tenantId: string;
+    /** 租户ID */
+    tenantName: string;
   }
 
   /** 租户-企业应用表 */

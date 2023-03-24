@@ -3,7 +3,7 @@ import { handleClipboard } from "@ui/utils/utils";
 
 
 export interface FaClickCopyLinkProps {
-  children: string|ReactNode;
+  children?: string|ReactNode;
   copyText: string;
 }
 
@@ -13,6 +13,6 @@ export interface FaClickCopyLinkProps {
  */
 export default function FaClickCopyLink({children, copyText}: FaClickCopyLinkProps) {
   return (
-    <a onClick={() => handleClipboard(copyText)}>{children}</a>
+    <a onClick={() => handleClipboard(copyText)}>{children || copyText}</a>
   )
 }
