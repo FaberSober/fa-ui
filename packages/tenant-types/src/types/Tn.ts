@@ -49,9 +49,9 @@ namespace Tn {
     /** 状态[1-正常2-停用] */
     status: TnEnums.TenantStatusEnum;
     /** 企业微信ID */
-    wxCorpid: string;
+    wxCorpId: string;
     /** 第三方服务商企业id */
-    openWxCorpid: string;
+    openWxCorpId: string;
     /** 永久授权码 */
     permanentCode: string;
     /** 企业代码(企业统一社会信用代码) */
