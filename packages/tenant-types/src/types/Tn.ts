@@ -68,6 +68,8 @@ namespace Tn {
     encodingAesKey: string;
     /** 授权类型 1-内部开发+自建应用 2-内部开发+自建应用代开发 3-第三方应用授权+自建应用代开发 4代开发应用 */
     authType: string;
+    /** 代开发-通讯录编辑-永久授权码 */
+    contactEditPermanentCode: string;
     /** 租户ID */
     tenantId: string;
     /** 租户ID */
