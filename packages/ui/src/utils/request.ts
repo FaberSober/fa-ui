@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { get } from 'lodash';
 import { message } from 'antd';
-import { getToken } from './cache';
+import {getTnCorpId, getToken} from './cache';
 import { dispatch } from 'use-bus';
 import { Fa } from '@ui/types';
 
@@ -40,6 +40,7 @@ instance.interceptors.request.use(
     if (token) {
       config.headers[Fa.Constant.TOKEN_KEY] = token;
     }
+    config.headers[Fa.Constant.TN_CORP_ID] = getTnCorpId();
     config.headers[Fa.Constant.FA_FROM] = window.FaFrom;
     config.headers[Fa.Constant.FA_VERSION_CODE] = window.FaVersionCode;
     config.headers[Fa.Constant.FA_VERSION_NAME] = window.FaVersionName;

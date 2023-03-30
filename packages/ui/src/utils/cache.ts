@@ -13,21 +13,31 @@ export function clearToken() {
 }
 
 
-const LOGIN_MODE_KEY = "LOGIN_MODE"
-
 export enum LoginMode {
   LOCAL = '1',
   CAS = '2',
 }
 
 export function getLoginMode(): LoginMode | null {
-  return localStorage.getItem(LOGIN_MODE_KEY) as LoginMode;
+  return localStorage.getItem(Fa.Constant.LOGIN_MODE_KEY) as LoginMode;
 }
 
 export function setLoginMode(mode: LoginMode) {
-  localStorage.setItem(LOGIN_MODE_KEY, mode);
+  localStorage.setItem(Fa.Constant.LOGIN_MODE_KEY, mode);
 }
 
 export function clearLoginMode() {
-  localStorage.removeItem(LOGIN_MODE_KEY);
+  localStorage.removeItem(Fa.Constant.LOGIN_MODE_KEY);
+}
+
+export function getTnCorpId(): string | null {
+  return localStorage.getItem(Fa.Constant.TN_CORP_ID);
+}
+
+export function setTnCorpId(corpId: string) {
+  localStorage.setItem(Fa.Constant.TN_CORP_ID, corpId);
+}
+
+export function clearTnCorpId() {
+  localStorage.removeItem(Fa.Constant.TN_CORP_ID);
 }
