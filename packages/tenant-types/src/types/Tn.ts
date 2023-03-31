@@ -70,6 +70,12 @@ namespace Tn {
     authType: string;
     /** 代开发-通讯录编辑-永久授权码 */
     contactEditPermanentCode: string;
+    /** 授权方企业圆形头像 */
+    corpRoundLogoUrl: string;
+    /** 授权方企业方形头像 */
+    corpSquareLogoUrl: string;
+    /** 企业类型，1. 企业; 2. 政府以及事业单位; 3. 其他组织, 4.团队号 */
+    subjectType: number;
     /** 租户ID */
     tenantId: string;
     /** 租户ID */
