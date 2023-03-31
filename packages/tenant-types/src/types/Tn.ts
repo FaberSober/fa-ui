@@ -369,6 +369,12 @@ namespace Tn {
     tenantId: string;
   }
 
+  export interface TnAgentPublishVo {
+    agentId: string,
+    wxAgentId: number,
+    publishStatus: TnEnums.PublishStatusEnum,
+  }
+
 }
 
 export default Tn;

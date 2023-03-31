@@ -5,6 +5,18 @@ namespace TnEnums {
     STOP = 2,
   }
 
+  export enum PublishStatusEnum {
+    NOT_SCAN = 0,
+    SCANNED = 1,
+    PUBLISHED = 2,
+  }
+
+  export const PublishStatusEnumMap = {
+    [PublishStatusEnum.NOT_SCAN]: '未扫码创建',
+    [PublishStatusEnum.SCANNED]: '已扫码未上线',
+    [PublishStatusEnum.PUBLISHED]: '已发布上线',
+  }
+
   // ------------------------------------ RBAC ------------------------------------
   export enum TenantRbacMenuLevelEnum {
     APP = 0,
