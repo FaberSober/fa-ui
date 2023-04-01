@@ -222,7 +222,7 @@ namespace Tn {
 
 
   /** SCRM-企业通讯录 */
-  export interface CpEmployee extends Fa.BaseDelEntity {
+  export interface CpEmployee extends Fa.TnBaseDelEntity {
     /**  */
     id: string;
     /** wx.userId */
@@ -271,42 +271,30 @@ namespace Tn {
     auditStatus: boolean;
     /** 权限状态（1：正常，3：未开通） */
     authStatus: boolean;
-    /** 企业ID */
-    corpId: string;
-    /** 租户ID */
-    tenantId: string;
   }
 
   /** SCRM-(通讯录 - 标签)中间表 */
-  export interface CpEmployeeTagPivot extends Fa.BaseDelEntity {
+  export interface CpEmployeeTagPivot extends Fa.TnBaseDelEntity {
     /**  */
     id: string;
     /** 通讯录员工ID */
     employeeId: string;
     /** wx标签ID */
     tagId: string;
-    /** 企业ID */
-    corpId: string;
-    /** 租户ID */
-    tenantId: string;
   }
 
   /** SCRM-(通讯录)标签 */
-  export interface CpEmployeeTag extends Fa.BaseDelEntity {
+  export interface CpEmployeeTag extends Fa.TnBaseDelEntity {
     /** id */
     id: string;
     /** 微信通许录标签 id */
     wxTagid: string;
     /** 标签名称 */
     tagName: string;
-    /** 企业ID */
-    corpId: string;
-    /** 租户ID */
-    tenantId: string;
   }
 
   /** SCRM-成员统计表 */
-  export interface CpEmployeeStatistic extends Fa.BaseDelEntity {
+  export interface CpEmployeeStatistic extends Fa.TnBaseDelEntity {
     /**  */
     id: string;
     /** 成员id (mc_work_employee.id) */
@@ -327,14 +315,10 @@ namespace Tn {
     negativeFeedbackCnt: number;
     /** 同步时间 */
     synTime: string;
-    /** 企业ID */
-    corpId: string;
-    /** 租户ID */
-    tenantId: string;
   }
 
   /** SCRM-(通讯录-通讯录部门)中间表 */
-  export interface CpEmployeeDepartment extends Fa.BaseDelEntity {
+  export interface CpEmployeeDepartment extends Fa.TnBaseDelEntity {
     /**  */
     id: string;
     /** 通讯录员工(mc_work_department.id) */
@@ -344,15 +328,11 @@ namespace Tn {
     /** 所在的部门内是否为上级 */
     isLeaderInDept: number;
     /** 排序 */
-    order: number;
-    /** 企业ID */
-    corpId: string;
-    /** 租户ID */
-    tenantId: string;
+    sort: number;
   }
 
   /** SCRM-(通讯录)部门管理 */
-  export interface CpDepartment extends Fa.BaseDelEntity {
+  export interface CpDepartment extends Fa.TnBaseDelEntity {
     /** 部门ID */
     id: string;
     /** 微信部门自增ID */
@@ -366,15 +346,11 @@ namespace Tn {
     /** 微信父部门ID */
     wxParentid: string;
     /** 排序 */
-    order: number;
+    wxOrder: number;
     /** 部门级别 */
     level: number;
     /** 父ID路径【#id#-#id#】 */
     path: string;
-    /** 企业ID */
-    corpId: string;
-    /** 租户ID */
-    tenantId: string;
   }
 
   export interface TnAgentPublishVo {
