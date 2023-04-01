@@ -359,6 +359,8 @@ namespace Tn {
     wxDepartmentId: string;
     /** 部门名称 */
     name: string;
+    /** 部门名称EN */
+    enName: string;
     /** 父部门ID */
     parentId: string;
     /** 微信父部门ID */
