@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@ant-design/icons": "5.0.1",
+    "@fa/core": "workspace:*",
     "@fa/eslint-config-custom": "workspace:*",
     "@fa/tailwind-config": "workspace:*",
     "@fa/tsconfig": "workspace:*",
