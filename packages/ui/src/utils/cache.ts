@@ -31,13 +31,13 @@ export function clearLoginMode() {
 }
 
 export function getTnCorpId(): string | null {
-  return localStorage.getItem(Fa.Constant.TN_CORP_ID);
+  return localStorage.getItem(Fa.Constant.FA_TN_CORP_ID);
 }
 
 export function setTnCorpId(corpId: string) {
-  localStorage.setItem(Fa.Constant.TN_CORP_ID, corpId);
+  localStorage.setItem(Fa.Constant.FA_TN_CORP_ID, corpId);
 }
 
 export function clearTnCorpId() {
-  localStorage.removeItem(Fa.Constant.TN_CORP_ID);
+  localStorage.removeItem(Fa.Constant.FA_TN_CORP_ID);
 }
