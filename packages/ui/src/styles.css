@@ -183,6 +183,16 @@ ul {
     height: 100%;
 }
 
+.fa-scroll-auto-y {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.fa-scroll-auto-x {
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+
 .fa-flex-row {
     display: flex;
     flex-direction: row;
