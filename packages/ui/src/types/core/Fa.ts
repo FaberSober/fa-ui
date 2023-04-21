@@ -291,6 +291,12 @@ namespace Fa {
     value: number;
   }
 
+  // ------------------------------------- input field -------------------------------------
+  export interface LngLat {
+    lng: number;
+    lat: number;
+  }
+
 }
 
 export default Fa;
