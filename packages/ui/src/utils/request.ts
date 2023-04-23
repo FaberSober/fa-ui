@@ -86,6 +86,7 @@ instance.interceptors.response.use(
         message.error(defaultErrorMsg);
       }
     } else if (error.response.data instanceof Blob) {
+      // 判断返回的是文件流，如果是文件流，则下载文件到本地。这种为了处理POST类型的文件下载接口。
       const blob = new Blob([error.response.data], {
         type: 'application/json;charset=utf-8',
       });
