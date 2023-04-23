@@ -106,6 +106,10 @@ ul {
     position: relative;
 }
 
+.fa-relative {
+    position: relative;
+}
+
 .fa-bg-white {
     background-color: #ffffff;
 }
