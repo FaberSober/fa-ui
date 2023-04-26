@@ -114,6 +114,10 @@ ul {
     background-color: #ffffff;
 }
 
+.fa-bg-blue {
+    background-color: #d6e4ff;
+}
+
 .fa-bg-grey {
     background-color: var(--fa-bg-grey);
 }

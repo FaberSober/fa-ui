@@ -1,3 +1,1 @@
-import ScaleContainer from './ScaleContainer';
-
-export { ScaleContainer };
+export { default as ScaleContainer } from './ScaleContainer';
