@@ -1,5 +1,6 @@
 export * from './antd-pro';
 export * from './auth';
+export * from './base-card';
 export * from './base-cascader';
 export * from './base-dict';
 export * from './base-drag';
