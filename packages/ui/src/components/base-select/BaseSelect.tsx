@@ -16,6 +16,7 @@ export interface BaseSelectProps<T> extends SelectProps<T> {
   extraParams?: any;
   showAll?: boolean; // 是否展示所有选项
   transValueToString?: boolean; // 是否将value转换为string
+  onApiGetData?: (arr: T[]) => void; // api获取数据回调
 }
 
 /**
@@ -31,6 +32,7 @@ export default function BaseSelect<RecordType extends object = any>({
   extraParams,
   showAll,
   transValueToString,
+  onApiGetData,
   ...props
 }: BaseSelectProps<RecordType>) {
   const [loading, setLoading] = useState(false);
@@ -53,6 +55,8 @@ export default function BaseSelect<RecordType extends object = any>({
             })),
           );
           setArray(newList);
+
+          if (onApiGetData) onApiGetData(res.data)
           setLoading(false);
         })
         .catch(() => setLoading(false));
