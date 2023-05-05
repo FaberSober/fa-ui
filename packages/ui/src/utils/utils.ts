@@ -447,3 +447,20 @@ export function getDocumentTypeByName(fileName: string):FaEnums.DocumentType|und
   if (FA_TYPE_EXCEL.indexOf('.' + ext) > -1) return FaEnums.DocumentType.cell;
   if (FA_TYPE_PPT.indexOf('.' + ext) > -1) return FaEnums.DocumentType.slide;
 }
+
+/**
+ * echarts toolbox 配置
+ */
+export const EchartsToolbox = {
+  show: true,
+  orient: 'vertical',
+  left: 'right',
+  top: 'center',
+  feature: {
+    mark: { show: true },
+    dataView: { show: true, readOnly: false },
+    magicType: { show: true, type: ['line', 'bar', 'stack'] },
+    restore: { show: true },
+    saveAsImage: { show: true }
+  }
+}
