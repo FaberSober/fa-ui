@@ -329,6 +329,10 @@ ul {
     border: 1px solid #d9d9d9;
 }
 
+.fa-tips {
+    color: #666;
+}
+
 .fa-upload-img-local .ant-upload-select {
     margin: 0 !important;
 }
