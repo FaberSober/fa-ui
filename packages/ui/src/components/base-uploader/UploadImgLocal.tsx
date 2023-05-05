@@ -102,7 +102,7 @@ export default function UploadImgLocal({ value, onChange, style, ...props }: Upl
   };
 
   return (
-    <>
+    <div className="fa-upload-img-local">
       <Upload
         name="file"
         listType="picture-card"
@@ -128,17 +128,19 @@ export default function UploadImgLocal({ value, onChange, style, ...props }: Upl
         )}
       </Upload>
 
-      <Image
-        width={200}
-        style={{ display: 'none' }}
-        preview={{
-          visible: previewOpen,
-          src: previewImage,
-          onVisibleChange: (value) => {
-            setPreviewOpen(value);
-          },
-        }}
-      />
-    </>
+      <div style={{ display: 'none' }}>
+        <Image
+          width={200}
+          style={{ display: 'none' }}
+          preview={{
+            visible: previewOpen,
+            src: previewImage,
+            onVisibleChange: (value) => {
+              setPreviewOpen(value);
+            },
+          }}
+        />
+      </div>
+    </div>
   );
 }
