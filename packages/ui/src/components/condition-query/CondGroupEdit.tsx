@@ -132,8 +132,13 @@ export default function CondGroupEdit<T>({ condGroup, columns, onChange, onDelet
           const { id, key, opr, value, begin, end } = cond;
           const colFind = find(columns, (n) => BaseTableUtils.dataIndexToString(n.dataIndex) === key);
 
+          // 单条件查询
           const tcCondComponent = colFind && colFind.tcCondComponent;
+          const tcCondComponentElement = colFind && colFind.tcCondComponentElement;
+
+          // 双条件查询
           const tcCondBetweenComponent = colFind && colFind.tcCondBetweenComponent;
+          const tcCondBetweenComponentElement = colFind && colFind.tcCondBetweenComponentElement;
 
           return (
             <div key={id} style={{ marginBottom: 12, display: 'flex', flexDirection: 'row' }}>
@@ -166,7 +171,17 @@ export default function CondGroupEdit<T>({ condGroup, columns, onChange, onDelet
               {/* 单值输入 */}
               {opr !== ConditionQuery.CondOpr.between ? (
                 <>
-                  {tcCondComponent ? (
+                  {/* 动态创建组件 */}
+                  {tcCondComponentElement && React.createElement(tcCondComponentElement, {
+                    index,
+                    value,
+                    callback: (v:any, i:any, name:any) => handleChangeValue(v, i, name),
+                    style: { width: 400, marginRight: 12 },
+                    placeholder: '请输入筛选条件的值',
+                    mode: opr === ConditionQuery.CondOpr.in ? 'multiple' : undefined,
+                  })}
+                  {/* 指定组件 */}
+                  {tcCondComponent && (
                     tcCondComponent({
                       index,
                       value,
@@ -175,7 +190,9 @@ export default function CondGroupEdit<T>({ condGroup, columns, onChange, onDelet
                       placeholder: '请输入筛选条件的值',
                       mode: opr === ConditionQuery.CondOpr.in ? 'multiple' : undefined,
                     })
-                  ) : (
+                  )}
+                  {/* 未指定组件，默认Input */}
+                  {tcCondComponent === undefined && tcCondComponentElement === undefined && (
                     <Input
                       style={{ width: 400, marginRight: 12 }}
                       value={value}
@@ -188,7 +205,17 @@ export default function CondGroupEdit<T>({ condGroup, columns, onChange, onDelet
               {/* 双值输入 */}
               {opr === ConditionQuery.CondOpr.between ? (
                 <>
-                  {tcCondBetweenComponent ? (
+                  {/* 动态创建组件 */}
+                  {tcCondBetweenComponentElement && React.createElement(tcCondBetweenComponentElement, {
+                    index,
+                    value: [begin, end],
+                    callback: (v:any, i:any, name:any) => {
+                      handleChangeBetweenValue(v[0], v[1], i, name);
+                    },
+                    style: { width: 400, marginRight: 12 },
+                  })}
+                  {/* 指定组件 */}
+                  {tcCondBetweenComponent && (
                     tcCondBetweenComponent({
                       index,
                       value: [begin, end],
@@ -197,7 +224,9 @@ export default function CondGroupEdit<T>({ condGroup, columns, onChange, onDelet
                       },
                       style: { width: 400, marginRight: 12 },
                     })
-                  ) : (
+                  )}
+                  {/* 未指定组件，默认Input */}
+                  {tcCondBetweenComponent === undefined && tcCondBetweenComponentElement === undefined && (
                     <>
                       <Input
                         style={{ width: 175 }}
