@@ -102,7 +102,7 @@ export default function UploadImgLocal({ value, onChange, style, ...props }: Upl
   };
 
   return (
-    <div className="fa-upload-img-local">
+    <div className="fa-upload-img-local" style={{height: 102}}>
       <Upload
         name="file"
         listType="picture-card"
