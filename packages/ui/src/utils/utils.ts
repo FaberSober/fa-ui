@@ -155,6 +155,26 @@ export function getDateStr000(date: string | any | null | undefined, format = 'Y
   return date === null || date === undefined ? undefined : dayjs(date).format(format);
 }
 
+
+/**
+ * date('YYYY-MM-DD')格式化str
+ * @param {*} date
+ * @param {*} format
+ */
+export function getDateStrBeginOfDay(date: string | any | null | undefined) {
+  return date === null || date === undefined ? undefined : dayjs(date).format('YYYY-MM-DD 00:00:00');
+}
+
+
+/**
+ * date('YYYY-MM-DD')格式化str
+ * @param {*} date
+ * @param {*} format
+ */
+export function getDateStrEndOfDay(date: string | any | null | undefined) {
+  return date === null || date === undefined ? undefined : dayjs(date).format('YYYY-MM-DD 23:59:59');
+}
+
 /**
  * date('YYYY-MM-DD')格式化str
  * @param {*} date
