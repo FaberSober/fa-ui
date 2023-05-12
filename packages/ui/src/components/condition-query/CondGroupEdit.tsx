@@ -5,6 +5,7 @@ import { each, find, remove } from 'lodash';
 import { CloseCircleFilled, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { BaseTableUtils, FaberTable } from '@ui/components/base-table';
 import { v1 as uuidv1 } from 'uuid';
+import {optionsToLabel} from "@ui/utils/utils";
 
 export interface CondGroupEditProps<T> {
   condGroup: ConditionQuery.CondGroup;
@@ -175,7 +176,9 @@ export default function CondGroupEdit<T>({ condGroup, columns, onChange, onDelet
                   {tcCondComponentElement && React.createElement(tcCondComponentElement, {
                     index,
                     value,
-                    callback: (v:any, i:any, name:any) => handleChangeValue(v, i, name),
+                    onChange: (v:any, o:any) => {
+                      handleChangeValue(v, index, optionsToLabel(o))
+                    },
                     style: { width: 400, marginRight: 12 },
                     placeholder: '请输入筛选条件的值',
                     mode: opr === ConditionQuery.CondOpr.in ? 'multiple' : undefined,
@@ -209,7 +212,7 @@ export default function CondGroupEdit<T>({ condGroup, columns, onChange, onDelet
                   {tcCondBetweenComponentElement && React.createElement(tcCondBetweenComponentElement, {
                     index,
                     value: [begin, end],
-                    callback: (v:any, i:any, name:any) => {
+                    onChange: (v:any, i:any, name:any) => {
                       handleChangeBetweenValue(v[0], v[1], i, name);
                     },
                     style: { width: 400, marginRight: 12 },
