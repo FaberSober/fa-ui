@@ -9,6 +9,7 @@ import SelectedUserList from "@ui/components/biz-user-select/SelectedUserList";
 import {BaseTree} from "@ui/components/base-tree";
 import {FaLabel} from "@ui/components/decorator";
 import {CommonModalProps, DragModal} from '../base-modal';
+import {FaFlexRestLayout} from "@ui/components";
 
 
 export interface SelectedUser {
@@ -174,9 +175,11 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
             </div>
           </Col>
 
-          <Col md={5}>
+          <Col md={5} className="fa-flex-column" style={{ height: '100%' }}>
             <FaLabel title="已选择" className="fa-mb12" />
-            <SelectedUserList selectedUsers={innerUsers} onRemove={handleRemove} />
+            <FaFlexRestLayout>
+              <SelectedUserList selectedUsers={innerUsers} onRemove={handleRemove} />
+            </FaFlexRestLayout>
           </Col>
         </Row>
       </DragModal>

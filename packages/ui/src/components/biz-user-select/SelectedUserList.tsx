@@ -19,7 +19,7 @@ export default function SelectedUserList({selectedUsers, onRemove}: SelectedUser
   const [array, setArray] = useState<Admin.User[]>([]);
 
   useEffect(() => {
-    console.log('selectedUsers', selectedUsers)
+    // console.log('selectedUsers', selectedUsers)
     if (isNil(selectedUsers) || selectedUsers.length === 0) {
       setArray([])
       return;
