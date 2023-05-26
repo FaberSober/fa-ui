@@ -60,6 +60,9 @@ export default class BaseApi<T, KeyType, PageT = T> extends BaseZeroApi {
   /** 获取实体 分页 */
   minePage = (params: Fa.BasePageProps): Promise<Fa.Ret<Fa.Page<PageT>>> => this.post('minePage', params);
 
-  /** 导出Excel[分页查询] */
+  /** 导出Excel */
   exportExcel = (params: Fa.BasePageProps): Promise<undefined> => this.download('exportExcel', params);
+
+  /** 导出格式Excel */
+  exportTplExcel = (): Promise<undefined> => this.download('exportTplExcel', {});
 }
