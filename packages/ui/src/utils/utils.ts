@@ -438,6 +438,7 @@ export const FormRules = {
 export const FileAccept = {
   EXCEL: '.csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   PDF: 'application/pdf',
+  IMG: 'image/gif,image/jpeg,image/jpg,image/png,image/svg,image/webp',
 };
 
 export const FA_TYPE_WORD = [".doc", ".docx", ".docm",

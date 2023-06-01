@@ -7,6 +7,7 @@ import { RcFile } from 'antd/es/upload';
 import { UploadChangeParam } from 'antd/lib/upload/interface';
 import { UploadFile } from 'antd/es/upload/interface';
 import { Fa } from '@ui/types';
+import {FileAccept} from "@ui/utils/utils";
 
 export interface UploadImgLocalProps extends Omit<UploadProps, 'onChange'> {
   value?: string;
@@ -119,6 +120,7 @@ export default function UploadImgLocal({ value, onChange, style, ...props }: Upl
         style={style}
         maxCount={1}
         onPreview={handlePreview}
+        accept={FileAccept.IMG}
         {...props}
       >
         {array && array[0] ? null : (
