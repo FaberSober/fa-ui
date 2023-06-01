@@ -233,7 +233,7 @@ export function genTimeSorterColumn(
   } as FaberTable.ColumnsProp<any>;
 }
 
-export function genCtrColumns(sorter: Fa.Sorter, tcChecked = true): FaberTable.ColumnsProp<any>[] {
+export function genCtrColumns(sorter: Fa.Sorter, tcChecked = true, crtNameTcChecked = false): FaberTable.ColumnsProp<any>[] {
   return [
     {
       title: '创建时间',
@@ -246,6 +246,14 @@ export function genCtrColumns(sorter: Fa.Sorter, tcChecked = true): FaberTable.C
       tcCondBetweenComponent: renderTimeRangePicker,
     },
     {
+      title: '创建用户',
+      dataIndex: 'crtName',
+      sorter: true,
+      sortOrder: getSortOrder(sorter, 'crtName'),
+      tcChecked: crtNameTcChecked,
+      width: 100,
+    },
+    {
       title: '创建用户ID',
       dataIndex: 'crtUser',
       sorter: true,
@@ -254,14 +262,6 @@ export function genCtrColumns(sorter: Fa.Sorter, tcChecked = true): FaberTable.C
       // tcCondComponent: ({ index, value, callback, ...props }: FaberTable.TcCondProp) => (
       //   <UserSearchSelect value={value} onChange={(v: any, item: any) => callback(v, index, get(item, 'label'))} {...props} />
       // ),
-    },
-    {
-      title: '创建用户',
-      dataIndex: 'crtName',
-      sorter: true,
-      sortOrder: getSortOrder(sorter, 'crtName'),
-      tcChecked: false,
-      width: 100,
     },
     {
       title: '创建IP',
@@ -285,6 +285,13 @@ export function genUpdateColumns(sorter: Fa.Sorter): FaberTable.ColumnsProp<any>
       tcCondBetweenComponent: renderTimeRangePicker,
     },
     {
+      title: '更新用户',
+      dataIndex: 'updName',
+      sorter: true,
+      sortOrder: getSortOrder(sorter, 'updName'),
+      width: 100,
+    },
+    {
       title: '更新用户ID',
       dataIndex: 'updUser',
       sorter: true,
@@ -293,13 +300,6 @@ export function genUpdateColumns(sorter: Fa.Sorter): FaberTable.ColumnsProp<any>
       // tcCondComponent: ({ index, value, callback, ...props }: FaberTable.TcCondProp) => (
       //   <UserSearchSelect value={value} onChange={(v: any, item: any) => callback(v, index, get(item, 'label'))} {...props} />
       // ),
-    },
-    {
-      title: '更新用户',
-      dataIndex: 'updName',
-      sorter: true,
-      sortOrder: getSortOrder(sorter, 'updName'),
-      width: 100,
     },
     {
       title: '更新IP',
