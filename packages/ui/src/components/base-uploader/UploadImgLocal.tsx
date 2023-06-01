@@ -52,16 +52,17 @@ export default function UploadImgLocal({ value, onChange, style, ...props }: Upl
     //   message.error('文件名不能包含空格！');
     //   return false;
     // }
-    const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJPG) {
-      message.error('你只能上传图片文件！');
-      return false;
-    }
-    const isLt2M = file.size / 1024 / 1024 < 10;
-    if (!isLt2M) {
-      message.error('图片大小不能超过10MB!');
-      return false;
-    }
+    // console.log('file.type', file.type)
+    // const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
+    // if (!isJPG) {
+    //   message.error('你只能上传图片文件！');
+    //   return false;
+    // }
+    // const isLt2M = file.size / 1024 / 1024 < 10;
+    // if (!isLt2M) {
+    //   message.error('图片大小不能超过10MB!');
+    //   return false;
+    // }
     return true;
   }
 
