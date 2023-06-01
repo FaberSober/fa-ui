@@ -50,7 +50,7 @@ export default function InputColor({ value, onChange, inputStyle, cubeStyle }: I
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            border: '1px solid #f1f1f1',
+            border: '1px solid #d9d9d9',
             cursor: 'pointer',
             color: '#FFF',
             // height: '100%',
