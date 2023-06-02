@@ -169,6 +169,10 @@ ul {
     margin-bottom: 12px;
 }
 
+.fa-m12 {
+    margin: 12px;
+}
+
 .fa-ml12 {
     margin-left: 12px;
 }
@@ -187,6 +191,10 @@ ul {
 
 .fa-mr8 {
     margin-right: 8px;
+}
+
+.fa-mr12 {
+    margin-right: 12px;
 }
 
 .fa-full-w {
