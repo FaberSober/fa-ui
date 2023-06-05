@@ -8,7 +8,9 @@ body {
     --primary-dark: theme('colors.blueDark');
     --fa-bg-color: #fff; /* 适配主题-背景色 */
     --fa-bg-color-hover: #999; /* 适配主题-背景色 */
+    --fa-bg-color2: #eee; /* 适配主题-背景色-2级 */
     --fa-text-color: #353535; /* 适配主题-文字颜色 */
+    --fa-text-color2: #353535; /* 适配主题-文字颜色-2级 */
     --fa-text-color-hover: #353535; /* 适配主题-文字颜色 */
     --fa-subtitle-color: #666; /* 适配主题-文字颜色-副标题 */
     --fa-border-color: #eee; /* 适配主题-边框颜色 */
