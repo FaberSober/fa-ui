@@ -20,12 +20,8 @@ export default function SiderLayout({
 }: SiderLayoutProps) {
   return (
     <div
+      className="fa-sider-div"
       style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-        backgroundColor: '#fff',
-        borderRight: '1px solid #eee',
         width: collapse ? collapseWidth : width,
       }}
     >

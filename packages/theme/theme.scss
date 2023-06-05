@@ -14,6 +14,7 @@ $subtitle-color: (
   dark: cyan,
 );
 
+// 混合不同主题的配色
 @mixin themify($key, $valueMap) {
   // theme list
   $themes: light, dark;

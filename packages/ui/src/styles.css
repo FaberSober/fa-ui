@@ -6,12 +6,16 @@ body {
     /* 使用 tailwind-config/tailwind.config.js 中的theme配置 */
     --primary-color: theme('colors.blue');
     --primary-dark: theme('colors.blueDark');
-    --fa-bg-grey: #fafafa;
+    --fa-bg-color: #fff; /* 适配主题-背景色 */
+    --fa-bg-color-hover: #999; /* 适配主题-背景色 */
+    --fa-text-color: #353535; /* 适配主题-文字颜色 */
+    --fa-border-color: #eee; /* 适配主题-边框颜色 */
+    --fa-bg-grey: #f1f1f1; /* 适配主题-背景色-灰色 */
+
     --fa-bg-grey-darker: #e1e1e1;
     --fa-hover-bg: #e1e1e1;
     --fa-transition: all ease-in-out 0.3s;
     --fa-border-radius: 3px;
-    --fa-border-color: #eee;
     --fa-subtitle-color: #666;
     --fa-box-shadow: 0 2px 4px 4px #eeeeeeee;
     --focus-border: var(--primary-color) !important;
@@ -111,7 +115,7 @@ ul {
 }
 
 .fa-bg-white {
-    background-color: #ffffff;
+    background-color: var(--fa-bg-color);
 }
 
 .fa-bg-blue {
