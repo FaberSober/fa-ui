@@ -37,3 +37,24 @@ $subtitle-color: (
 .subtitle {
   @include themify('color', $subtitle-color);
 }
+
+
+// ------------------------- 自定义修改antd样式，适配dark样式 -------------------------
+[data-theme=dark] .ant-tabs-tab-btn {
+  color: #FFF !important;
+}
+
+[data-theme=dark] .ant-menu-submenu-selected >.ant-menu-submenu-title {
+  color: #fff !important;
+}
+
+[data-theme=dark] .ant-menu-item-selected {
+  color: #fff !important;
+  background-color: #1B5E88 !important;
+}
+
+[data-theme=dark] .ant-dropdown-menu-item-selected {
+  color: #fff !important;
+  background-color: #1B5E88 !important;
+}
+// ------------------------- 自定义修改antd样式，适配dark样式 -------------------------

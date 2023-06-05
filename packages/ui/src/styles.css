@@ -9,9 +9,11 @@ body {
     --fa-bg-color: #fff; /* 适配主题-背景色 */
     --fa-bg-color-hover: #999; /* 适配主题-背景色 */
     --fa-text-color: #353535; /* 适配主题-文字颜色 */
+    --fa-text-color-hover: #353535; /* 适配主题-文字颜色 */
     --fa-subtitle-color: #666; /* 适配主题-文字颜色-副标题 */
     --fa-border-color: #eee; /* 适配主题-边框颜色 */
     --fa-bg-grey: #f1f1f1; /* 适配主题-背景色-灰色 */
+    --separator-border: #eee; /* 适配主题-allocate-分割面板的分割线颜色 */
 
     --fa-bg-grey-darker: #e1e1e1;
     --fa-hover-bg: #e1e1e1;
@@ -19,7 +21,6 @@ body {
     --fa-border-radius: 3px;
     --fa-box-shadow: 0 2px 4px 4px #eeeeeeee;
     --focus-border: var(--primary-color) !important;
-    --separator-border: #eee;
 }
 
 #root, body {
@@ -137,17 +138,28 @@ ul {
     border: 1px solid var(--fa-border-color);
 }
 
+.fa-text {
+    color: var(--fa-text-color);
+}
+
+.fa-text:hover {
+    color: var(--fa-text-color-hover);
+}
+
 .fa-h1 {
+    color: var(--fa-text-color);
     font-size: 24px;
     font-weight: 600;
 }
 
 .fa-h2 {
+    color: var(--fa-text-color);
     font-size: 20px;
     font-weight: 600;
 }
 
 .fa-h3 {
+    color: var(--fa-text-color);
     font-weight: 600;
     font-size: 16px;
     line-height: 1.5;

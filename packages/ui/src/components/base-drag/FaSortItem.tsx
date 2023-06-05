@@ -40,7 +40,7 @@ export default function FaSortItem({
     alignItems: 'center',
     zIndex: dragging ? 999 : undefined,
     boxShadow: dragging ? '8px 8px 8px rgba(0, 21, 41, 0.08)' : undefined,
-    backgroundColor: '#FFF',
+    backgroundColor: 'var(--fa-bg-color)',
     position: 'relative',
   };
   if (vertical) {

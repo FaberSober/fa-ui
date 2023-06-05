@@ -89,7 +89,7 @@ function SceneManageModal<T>({ biz, columns, onOk, ...restProps }: SceneManageMo
                 onChange={(e) => handleItemCheck(item, e.target.checked)}
               />
               <div style={{ flex: 1, paddingLeft: 8 }}>
-                <strong>{item.name}</strong>
+                <div className="fa-h3">{item.name}</div>
               </div>
               {item.system ? <span style={{ color: '#666', marginRight: 16 }}>（系统场景）</span> : null}
               <div>

@@ -5,10 +5,11 @@
   width: 100%;
   cursor: pointer;
   z-index: 1001;
+  color: var(--fa-text-color);
 }
 
 .fa-table-col-item:hover {
-  background-color: #e6f7ff;
+  background-color: var(--fa-bg-color-hover);
 }
 
 .fa-table-col-thead-item {

@@ -250,7 +250,7 @@ export default function BaseTree<RecordType extends object = any, KeyType = numb
       style={{
         width: '100%',
         height: '100%',
-        backgroundColor: '#fff',
+        backgroundColor: 'var(--fa-bg-color)',
         display: 'flex',
         flexDirection: 'column',
         ...bodyStyle,

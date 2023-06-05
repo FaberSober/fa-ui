@@ -6,8 +6,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  color: var(--fa-text-color);
 }
 
 .fa-drag-handle:hover {
-  background-color: #eee;
+  background-color: var(--fa-bg-color-hover);
 }

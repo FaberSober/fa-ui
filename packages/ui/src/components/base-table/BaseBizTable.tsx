@@ -134,7 +134,7 @@ export default function BaseBizTable<RecordType extends object = any>({
         {/* 多选删除 */}
         {selectedRowKeys.length > 0 && (
           <Space style={{ padding: 8, display: 'flex', lineHeight: '32px' }}>
-            <div style={{ marginRight: 12 }}>
+            <div className="fa-text fa-mr12">
               已选中&nbsp;<a>{selectedRowKeys.length}</a>&nbsp;条数据
             </div>
             {renderCheckBtns && renderCheckBtns(selectedRowKeys)}
@@ -159,8 +159,8 @@ export default function BaseBizTable<RecordType extends object = any>({
                 onConditionChange={onConditionChange}
               />
             )}
-            <div style={{ flex: 1 }}>{renderQuerySuffix && renderQuerySuffix()}</div>
-            <div style={{ lineHeight: '32px' }}>
+            <div className="fa-text" style={{ flex: 1 }}>{renderQuerySuffix && renderQuerySuffix()}</div>
+            <div className="fa-text" style={{ lineHeight: '32px' }}>
               共<a style={{ fontWeight: 600, margin: '0 4px' }}>{get(props, 'pagination.total')}</a>条数据
             </div>
           </div>

@@ -1,10 +1,10 @@
-import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { find } from 'lodash';
-import { Dropdown } from 'antd';
-import { DownOutlined, SettingOutlined } from '@ant-design/icons';
+import React, {useEffect, useImperativeHandle, useMemo, useRef, useState} from 'react';
+import {find} from 'lodash';
+import {Button, Dropdown} from 'antd';
+import {DownOutlined, SettingOutlined} from '@ant-design/icons';
 import SceneManageModal from '@ui/components/condition-query/SceneManageModal';
-import { Admin } from '@ui/types';
-import { FaberTable } from '@ui/components/base-table';
+import {Admin} from '@ui/types';
+import {FaberTable} from '@ui/components/base-table';
 import {configSceneApi} from '@ui/services/base';
 
 const allSceneLabel = '全部数据';
@@ -76,9 +76,7 @@ function SceneDropMenu<T>({ biz, columns, onChange }: SceneDropMenuProps<T>, ref
   return (
     <div>
       <Dropdown menu={{ items, onClick: handleMenuClick, selectedKeys: [value] }} trigger={['click']}>
-        <a style={{ color: '#666', minWidth: 70, display: 'inline-block' }} onClick={(e) => e.preventDefault()}>
-          {label} <DownOutlined />
-        </a>
+        <Button icon={<DownOutlined />} type="text">{label}</Button>
       </Dropdown>
       <SceneManageModal
         ref={manageModalRef}

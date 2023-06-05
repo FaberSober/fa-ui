@@ -150,7 +150,7 @@ function TableColConfigModal<T>({ columns = [], biz, onConfigChange, children, .
         {...restProps}
       >
         <div className="fa-full-content-p12 fa-flex-column">
-          <div className="fa-flex-row-center" style={{ borderBottom: '1px solid #ccc', padding: '8px 0' }}>
+          <div className="fa-flex-row-center fa-text" style={{ borderBottom: '1px solid #ccc', padding: '8px 0' }}>
             <div className="fa-table-col-thead-item" style={{ flex: 1, borderRight: '1px solid #ccc' }}>
               字段
             </div>
