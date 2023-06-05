@@ -9,6 +9,7 @@ body {
     --fa-bg-color: #fff; /* 适配主题-背景色 */
     --fa-bg-color-hover: #999; /* 适配主题-背景色 */
     --fa-text-color: #353535; /* 适配主题-文字颜色 */
+    --fa-subtitle-color: #666; /* 适配主题-文字颜色-副标题 */
     --fa-border-color: #eee; /* 适配主题-边框颜色 */
     --fa-bg-grey: #f1f1f1; /* 适配主题-背景色-灰色 */
 
@@ -16,7 +17,6 @@ body {
     --fa-hover-bg: #e1e1e1;
     --fa-transition: all ease-in-out 0.3s;
     --fa-border-radius: 3px;
-    --fa-subtitle-color: #666;
     --fa-box-shadow: 0 2px 4px 4px #eeeeeeee;
     --focus-border: var(--primary-color) !important;
     --separator-border: #eee;

@@ -474,9 +474,9 @@ export function getDocumentTypeByName(fileName: string):FaEnums.DocumentType|und
  */
 export const EchartsToolbox = {
   show: true,
-  orient: 'vertical',
+  orient: 'horizontal',
   left: 'right',
-  top: 'center',
+  top: 'left',
   feature: {
     mark: { show: true },
     dataView: { show: true, readOnly: false },

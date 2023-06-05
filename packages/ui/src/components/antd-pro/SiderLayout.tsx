@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { DoubleLeftOutlined, DoubleRightOutlined } from '@ant-design/icons';
+import { DoubleLeftOutlined, DoubleRightOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { FaFlexRestLayout } from '@ui/components/base-layout';
 import './SiderLayout.css';
 
@@ -32,7 +32,7 @@ export default function SiderLayout({
         style={{ width: collapse ? collapseWidth - 1 : width - 1 }}
         onClick={() => onCollapse && onCollapse(!collapse)}
       >
-        {collapse ? <DoubleRightOutlined /> : <DoubleLeftOutlined />}
+        <span style={{fontSize: '16px'}}>{collapse ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}</span>
       </div>
     </div>
   );
