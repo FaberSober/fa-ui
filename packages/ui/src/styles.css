@@ -314,7 +314,7 @@ ul {
 }
 
 .fa-link-btn:hover {
-    background-color: #ddd;
+    background-color: var(--fa-bg-color-hover);
 }
 
 .fa-normal-btn {
@@ -329,7 +329,16 @@ ul {
 }
 
 .fa-normal-btn:hover {
-    background-color: #ddd;
+    background-color: var(--fa-bg-color-hover);
+}
+
+.fa-hover {
+    cursor: pointer;
+    transition: var(--fa-transition);
+}
+
+.fa-hover:hover {
+    box-shadow: var(--fa-box-shadow);
 }
 
 .fa-rich-div img {
@@ -354,7 +363,7 @@ ul {
 .fa-input-amap-search {
     line-height: 24px;
     width: 200px;
-    border: 1px solid #d9d9d9;
+    border: 1px solid var(--fa-border-color);
 }
 
 .fa-tips {
