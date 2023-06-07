@@ -297,6 +297,12 @@ namespace Fa {
     lat: number;
   }
 
+  // ------------------------------------- Chart -------------------------------------
+  export interface ChartSeriesVo {
+    label: string;
+    value: number;
+  }
+
 }
 
 export default Fa;
