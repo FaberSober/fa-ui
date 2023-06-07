@@ -31,6 +31,9 @@ body {
     margin: 0;
     padding: 0;
     overflow: hidden;
+    /* 适配主题色 */
+    background-color: var(--fa-bg-color);
+    color: var(--fa-text-color);
 }
 
 a {

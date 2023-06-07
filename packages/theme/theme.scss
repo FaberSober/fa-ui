@@ -39,6 +39,11 @@ $subtitle-color: (
 }
 
 
+[data-theme=dark] .root {
+  color: #fff !important;
+  background-color: #1B5E88 !important;
+}
+
 // ------------------------- 自定义修改antd样式，适配dark样式 -------------------------
 [data-theme=dark] .ant-tabs-tab-btn {
   color: #FFF !important;
