@@ -299,7 +299,7 @@ namespace Fa {
 
   // ------------------------------------- Chart -------------------------------------
   export interface ChartSeriesVo {
-    label: string;
+    name: string;
     value: number;
   }
 
