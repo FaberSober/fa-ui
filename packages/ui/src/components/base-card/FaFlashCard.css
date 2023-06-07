@@ -4,6 +4,8 @@
     background-color: var(--fa-bg-color);
     overflow: hidden;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .fa-flash-card-title-div {
@@ -48,4 +50,6 @@
 .fa-flash-card-body {
     background-color: var(--fa-bg-color);
     padding: 12px;
+    flex: 1;
+    position: relative;
 }
