@@ -200,7 +200,7 @@ export default function CondGroupEdit<T>({ condGroup, columns, onChange, onDelet
                       style={{ width: 400, marginRight: 12 }}
                       value={value}
                       onChange={(e) => handleChangeValue(e.target.value, index)}
-                      placeholder={opr === ConditionQuery.CondOpr.in ? '多个值用逗号分割' : '请输入筛选条件的值'}
+                      placeholder={[ConditionQuery.CondOpr.in, ConditionQuery.CondOpr.notIn].includes(opr) ? '多个值用逗号分割' : '请输入筛选条件的值'}
                     />
                   )}
                 </>

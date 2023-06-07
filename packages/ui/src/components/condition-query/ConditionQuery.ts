@@ -13,6 +13,7 @@ namespace ConditionQuery {
     less_equal = 'le', // '小于等于',
     between = 'between', // '介于',
     in = 'in', // 'IN',
+    notIn = 'notIn', // 'notIn',
   }
 
   /** 自定义筛选条件 */
@@ -40,7 +41,8 @@ namespace ConditionQuery {
 
   export const OPR_MAP: { [key: string]: string } = {
     [ConditionQuery.CondOpr.equal]: '=',
-    [ConditionQuery.CondOpr.in]: 'IN',
+    [ConditionQuery.CondOpr.in]: 'in',
+    [ConditionQuery.CondOpr.notIn]: 'not in',
     [ConditionQuery.CondOpr.not_equal]: '!=',
     [ConditionQuery.CondOpr.greater]: '>',
     [ConditionQuery.CondOpr.greater_equal]: '>=',
