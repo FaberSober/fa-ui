@@ -82,8 +82,8 @@ $scrollbar-thumb-hover-color: (
 
 
 [data-theme=dark] .root {
-  color: #fff !important;
-  background-color: #1B5E88 !important;
+  //color: #fff !important;
+  //background-color: #1B5E88 !important;
 }
 
 // ------------------------- 自定义修改antd样式，适配dark样式 -------------------------
@@ -107,5 +107,13 @@ $scrollbar-thumb-hover-color: (
 [data-theme=dark] .ant-dropdown-menu-item-selected {
   color: #fff !important;
   background-color: #1B5E88 !important;
+}
+
+[data-theme=dark] .ant-popover-inner {
+  background-color: #05202F !important;
+}
+
+[data-theme=dark] .ant-empty-description {
+  color: #fff !important;
 }
 // ------------------------- 自定义修改antd样式，适配dark样式 -------------------------
