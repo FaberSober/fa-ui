@@ -196,8 +196,16 @@ ul {
     margin-top: 12px;
 }
 
+.fa-mt24 {
+    margin-top: 24px;
+}
+
 .fa-mb12 {
     margin-bottom: 12px;
+}
+
+.fa-mb24 {
+    margin-bottom: 24px;
 }
 
 .fa-m12 {
@@ -234,6 +242,10 @@ ul {
 
 .fa-full-w {
     width: 100%;
+}
+
+.fa-full-h {
+    height: 100%;
 }
 
 .fa-full {
