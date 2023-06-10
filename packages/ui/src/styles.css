@@ -14,6 +14,7 @@ body {
     --fa-text-color-hover: #353535; /* 适配主题-文字颜色 */
     --fa-subtitle-color: #666; /* 适配主题-文字颜色-副标题 */
     --fa-border-color: #eee; /* 适配主题-边框颜色 */
+    --fa-border-dark-color: #66666666; /* 适配主题-边框颜色 */
     --fa-bg-grey: #f1f1f1; /* 适配主题-背景色-灰色 */
     --separator-border: #eee; /* 适配主题-allocate-分割面板的分割线颜色 */
 
@@ -22,6 +23,7 @@ body {
     --fa-transition: all ease-in-out 0.3s;
     --fa-border-radius: 3px;
     --fa-box-shadow: 0 2px 4px 4px #eeeeeeee;
+    --fa-box-shadow-b: 0px -2px 2px 2px #666;
     --focus-border: var(--primary-color) !important;
 }
 
@@ -218,6 +220,10 @@ ul {
     margin-right: 4px;
 }
 
+.fa-ml4 {
+    margin-left: 4px;
+}
+
 .fa-mr8 {
     margin-right: 8px;
 }
@@ -299,6 +305,10 @@ ul {
     border-bottom: 1px solid var(--fa-border-color);
 }
 
+.fa-border-dark-b {
+    border-bottom: 1px solid var(--fa-border-dark-color);
+}
+
 .fa-form-underline > input {
     border: none !important;
     border-radius: 0 !important;
@@ -350,6 +360,10 @@ ul {
 
 .fa-hover:hover {
     box-shadow: var(--fa-box-shadow);
+}
+
+.fa-box-shadow-b {
+    box-shadow: var(--fa-box-shadow-b);
 }
 
 .fa-rich-div img {
