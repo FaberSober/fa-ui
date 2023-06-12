@@ -72,7 +72,7 @@ function SceneManageModal<T>({ biz, columns, onOk, ...restProps }: SceneManageMo
   return (
     <DragModal title="管理场景" onOk={handleSave} confirmLoading={loading} width={700} destroyOnClose {...restProps}>
       <div>
-        <div style={{ display: 'flex', fontSize: '14px', fontWeight: 'bold', backgroundColor: '#eee', padding: 8 }}>
+        <div className="fa-scene-title">
           <div style={{ width: 40 }}>展示</div>
           <div style={{ flex: 1, paddingLeft: 8 }}>场景名称</div>
           <div>操作</div>
