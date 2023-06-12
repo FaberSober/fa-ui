@@ -303,6 +303,14 @@ namespace Fa {
     value: number;
   }
 
+  // ------------------------------------- Socket Task -------------------------------------
+  export interface SocketTaskVo {
+    taskId: string;
+    total: number;
+    cur: number;
+    error: number;
+  }
+
 }
 
 export default Fa;
