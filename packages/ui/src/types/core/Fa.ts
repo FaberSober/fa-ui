@@ -310,6 +310,7 @@ namespace Fa {
     total: number;
     cur: number;
     error: number;
+    startTime: string;
   }
 
 }
