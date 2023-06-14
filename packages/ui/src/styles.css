@@ -148,7 +148,7 @@ ul {
 
 .fa-card {
     padding: 12px;
-    background-color: #ffffff;
+    background-color: var(--fa-bg-color);
     border-radius: var(--fa-border-radius);
     border: 1px solid var(--fa-border-color);
 }
