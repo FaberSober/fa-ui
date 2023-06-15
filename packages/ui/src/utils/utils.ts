@@ -485,3 +485,15 @@ export const EchartsToolbox = {
     saveAsImage: { show: true }
   }
 }
+
+/**
+ * 获取dom节点的rect大小矩阵
+ * @param dom
+ */
+export function getDomRect(dom:HTMLElement):DOMRect {
+  return dom.getBoundingClientRect();
+}
+
+export function scrollToBottom(dom:HTMLElement) {
+  dom.scrollTo(0, dom.scrollHeight)
+}
