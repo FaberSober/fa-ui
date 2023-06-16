@@ -9,6 +9,7 @@ body {
     --fa-bg-color: #fff; /* 适配主题-背景色 */
     --fa-bg-color-hover: #99999933; /* 适配主题-背景色 */
     --fa-bg-color2: #eee; /* 适配主题-背景色-2级 */
+    --fa-bg-color-highlight: #1c5e88; /* 适配主题-背景色-高亮 */
     --fa-text-color: #353535; /* 适配主题-文字颜色 */
     --fa-text-color2: #353535; /* 适配主题-文字颜色-2级 */
     --fa-text-color-hover: #353535; /* 适配主题-文字颜色 */
@@ -426,4 +427,19 @@ ul {
 
 .fa-upload-img-local .ant-upload-select {
     margin: 0 !important;
+}
+
+/*----------------------------------------- fa-corn -----------------------------------------*/
+.fa-cron-react-editor-tab {
+    background-color: var(--fa-bg-grey) !important;
+}
+
+.fa-cron-react-editor-tab-item {
+    background-color: var(--fa-bg-color) !important;
+    color: var(--fa-text-color);
+}
+
+.fa-cron-react-editor-tab-item-active {
+    background-color: var(--fa-bg-color-highlight) !important;
+    color: var(--fa-text-color);
 }
