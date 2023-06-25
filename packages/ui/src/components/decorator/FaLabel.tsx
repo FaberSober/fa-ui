@@ -20,7 +20,7 @@ export default function FaLabel({ title, barColor, className, style, textStyle }
         alignItems: 'center',
         padding: '4px 12px',
         borderLeft: `4px solid #00878b`,
-        backgroundColor: '#FFF',
+        backgroundColor: 'var(--fa-bg-color)',
         ...style,
       }}
       className={className}
