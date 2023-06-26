@@ -19,7 +19,7 @@ export interface SelectedUser {
 
 export interface BizUserSelectProps extends CommonModalProps<any> {
   selectedUsers?: SelectedUser[]; // 已经选中的用户ID
-  onChange?: (v: SelectedUser[], callback: any) => void;
+  onChange?: (v: SelectedUser[], callback: any, error?: any) => void;
 }
 
 /**
@@ -105,7 +105,7 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
       onChange(innerUsers, () => {
         setConfirmLoading(false)
         setOpen(false)
-      })
+      }, () => setConfirmLoading(false))
     }
   }
 
