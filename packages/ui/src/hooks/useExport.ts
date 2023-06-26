@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {BaseTableUtils} from "@ui/components/base-table";
 import {Fa} from "@ui/types";
+import {Modal} from "antd";
 
 
 /**
@@ -16,20 +17,25 @@ export default function useExport(
 
   /** 导出Excel文件 */
   function fetchExportExcel() {
-    setExporting(true);
-    const params = {
-      sorter: BaseTableUtils.getSorter(queryParams.sorter),
-      sceneId: queryParams.sceneId,
-      conditionList: queryParams.conditionList,
-      query: {
-        ...queryParams.formValues,
-        // 外部补充查询条件
-        ...queryParams.extraParams,
-      },
-    };
-    exportApi(params)
-      .then(() => setExporting(false))
-      .catch(() => setExporting(false));
+    Modal.confirm({
+      title: '确认导出？',
+      onOk: () => {
+        setExporting(true);
+        const params = {
+          sorter: BaseTableUtils.getSorter(queryParams.sorter),
+          sceneId: queryParams.sceneId,
+          conditionList: queryParams.conditionList,
+          query: {
+            ...queryParams.formValues,
+            // 外部补充查询条件
+            ...queryParams.extraParams,
+          },
+        };
+        return exportApi(params)
+          .then(() => setExporting(false))
+          .catch(() => setExporting(false));
+      }
+    })
   }
 
   return [exporting, fetchExportExcel];
