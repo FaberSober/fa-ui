@@ -25,7 +25,7 @@ export default function FaLabel({ title, barColor, className, style, textStyle }
       }}
       className={className}
     >
-      <div style={{ fontSize: '15px', fontWeight: 600, ...textStyle }}>{title}</div>
+      <div style={{ fontSize: '15px', fontWeight: 600, color: 'var(--fa-text-color)', ...textStyle }}>{title}</div>
     </div>
   );
 }
