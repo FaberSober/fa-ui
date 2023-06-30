@@ -181,6 +181,13 @@ ul {
     line-height: 1.5;
 }
 
+.fa-normal {
+    color: var(--fa-text-color);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.2;
+}
+
 .fa-p24 {
     padding: 24px;
 }
@@ -324,6 +331,14 @@ ul {
 
 .fa-border-r {
     border-right: 1px solid var(--fa-border-color);
+}
+
+.fa-border-l {
+    border-left: 1px solid var(--fa-border-color);
+}
+
+.fa-border-t {
+    border-top: 1px solid var(--fa-border-color);
 }
 
 .fa-border-b {
