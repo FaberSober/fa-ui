@@ -17,6 +17,8 @@ class FileSaveApi extends BaseApi<Admin.FileSave, string> {
   uploadFile = (file: any, callback?: (progressEvent: any) => void): Promise<Fa.Ret<Admin.FileSave>> =>
     this.postFile('upload', file, { onUploadProgress: callback });
 
+  uploadFromUrl = (params: {url: string}): Promise<Fa.Ret<Admin.FileSave>> => this.post('uploadFromUrl', params);
+
   uploadFileForm = (formData: any, callback?: (progressEvent: any) => void): Promise<Fa.Ret<Admin.FileSave>> =>
     this.postForm('upload', formData, { onUploadProgress: callback });
 

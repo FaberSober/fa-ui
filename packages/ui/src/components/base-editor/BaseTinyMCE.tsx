@@ -98,6 +98,7 @@ function BaseTinyMCE({ value, onChange, style, editorInit, editorProps }: BaseTi
             'help',
             'wordcount',
             'emoticons',
+            'paste'
           ],
           toolbar: 'blocks bold italic forecolor bullist numlist table link image media charmap emoticons fullscreen help',
           content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
@@ -122,6 +123,30 @@ function BaseTinyMCE({ value, onChange, style, editorInit, editorProps }: BaseTi
           image_title: true,
           /* enable automatic uploads of images represented by blob or data URIs*/
           automatic_uploads: true,
+          paste_data_images: true,
+          // 粘贴图片后，自动上传
+          urlconverter_callback: function(url, node, on_save, name) {
+            if (node === 'img' && name === 'src') {
+              // 判断是否是本服务器的图片
+              const isInner = url.indexOf("data:image/gif;base64") > -1 || url.indexOf("blob:") > -1 || url.indexOf("/api/base/admin/fileSave/getFile/") > -1;
+
+              if (!isInner) {
+                console.log('urlconverter_callback 识别到外部图片URL', url, node, on_save, name);
+
+                fileSaveApi.uploadFromUrl({url}).then(res => {
+                  const localFileUrl = fileSaveApi.genLocalGetFile(res.data.id);
+
+                  let content = editorRef.current.getContent();
+                  content = content.replace(url, localFileUrl);
+                  editorRef.current.setContent(content);
+                  if (onChange) {
+                    onChange(content)
+                  }
+                })
+              }
+            }
+            return url;
+          },
           /*
             URL of our upload handler (for more details check: https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_url)
             images_upload_url: 'postAcceptor.php',
