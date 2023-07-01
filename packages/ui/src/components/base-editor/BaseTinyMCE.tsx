@@ -1,8 +1,10 @@
-import React, { CSSProperties, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import React, {CSSProperties, useContext, useEffect, useImperativeHandle, useMemo, useRef, useState} from 'react';
 import { Editor } from '@tinymce/tinymce-react';
-import { trim } from 'lodash';
+import {isNil, trim} from 'lodash';
 import { fileSaveApi } from '@ui/services/base';
 import {useHeight} from '@ui/hooks';
+import {ThemeLayoutContext} from "@ui/layout";
+
 
 export interface BaseTinyMCEProps {
   value?: string | undefined;
@@ -18,12 +20,14 @@ export interface BaseTinyMCEProps {
  * @date 2022/2/17 14:17
  */
 function BaseTinyMCE({ value, onChange, style, editorInit, editorProps }: BaseTinyMCEProps, ref: any) {
+  const {themeDark} = useContext(ThemeLayoutContext)
   const editorRef = useRef<any>(null);
 
   const divRef = useRef<any | null>();
   const height = useHeight(divRef);
   const [ready, setReady] = useState(false);
   const [innerValue, setInnerValue] = useState(value);
+  const [loading, setLoading] = useState(false)
 
   useImperativeHandle(ref, () => ({
     getContent: () => {
@@ -51,8 +55,13 @@ function BaseTinyMCE({ value, onChange, style, editorInit, editorProps }: BaseTi
     }
   }, [value, ready]);
 
+  useEffect(() => {
+    if (isNil(editorRef.current)) return;
+    // FIXME 目前切换主题，编辑器也需要跟随主题进行切换
+  }, [themeDark])
+
   const editor = useMemo(() => {
-    // console.log('useMemo.editor', height)
+    console.log('useMemo.editor', height, 'themeDark', themeDark)
     if (height === undefined) return null;
     return (
       <Editor
@@ -92,6 +101,8 @@ function BaseTinyMCE({ value, onChange, style, editorInit, editorProps }: BaseTi
           ],
           toolbar: 'blocks bold italic forecolor bullist numlist table link image media charmap emoticons fullscreen help',
           content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+          skin: themeDark ? "oxide-dark" : "oxide",
+          content_css: themeDark ? "dark" : "default",
           /**
            * 需要在后台提供对应API的接口，参考：https://www.tiny.cloud/docs/advanced/php-upload-handler/
            * 返回数据json格式为：{ location : '/your/uploaded/image/file'}
