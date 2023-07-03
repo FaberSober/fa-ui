@@ -49,3 +49,12 @@ function handleCloseTabInner() {
 }
 ```
 
+## helmet
+
+```typescript jsx
+import { Helmet } from 'react-helmet-async';
+
+<Helmet title={`title${systemConfig.title}`} />
+```
+
+
