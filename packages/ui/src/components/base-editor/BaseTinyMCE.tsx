@@ -100,7 +100,7 @@ function BaseTinyMCE({ value, onChange, style, editorInit, editorProps }: BaseTi
             'emoticons',
             'paste'
           ],
-          toolbar: 'blocks bold italic forecolor bullist numlist table link image media charmap emoticons fullscreen help',
+          toolbar: 'blocks bold italic forecolor bullist numlist table link image media charmap emoticons code fullscreen help',
           content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
           skin: themeDark ? "oxide-dark" : "oxide",
           content_css: themeDark ? "dark" : "default",
