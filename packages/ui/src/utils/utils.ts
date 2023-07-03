@@ -262,7 +262,6 @@ export function tryToFixed(value: any, num = 6) {
 }
 
 
-
 /** * 是否为mac系统（包含iphone手机） * */
 export function isMac() {
   return /macintosh|mac os x/i.test(navigator.userAgent);
@@ -292,7 +291,7 @@ export function isJson(input: string | undefined): boolean {
     ) {
       //the json is ok
       return true;
-    }else{
+    } else {
       //the json is not ok
       return false;
     }
@@ -415,20 +414,20 @@ export function previewImageQiniu(url: string, width = 200, height?: number) {
  * @param size
  */
 export function sizeToHuman(size: number, base = 2): string {
-  return filesize(size, { base, standard: 'jedec' }) as string;
+  return filesize(size, {base, standard: 'jedec'}) as string;
 }
 
 export const REGEX_TEL_NO = /^(13[0-9]|14[5-9]|15[012356789]|166|17[0-8]|18[0-9]|19[8-9])[0-9]{8}$/;
 export const REGEX_CHAR_NUM = /^[0-9a-zA-Z]+$/;
-export const formItemFullLayout = { labelCol: { span: 4 }, wrapperCol: { span: 20 } };
-export const formItemHalfLayout = { labelCol: { span: 8 }, wrapperCol: { span: 16 } };
+export const formItemFullLayout = {labelCol: {span: 4}, wrapperCol: {span: 20}};
+export const formItemHalfLayout = {labelCol: {span: 8}, wrapperCol: {span: 16}};
 
 export const FormRules = {
-  PATTERN_WORD: { pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]*$/, message: '只能输入中英文字符、数字' },
-  PATTERN_CHAR_AND_NUM: { pattern: /^[a-zA-Z]+[a-zA-Z0-9_-]*$/, message: '只能输入英文字符、数字、下划线、中划线' },
-  PATTERN_WORD_ZH_ONLY: { pattern: /^[\u4e00-\u9fa5]*$/, message: '只能输入中文字符' },
-  PATTERN_CHAR_UPPER_AND_NUM: { pattern: /^[A-Z0-9]*$/, message: '只能输入英文字符、数字' },
-  PATTERN_TEL: { pattern: REGEX_TEL_NO, message: '请输入正确格式的手机号' },
+  PATTERN_WORD: {pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]*$/, message: '只能输入中英文字符、数字'},
+  PATTERN_CHAR_AND_NUM: {pattern: /^[a-zA-Z]+[a-zA-Z0-9_-]*$/, message: '只能输入英文字符、数字、下划线、中划线'},
+  PATTERN_WORD_ZH_ONLY: {pattern: /^[\u4e00-\u9fa5]*$/, message: '只能输入中文字符'},
+  PATTERN_CHAR_UPPER_AND_NUM: {pattern: /^[A-Z0-9]*$/, message: '只能输入英文字符、数字'},
+  PATTERN_TEL: {pattern: REGEX_TEL_NO, message: '请输入正确格式的手机号'},
 };
 
 /**
@@ -456,13 +455,13 @@ export const FA_TYPE_PPT = [".pps", ".ppsx", ".ppsm",
   ".pot", ".potx", ".potm",
   ".odp", ".fodp", ".otp"];
 
-export function getDocumentTypeByExt(ext: string):FaEnums.DocumentType|undefined {
+export function getDocumentTypeByExt(ext: string): FaEnums.DocumentType | undefined {
   if (FA_TYPE_WORD.indexOf('.' + ext) > -1) return FaEnums.DocumentType.word;
   if (FA_TYPE_EXCEL.indexOf('.' + ext) > -1) return FaEnums.DocumentType.cell;
   if (FA_TYPE_PPT.indexOf('.' + ext) > -1) return FaEnums.DocumentType.slide;
 }
 
-export function getDocumentTypeByName(fileName: string):FaEnums.DocumentType|undefined {
+export function getDocumentTypeByName(fileName: string): FaEnums.DocumentType | undefined {
   const ext = fileName.substring(fileName.lastIndexOf('.') + 1)
   if (FA_TYPE_WORD.indexOf('.' + ext) > -1) return FaEnums.DocumentType.word;
   if (FA_TYPE_EXCEL.indexOf('.' + ext) > -1) return FaEnums.DocumentType.cell;
@@ -478,11 +477,11 @@ export const EchartsToolbox = {
   left: 'right',
   top: 'left',
   feature: {
-    mark: { show: true },
-    dataView: { show: true, readOnly: false },
-    magicType: { show: true, type: ['line', 'bar', 'stack'] },
-    restore: { show: true },
-    saveAsImage: { show: true }
+    mark: {show: true},
+    dataView: {show: true, readOnly: false},
+    magicType: {show: true, type: ['line', 'bar', 'stack']},
+    restore: {show: true},
+    saveAsImage: {show: true}
   }
 }
 
@@ -490,16 +489,16 @@ export const EchartsToolbox = {
  * 获取dom节点的rect大小矩阵
  * @param dom
  */
-export function getDomRect(dom:HTMLElement):DOMRect {
+export function getDomRect(dom: HTMLElement): DOMRect {
   return dom.getBoundingClientRect();
 }
 
-export function scrollToTop(dom:HTMLElement) {
+export function scrollToTop(dom: HTMLElement) {
   if (dom === undefined || dom === null) return;
   dom.scrollTo(0, 0)
 }
 
-export function scrollToBottom(dom:HTMLElement) {
+export function scrollToBottom(dom: HTMLElement) {
   if (dom === undefined || dom === null) return;
   dom.scrollTo(0, dom.scrollHeight)
 }
@@ -510,7 +509,19 @@ export function scrollToBottom(dom:HTMLElement) {
  */
 export function scrollToDomById(domId: string) {
   const element = document.getElementById(domId);
-  if(element) {
+  if (element) {
     element.scrollIntoView();
   }
+}
+
+/**
+ * @returns 随机生产长size位的字母[a-z]
+ */
+export function generateId(size: number = 8) {
+  let str = "";
+  for (let i = 0; i < size; i++) {
+    const code = Math.floor(Math.random() * 26);
+    str += String.fromCharCode("a".charCodeAt(0) + code);
+  }
+  return str;
 }
