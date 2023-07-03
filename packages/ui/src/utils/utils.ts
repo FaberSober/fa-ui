@@ -494,6 +494,23 @@ export function getDomRect(dom:HTMLElement):DOMRect {
   return dom.getBoundingClientRect();
 }
 
+export function scrollToTop(dom:HTMLElement) {
+  if (dom === undefined || dom === null) return;
+  dom.scrollTo(0, 0)
+}
+
 export function scrollToBottom(dom:HTMLElement) {
+  if (dom === undefined || dom === null) return;
   dom.scrollTo(0, dom.scrollHeight)
+}
+
+/**
+ * 滚动到元素
+ * @param domId
+ */
+export function scrollToDomById(domId: string) {
+  const element = document.getElementById(domId);
+  if(element) {
+    element.scrollIntoView();
+  }
 }
