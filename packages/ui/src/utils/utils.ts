@@ -517,7 +517,7 @@ export function scrollToDomById(domId: string) {
 /**
  * @returns 随机生产长size位的字母[a-z]
  */
-export function generateId(size: number = 8) {
+export function generateId(size = 8) {
   let str = "";
   for (let i = 0; i < size; i++) {
     const code = Math.floor(Math.random() * 26);
