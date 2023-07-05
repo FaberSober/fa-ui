@@ -18,7 +18,7 @@ export default function SegmentTitle({ title, style, extra, ribbonColor = '#1890
         fontSize: '20px',
         fontWeight: 500,
         borderLeft: `4px solid ${ribbonColor}`,
-        color: '#333',
+        color: 'var(--fa-text-color)',
         paddingLeft: 12,
         marginTop: 12,
         marginBottom: 12,
