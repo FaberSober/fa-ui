@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { isNil } from 'lodash';
 import { Fa } from '@ui/types';
-import { CascaderProps } from 'antd/es/cascader';
+import { CascaderProps, BaseOptionType } from 'antd/es/cascader';
 import { Cascader } from 'antd';
 import * as BaseTreeUtils from '@ui/components/base-tree/utils';
 import { setTreeDisabled } from '@ui/components/base-tree/utils';
 
-export interface BaseCascaderProps<T, KeyType = number> extends Omit<CascaderProps<T>, 'options' | 'onChange'> {
+export interface BaseCascaderProps<T extends BaseOptionType, KeyType = number> extends Omit<CascaderProps<T>, 'options' | 'onChange'> {
   showRoot?: boolean;
   /** [外部定义]Tree节点标准API接口 */
   serviceApi: {
@@ -97,7 +97,7 @@ export default function BaseCascader<RecordType extends object = any, KeyType = 
   }
 
   return (
-    <Cascader
+    <Cascader<any>
       fieldNames={{ label: 'name', value: 'id' }}
       placeholder="请选择"
       {...props}
