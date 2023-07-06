@@ -23,13 +23,11 @@ import { BaseSearchSelect, BaseSearchSelectProps } from '@fa/ui';
 import { Admin } from '@/types';
 import { userApi as api } from '@/services';
 
-export interface UserSearchSelectProps extends Omit<BaseSearchSelectProps<Admin.User, string>, 'serviceApi'> {}
-
 /**
  * @author xu.pengfei
  * @date 2020/12/28
  */
-export default function UserSearchSelect(props: UserSearchSelectProps) {
+export default function UserSearchSelect(props: Omit<BaseSearchSelectProps<Admin.User, string>, 'serviceApi'>) {
   return (
     <BaseSearchSelect<Admin.User, string>
       valueKey="id"
