@@ -4,10 +4,10 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "ncu": "ncu -u",
+    "ncu": "ncu -u --timeout 120000",
     "clean": "rimraf /s/d node_modules dist .turbo"
   },
   "devDependencies": {
-    "tailwindcss": "3.2.7"
+    "tailwindcss": "3.3.2"
   }
 }

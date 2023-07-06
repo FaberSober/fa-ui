@@ -3,14 +3,14 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
-    "ncu": "ncu -u",
+    "ncu": "ncu -u --timeout 120000",
     "clean": "rimraf /s/d node_modules dist .turbo"
   },
   "license": "MIT",
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "5.55.0",
-    "@typescript-eslint/parser": "5.55.0",
-    "eslint-config-prettier": "8.7.0"
+    "@typescript-eslint/eslint-plugin": "5.61.0",
+    "@typescript-eslint/parser": "5.61.0",
+    "eslint-config-prettier": "8.8.0"
   },
   "publishConfig": {
     "access": "public"
