@@ -17,7 +17,6 @@ export default defineConfig({
     'fa-cron-react-editor',
     'lodash',
     'react',
-    'react-color',
     'react-contexify',
     'react-router-dom',
     'uuid',
