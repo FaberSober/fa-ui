@@ -19,6 +19,27 @@ export default function InputColor({ value, onChange, ...props }: InputColorProp
           onChange(hex)
         }
       }}
+      presets={[
+        {
+          label: '推荐',
+          colors: [
+            '#F5222D',
+            '#FA8C16',
+            '#FADB14',
+            '#8BBB11',
+            '#52C41A',
+            '#13A8A8',
+            '#1677FF',
+            '#2F54EB',
+            '#722ED1',
+            '#EB2F96',
+          ],
+        },
+        // {
+        //   label: 'Recent',
+        //   colors: [],
+        // },
+      ]}
       {...props}
     />
   );
