@@ -8,6 +8,7 @@ import {
 } from '@dnd-kit/sortable';
 import { findIndex, get } from 'lodash';
 import FaSortItem from './FaSortItem';
+import {Empty} from "antd";
 
 export interface FaSortListProps<T> {
   list: T[];
@@ -58,6 +59,10 @@ export default function FaSortList<T>({
 
   function getRowKey(item: T) {
     return get(item, rowKey!);
+  }
+
+  if (list === undefined || list === null || list.length === 0) {
+    return <Empty />
   }
 
   return (
