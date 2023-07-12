@@ -9,6 +9,7 @@ import {ThemeLayoutContext} from "@ui/layout";
 export interface BaseTinyMCEProps {
   value?: string | undefined;
   onChange?: (v: string) => void;
+  onSave?: (v: string) => void;
   style?: CSSProperties;
   editorInit?: any;
   editorProps?: any;
@@ -19,7 +20,7 @@ export interface BaseTinyMCEProps {
  * @author xu.pengfei
  * @date 2022/2/17 14:17
  */
-function BaseTinyMCE({ value, onChange, style, editorInit, editorProps }: BaseTinyMCEProps, ref: any) {
+function BaseTinyMCE({ value, onChange, onSave, style, editorInit, editorProps }: BaseTinyMCEProps, ref: any) {
   const {themeDark} = useContext(ThemeLayoutContext)
   const editorRef = useRef<any>(null);
 
@@ -98,9 +99,10 @@ function BaseTinyMCE({ value, onChange, style, editorInit, editorProps }: BaseTi
             'help',
             'wordcount',
             'emoticons',
-            'paste'
+            'paste',
+            'save'
           ],
-          toolbar: 'blocks bold italic forecolor bullist numlist table link image media charmap emoticons code fullscreen help',
+          toolbar: 'save blocks bold italic forecolor bullist numlist table link image media charmap emoticons code fullscreen help',
           content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px } ' + ' img {max-width: 100%;} ',
           skin: themeDark ? "oxide-dark" : "oxide",
           content_css: themeDark ? "dark" : "default",
@@ -191,6 +193,14 @@ function BaseTinyMCE({ value, onChange, style, editorInit, editorProps }: BaseTi
             });
 
             input.click();
+          },
+          // https://www.tiny.cloud/docs/tinymce/6/save/#save_onsavecallback
+          // CTRL+S 快捷键保存
+          save_onsavecallback: () => {
+            // console.log('Saved');
+            if (onSave) {
+              onSave(editorRef.current.getContent())
+            }
           },
           ...editorInit,
         }}
