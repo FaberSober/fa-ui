@@ -2,6 +2,8 @@
 ## 获取URL中query参数
 
 ## [id].tsx类型URL
+URL格式为：http://xxx/path/111
+
 ```typescript jsx
 import React from 'react';
 import {useParams} from "react-router-dom";
@@ -13,6 +15,20 @@ export default function index() {
     <div>{id}</div>
   )
 }
+```
+
+## URL中的query参数
+URL格式为：http://xxx/path/111?id=222
+
+使用组件：[qs](https://github.com/ljharb/qs)
+
+封装过后的hooks：frontend/fa-ui/packages/ui/src/hooks/useQs.ts
+
+```typescript jsx
+import {useQs} from "@fa/ui";
+
+const search = useQs();
+// search={id:'222'}
 ```
 
 ## 操作标签页
