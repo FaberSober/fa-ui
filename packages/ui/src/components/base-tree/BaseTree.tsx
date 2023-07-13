@@ -339,7 +339,7 @@ export default function BaseTree<RecordType extends object = any, KeyType = numb
         )}
       </Menu>
 
-      {showTips && <div style={{ padding: 12, backgroundColor: '#FFF', color: '#aaa' }}>{tips}</div>}
+      {showTips && <div style={{ padding: 12, color: '#aaa' }} className="fa-bg-white">{tips}</div>}
     </div>
   );
 }
