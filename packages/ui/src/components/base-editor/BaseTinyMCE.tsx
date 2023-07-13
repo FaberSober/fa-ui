@@ -4,6 +4,7 @@ import {isNil, trim} from 'lodash';
 import { fileSaveApi } from '@ui/services/base';
 import {useHeight} from '@ui/hooks';
 import {ThemeLayoutContext} from "@ui/layout";
+import {Spin} from "antd";
 
 
 export interface BaseTinyMCEProps {
@@ -13,6 +14,7 @@ export interface BaseTinyMCEProps {
   style?: CSSProperties;
   editorInit?: any;
   editorProps?: any;
+  loading?: boolean;
 }
 
 /**
@@ -20,7 +22,7 @@ export interface BaseTinyMCEProps {
  * @author xu.pengfei
  * @date 2022/2/17 14:17
  */
-function BaseTinyMCE({ value, onChange, onSave, style, editorInit, editorProps }: BaseTinyMCEProps, ref: any) {
+function BaseTinyMCE({ value, onChange, onSave, style, editorInit, editorProps, loading }: BaseTinyMCEProps, ref: any) {
   const {themeDark} = useContext(ThemeLayoutContext)
   const editorRef = useRef<any>(null);
 
@@ -28,7 +30,6 @@ function BaseTinyMCE({ value, onChange, onSave, style, editorInit, editorProps }
   const height = useHeight(divRef);
   const [ready, setReady] = useState(false);
   const [innerValue, setInnerValue] = useState(value);
-  const [loading, setLoading] = useState(false)
 
   useImperativeHandle(ref, () => ({
     getContent: () => {
@@ -43,6 +44,7 @@ function BaseTinyMCE({ value, onChange, onSave, style, editorInit, editorProps }
         editorRef.current.setContent(trim(html));
       }
     },
+    save: () => editorRef.current?.execCommand('mceSave'),
   }));
 
   useEffect(() => {
@@ -231,6 +233,7 @@ function BaseTinyMCE({ value, onChange, onSave, style, editorInit, editorProps }
   return (
     <div ref={divRef} style={{ width: '100%', height: '100%', position: 'relative', ...style }}>
       {editor}
+      {loading && <div className="fa-full-content fa-flex-center"><Spin size="large" /></div>}
     </div>
   );
 }
