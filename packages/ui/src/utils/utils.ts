@@ -141,7 +141,14 @@ export function getCurDateTime(format = 'YYYY-MM-DD HH:mm:ss') {
 /**
  * date('HH:mm:ss')str
  */
-export function getCurTime(format = 'HH:mm:ss.SSS') {
+export function getCurTime(format = 'HH:mm:ss') {
+  return dayjs().format(format);
+}
+
+/**
+ * date('HH:mm:ss')str
+ */
+export function getCurDate(format = 'YYYY-MM-DD') {
   return dayjs().format(format);
 }
 
