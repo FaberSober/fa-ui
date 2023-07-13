@@ -8,9 +8,11 @@ import {Spin} from "antd";
 
 
 export interface BaseTinyMCEProps {
+  initialValue?: string | undefined;
   value?: string | undefined;
   onChange?: (v: string) => void;
   onSave?: (v: string) => void;
+  onReady?: () => void;
   style?: CSSProperties;
   editorInit?: any;
   editorProps?: any;
@@ -22,7 +24,7 @@ export interface BaseTinyMCEProps {
  * @author xu.pengfei
  * @date 2022/2/17 14:17
  */
-function BaseTinyMCE({ value, onChange, onSave, style, editorInit, editorProps, loading }: BaseTinyMCEProps, ref: any) {
+function BaseTinyMCE({ initialValue, value, onChange, onSave, onReady, style, editorInit, editorProps, loading }: BaseTinyMCEProps, ref: any) {
   const {themeDark} = useContext(ThemeLayoutContext)
   const editorRef = useRef<any>(null);
 
@@ -75,8 +77,9 @@ function BaseTinyMCE({ value, onChange, onSave, style, editorInit, editorProps, 
           // console.log('BaseTinyMCE#onInit')
           editorRef.current = editor;
           setReady(true)
+          if (onReady) onReady();
         }}
-        initialValue={value}
+        initialValue={initialValue}
         init={{
           height,
           menubar: false,
