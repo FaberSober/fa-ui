@@ -59,7 +59,7 @@ function findPathInner(options: any[] | undefined, destId: any): any {
       return [o];
     }
     if (o.children && o.children[0]) {
-      // try find in children
+      // try to find in children
       const co = findPathInner(o.children, destId);
       if (co) {
         return [o, ...co];

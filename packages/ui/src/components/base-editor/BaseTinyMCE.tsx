@@ -108,7 +108,7 @@ function BaseTinyMCE({ initialValue, value, onChange, onSave, onReady, style, ed
             'save'
           ],
           toolbar: 'save blocks bold italic forecolor bullist numlist table link image media charmap emoticons code fullscreen help',
-          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px } ' + ' img {max-width: 100%;} ',
+          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; } ' + ' img {max-width: 100%;} ',
           skin: themeDark ? "oxide-dark" : "oxide",
           content_css: themeDark ? "dark" : "default",
           /**
