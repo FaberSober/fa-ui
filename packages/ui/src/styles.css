@@ -158,6 +158,10 @@ ul {
     color: var(--fa-text-color);
 }
 
+.fa-text-center {
+    text-align: center;
+}
+
 .fa-text:hover {
     color: var(--fa-text-color-hover);
 }
@@ -194,6 +198,10 @@ ul {
 
 .fa-p12 {
     padding: 12px;
+}
+
+.fa-p4 {
+    padding: 4px;
 }
 
 .fa-p8 {
