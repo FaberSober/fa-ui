@@ -46,8 +46,8 @@ export function handleClipboard(text: string, successMsg = '') {
  * @param {string} permissionCode 需要鉴定的权限点
  */
 export function hasPermission(permissions?: string[], permissionCode?: string | undefined) {
-  if (isUndefined(permissionCode)) return true;
-  if (isUndefined(permissions) || permissions.length === 0) return false;
+  if (isNil(permissionCode) || permissionCode === '') return true;
+  if (isNil(permissions) || permissions.length === 0) return false;
   return findIndex(permissions, (e) => e === permissionCode) > -1;
 }
 
