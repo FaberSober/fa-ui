@@ -3,6 +3,8 @@ import {Fa, FaEnums} from '@ui/types';
 import {findIndex, isNil, isUndefined, map, trim} from 'lodash';
 import dayjs from "dayjs";
 import {filesize} from "filesize";
+import { isMobile as isMobileInner } from 'react-device-detect';
+
 
 /**
  * 展示服务端返回数据提示
@@ -532,3 +534,8 @@ export function generateId(size = 8) {
   }
   return str;
 }
+
+/**
+ * 是否是手机
+ */
+export const isMobile = isMobileInner
