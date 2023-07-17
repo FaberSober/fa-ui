@@ -1,4 +1,4 @@
-import React, { createContext, CSSProperties, ReactNode, useContext, useEffect, useState } from 'react';
+import React, { createContext, CSSProperties, ReactNode, useContext, useEffect, useImperativeHandle, useState } from 'react';
 import { each, find, get } from 'lodash';
 import { Modal, Space, Spin, Tree } from 'antd';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
@@ -12,13 +12,17 @@ import { Item, ItemParams, Menu, useContextMenu } from 'react-contexify';
 import 'react-contexify/ReactContexify.css';
 import useBus from 'use-bus';
 import './BaseTree.css';
+import { findTreePath } from "@ui/utils";
 
 export interface BaseTreeContextProps {
   renderCount: number;
   updateRenderCount?: () => void;
 }
 
-export const BaseTreeContext = createContext<BaseTreeContextProps>({ renderCount: 1, updateRenderCount: () => {} });
+export const BaseTreeContext = createContext<BaseTreeContextProps>({
+  renderCount: 1, updateRenderCount: () => {
+  }
+});
 const MENU_ID = 'base-tree-menu';
 
 export interface BaseTreeProp<T, KeyType = number> extends TreeProps {
@@ -58,30 +62,30 @@ export interface BaseTreeProp<T, KeyType = number> extends TreeProps {
  * @author xu.pengfei
  * @date 2020/12/25
  */
-export default function BaseTree<RecordType extends object = any, KeyType = number>({
-  showRoot = false,
-  showTopBtn = true,
-  showTopAddBtn = true,
-  showTips = false,
-  showOprBtn = false,
-  showOprBtnAdd = true,
-  showOprBtnEdit = true,
-  serviceName = '',
-  className,
-  bodyStyle,
-  treeStyle,
-  ServiceModal = Modal,
-  extraContextMenus,
-  serviceApi,
-  onGetTree,
-  onAfterDelItem,
-  rootName = Fa.Constant.TREE_SUPER_ROOT_LABEL,
-  tips = '右键新增、编辑、删除节点',
-  renderTreeLabel,
-  extraEffectArgs = [],
-  ...props
-}: BaseTreeProp<RecordType, KeyType>) {
-  const { renderCount } = useContext(BaseTreeContext);
+function BaseTree<RecordType extends object = any, KeyType = number>({
+                                                                       showRoot = false,
+                                                                       showTopBtn = true,
+                                                                       showTopAddBtn = true,
+                                                                       showTips = false,
+                                                                       showOprBtn = false,
+                                                                       showOprBtnAdd = true,
+                                                                       showOprBtnEdit = true,
+                                                                       serviceName = '',
+                                                                       className,
+                                                                       bodyStyle,
+                                                                       treeStyle,
+                                                                       ServiceModal = Modal,
+                                                                       extraContextMenus,
+                                                                       serviceApi,
+                                                                       onGetTree,
+                                                                       onAfterDelItem,
+                                                                       rootName = Fa.Constant.TREE_SUPER_ROOT_LABEL,
+                                                                       tips = '右键新增、编辑、删除节点',
+                                                                       renderTreeLabel,
+                                                                       extraEffectArgs = [],
+                                                                       ...props
+                                                                     }: BaseTreeProp<RecordType, KeyType>, ref: any) {
+  const {renderCount} = useContext(BaseTreeContext);
 
   const [loading, setLoading] = useState(false);
   const [addItemModalVisible, setAddItemModalVisible] = useState(false);
@@ -91,19 +95,28 @@ export default function BaseTree<RecordType extends object = any, KeyType = numb
   const [expandedKeys, setExpandedKeys] = useState<any[]>([]);
 
   useEffect(() => {
-    fetchCourtTree();
+    fetchTree();
   }, [renderCount, ...extraEffectArgs]);
 
   useBus(
     ['@@api/BASE_TREE_REFRESH'],
     () => {
-      fetchCourtTree();
+      fetchTree();
     },
     [...extraEffectArgs],
   );
 
+  // ------------------------------------------ ref method ------------------------------------------
+  useImperativeHandle(ref, () => ({
+    /**
+     * 展开指定的keys
+     * @param key
+     */
+    expandKeys: (key: KeyType) => handleExpandKey(key),
+  }));
+
   // ------------------------------------------ context menu ------------------------------------------
-  const { show } = useContextMenu({
+  const {show} = useContextMenu({
     id: MENU_ID,
   });
 
@@ -111,12 +124,12 @@ export default function BaseTree<RecordType extends object = any, KeyType = numb
     // 默认根节点无右键菜单
     if (props.value === Fa.Constant.TREE_SUPER_ROOT_ID) return;
     if (!showOprBtn) return;
-    show({ event, props });
+    show({event, props});
   }
 
   // I'm using a single event handler for all items
   // but you don't have too :)
-  const handleItemClick = ({ id, props }: ItemParams) => {
+  const handleItemClick = ({id, props}: ItemParams) => {
     const item = props as BaseTreeProps.TreeNode<RecordType, KeyType>;
     switch (id) {
       case 'add':
@@ -146,7 +159,7 @@ export default function BaseTree<RecordType extends object = any, KeyType = numb
   function handleDelItem(item: BaseTreeProps.TreeNode<RecordType, KeyType>) {
     return serviceApi.remove(item.value).then((res) => {
       showResponse(res, `删除${serviceName}`);
-      fetchCourtTree();
+      fetchTree();
       if (onAfterDelItem) onAfterDelItem(item);
     });
   }
@@ -156,7 +169,7 @@ export default function BaseTree<RecordType extends object = any, KeyType = numb
       title: '删除确认',
       content: `确认删除${serviceName}【${item.label}】？`,
       okText: '删除',
-      okButtonProps: { type: 'primary', danger: true },
+      okButtonProps: {type: 'primary', danger: true},
       onOk: () => handleDelItem(item),
       cancelText: '取消',
     });
@@ -166,36 +179,55 @@ export default function BaseTree<RecordType extends object = any, KeyType = numb
     const item = e.props as BaseTreeProps.TreeNode<RecordType>;
     extraMenu.onMenuClick(e, item);
   };
+
   // ------------------------------------------ context menu ------------------------------------------
 
-  function fetchCourtTree() {
+  function fetchTree() {
     setLoading(true);
-    serviceApi
-      .allTree()
-      .then((res) => {
-        let treeArr = TreeUtils.parseNode<RecordType>(res.data) || [];
-        if (showRoot) {
-          treeArr = [{ ...Fa.ROOT_DEFAULT, name: rootName, children: treeArr }] as any[];
-        }
-        // const newTreeData = renderTreeData(treeArr);
-        setTreeData(treeArr as any[]);
-        if (expandedKeys === undefined || expandedKeys.length === 0) {
-          if (showRoot) {
-            setExpandedKeys([0]);
+    serviceApi.allTree().then((res) => {
+      let treeArr: any[] = TreeUtils.parseNode<RecordType>(res.data) || [];
+      if (showRoot) {
+        treeArr = [{...Fa.ROOT_DEFAULT, name: rootName, children: treeArr}] as any[];
+      }
+      // const newTreeData = renderTreeData(treeArr);
+      setTreeData(treeArr);
+      if (expandedKeys === undefined || expandedKeys.length === 0) {
+        if (showRoot) { // 默认展开全部
+          setExpandedKeys([0]);
+        } else {
+          if (props.selectedKeys && props.selectedKeys[0]) { // 如果有指定的选中key，默认展示选中的key
+            const traceKey = props.selectedKeys[0];
+            const treePath = findTreePath(treeArr, i => i.id === traceKey)
+            const keys: any[] = treePath.map(i => i.id)
+            setExpandedKeys(keys)
           }
         }
+      }
 
-        if (onGetTree) onGetTree(res.data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+      if (onGetTree) onGetTree(res.data);
+      setLoading(false);
+    }).catch(() => setLoading(false));
+  }
+
+  function handleExpandKey(key: KeyType) {
+    const treePath = findTreePath(treeData, i => i.id === key)
+    // console.log('treePath', treePath)
+    const keys: any[] = treePath.map(i => i.id)
+
+    const newEks = [...expandedKeys]
+    each(keys, v => {
+      if (!newEks.includes(v)) {
+        newEks.push(v)
+      }
+    })
+    setExpandedKeys(newEks)
   }
 
   function afterEditItem() {
     setClickItem(undefined);
     setAddItemModalVisible(false);
     setEditItemModalVisible(false);
-    fetchCourtTree();
+    fetchTree();
   }
 
   function onDrop(info: any) {
@@ -235,7 +267,7 @@ export default function BaseTree<RecordType extends object = any, KeyType = numb
 
     // api update
     serviceApi.changePos(changeItems).then(() => {
-      fetchCourtTree();
+      fetchTree();
     });
   }
 
@@ -258,10 +290,10 @@ export default function BaseTree<RecordType extends object = any, KeyType = numb
     >
       {/* top tools */}
       {showTopBtn && (
-        <div style={{ padding: 12, display: 'flex', alignItems: 'center' }}>
-          <div style={{ flex: 1 }}>
+        <div style={{padding: 12, display: 'flex', alignItems: 'center'}}>
+          <div style={{flex: 1}}>
             {showTopAddBtn && (
-              <FaHref onClick={() => handleAddItem()} icon={<PlusOutlined />} text={`新增${serviceName}`} />
+              <FaHref onClick={() => handleAddItem()} icon={<PlusOutlined/>} text={`新增${serviceName}`}/>
             )}
           </div>
           <Space>
@@ -272,18 +304,18 @@ export default function BaseTree<RecordType extends object = any, KeyType = numb
       )}
 
       {/* main tree */}
-      <div className="fa-base-tree-div" style={{ flex: 1, overflowY: 'auto' }}>
-        <div style={{ paddingLeft: 7, ...treeStyle }}>
+      <div className="fa-base-tree-div" style={{flex: 1, overflowY: 'auto'}}>
+        <div style={{paddingLeft: 7, ...treeStyle}}>
           <Spin spinning={loading}>
             <Tree
               blockNode
-              showLine={{ showLeafIcon: false }}
+              showLine={{showLeafIcon: false}}
               treeData={treeData as any[]}
-              draggable={{ icon: false }}
+              draggable={{icon: false}}
               onDrop={onDrop}
               expandedKeys={expandedKeys}
               onExpand={(eks) => setExpandedKeys(eks)}
-              fieldNames={{ key: 'id', title: 'name' }}
+              fieldNames={{key: 'id', title: 'name'}}
               titleRender={(item: any) => (
                 <div className="fa-base-tree-title-div" onContextMenu={(e) => handleContextMenu(e, item)}>
                   {item.name}
@@ -316,30 +348,32 @@ export default function BaseTree<RecordType extends object = any, KeyType = numb
       <Menu id={MENU_ID} className="contextMenu">
         {showOprBtnAdd && (
           <Item id="add" onClick={handleItemClick}>
-            <PlusOutlined style={{ width: 20 }} /> 新增
+            <PlusOutlined style={{width: 20}}/> 新增
           </Item>
         )}
         {showOprBtnEdit && (
           <Item id="edit" onClick={handleItemClick}>
-            <EditOutlined style={{ width: 20 }} /> 编辑
+            <EditOutlined style={{width: 20}}/> 编辑
           </Item>
         )}
         {extraContextMenus?.map((em) => (
           <Item id={em.key} key={em.key} onClick={(e: any) => handleExtraItemClick(e, em)}>
-            <span style={{ width: 20 }}>{em.icon && em.icon}</span>
+            <span style={{width: 20}}>{em.icon && em.icon}</span>
             {em.title}
           </Item>
         ))}
         {showOprBtnEdit && (
           <Item id="del" onClick={handleItemClick}>
-            <span style={{ color: '#F00' }}>
-              <DeleteOutlined style={{ width: 16 }} /> 删除
+            <span style={{color: '#F00'}}>
+              <DeleteOutlined style={{width: 16}}/> 删除
             </span>
           </Item>
         )}
       </Menu>
 
-      {showTips && <div style={{ padding: 12, color: '#aaa' }} className="fa-bg-white">{tips}</div>}
+      {showTips && <div style={{padding: 12, color: '#aaa'}} className="fa-bg-white">{tips}</div>}
     </div>
   );
 }
+
+export default React.forwardRef(BaseTree<any, any>);
