@@ -135,6 +135,7 @@ function BaseTinyMCE({ initialValue, value, onChange, onSave, onReady, style, ed
             { text: 'Ruby', value: 'ruby' },
             { text: 'Python', value: 'python' },
             { text: 'Java', value: 'java' },
+            { text: 'SQL', value: 'sql' },
             { text: 'C', value: 'c' },
             { text: 'C#', value: 'csharp' },
             { text: 'C++', value: 'cpp' },

@@ -466,3 +466,17 @@ ul {
     background-color: var(--fa-bg-color-highlight) !important;
     color: var(--fa-text-color);
 }
+
+/*----------------------------------------- prism -----------------------------------------*/
+pre[class*=language-] {
+    background: var(--fa-bg-color2);
+}
+
+code[class*=language-], pre[class*=language-] {
+    color: var(--fa-text-color);
+    text-shadow: 0 1px var(--fa-bg-color2);
+}
+
+.token.operator {
+    background: var(--fa-bg-color2);
+}
