@@ -28,6 +28,17 @@ function BaseTinyMCE({ initialValue, value, onChange, onSave, onReady, style, ed
   const {themeDark} = useContext(ThemeLayoutContext)
   const editorRef = useRef<any>(null);
 
+  const [flash, setFlash] = useState(false)
+
+  // 主题变换后，重构编辑器
+  useEffect(() => {
+    if (!ready) return;
+    setFlash(true)
+    setTimeout(() => {
+      setFlash(false)
+    }, 100)
+  }, [themeDark])
+
   const divRef = useRef<any | null>();
   const height = useHeight(divRef);
   const [ready, setReady] = useState(false);
@@ -68,13 +79,14 @@ function BaseTinyMCE({ initialValue, value, onChange, onSave, onReady, style, ed
   const editor = useMemo(() => {
     console.log('useMemo.editor', height, 'themeDark', themeDark)
     if (height === undefined) return null;
+    if (flash) return null;
     return (
       <Editor
         apiKey="xxx"
         style={{ margin: -10, padding: 10 }}
         tinymceScriptSrc="/plugins/tinymce/v6.2.0/tinymce.min.js"
         onInit={(_, editor) => {
-          // console.log('BaseTinyMCE#onInit')
+          console.log('BaseTinyMCE#onInit')
           editorRef.current = editor;
           setReady(true)
           if (onReady) onReady();
@@ -231,7 +243,7 @@ function BaseTinyMCE({ initialValue, value, onChange, onSave, onReady, style, ed
         {...editorProps}
       />
     );
-  }, [height]);
+  }, [height, flash]);
 
   return (
     <div ref={divRef} style={{ width: '100%', height: '100%', position: 'relative', ...style }}>
