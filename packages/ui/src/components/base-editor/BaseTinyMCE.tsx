@@ -107,6 +107,7 @@ function BaseTinyMCE({ initialValue, value, onChange, onSave, onReady, style, ed
             'anchor',
             'searchreplace',
             'visualblocks',
+            'codesample',
             'code',
             'fullscreen',
             'insertdatetime',
@@ -119,10 +120,25 @@ function BaseTinyMCE({ initialValue, value, onChange, onSave, onReady, style, ed
             'paste',
             'save'
           ],
-          toolbar: 'save blocks bold italic forecolor bullist numlist table link image media charmap emoticons code fullscreen help',
+          toolbar: 'blocks bold italic forecolor bullist numlist table link image media charmap emoticons codesample code fullscreen help',
           content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; } ' + ' img {max-width: 100%;} ',
           skin: themeDark ? "oxide-dark" : "oxide",
           content_css: themeDark ? "dark" : "default",
+          // 代码片段-语言类型
+          codesample_languages: [
+            { text: 'HTML/XML', value: 'markup' },
+            { text: 'JavaScript', value: 'javascript' },
+            { text: 'TypeScript', value: 'typeScript' },
+            { text: 'React', value: 'jsx' },
+            { text: 'CSS', value: 'css' },
+            { text: 'PHP', value: 'php' },
+            { text: 'Ruby', value: 'ruby' },
+            { text: 'Python', value: 'python' },
+            { text: 'Java', value: 'java' },
+            { text: 'C', value: 'c' },
+            { text: 'C#', value: 'csharp' },
+            { text: 'C++', value: 'cpp' },
+          ],
           /**
            * 需要在后台提供对应API的接口，参考：https://www.tiny.cloud/docs/advanced/php-upload-handler/
            * 返回数据json格式为：{ location : '/your/uploaded/image/file'}
