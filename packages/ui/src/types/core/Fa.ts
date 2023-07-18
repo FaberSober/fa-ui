@@ -243,6 +243,7 @@ namespace Fa {
     name: string;
     sort: number;
     hasChildren: boolean;
+    level: number; // 层级，从1开始
     children: TreeNode<T, KeyType>[] | undefined;
     sourceData: T;
     disabled?: boolean | undefined;

@@ -3,9 +3,7 @@ import { Fa } from '@ui/types';
 import BaseTreeProps from '@ui/types/core/BaseTreeProps';
 import {DataNode} from "antd/es/tree";
 
-export function parseNode<T = any>(
-  nodeList: Fa.TreeNode<T, any>[] | undefined,
-): BaseTreeProps.TreeNode<T>[] | undefined {
+export function parseNode<T = any>(nodeList: Fa.TreeNode<T, any>[] | undefined): BaseTreeProps.TreeNode<T>[] | undefined {
   if (isNil(nodeList) || nodeList.length === 0) return undefined;
   return nodeList.map((d) => ({
     id: d.id,
@@ -14,6 +12,7 @@ export function parseNode<T = any>(
     // tree
     label: d.name,
     value: d.id,
+    level: d.level,
     isLeaf: !d.hasChildren,
     children: parseNode<T>(d.children),
     sourceData: d.sourceData,

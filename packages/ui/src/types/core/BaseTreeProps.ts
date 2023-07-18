@@ -12,6 +12,7 @@ namespace BaseTreeProps {
     label: string;
     value: KeyType;
     isLeaf: boolean;
+    level: number; // 层级，从1开始
     children: BaseTreeProps.TreeNode<T>[] | undefined;
     sourceData?: T;
   }

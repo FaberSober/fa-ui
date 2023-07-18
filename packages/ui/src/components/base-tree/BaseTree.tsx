@@ -1,5 +1,5 @@
 import React, { createContext, CSSProperties, ReactNode, useContext, useEffect, useImperativeHandle, useState } from 'react';
-import { each, find, get } from 'lodash';
+import { each, find, get, isNil } from 'lodash';
 import { Modal, Space, Spin, Tree } from 'antd';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { showResponse } from '@ui/utils/utils';
@@ -56,6 +56,7 @@ export interface BaseTreeProp<T, KeyType = number> extends TreeProps {
   rootName?: string;
   renderTreeLabel?: (item: BaseTreeProps.TreeNode<T>) => ReactNode; // 自定义渲染Tree的节点名称
   extraEffectArgs?: any[];
+  maxLevel?: number; // 最大的层级，超过这个层级不展示新增按钮
 }
 
 /**
@@ -63,35 +64,36 @@ export interface BaseTreeProp<T, KeyType = number> extends TreeProps {
  * @date 2020/12/25
  */
 function BaseTree<RecordType extends object = any, KeyType = number>({
-                                                                       showRoot = false,
-                                                                       showTopBtn = true,
-                                                                       showTopAddBtn = true,
-                                                                       showTips = false,
-                                                                       showOprBtn = false,
-                                                                       showOprBtnAdd = true,
-                                                                       showOprBtnEdit = true,
-                                                                       serviceName = '',
-                                                                       className,
-                                                                       bodyStyle,
-                                                                       treeStyle,
-                                                                       ServiceModal = Modal,
-                                                                       extraContextMenus,
-                                                                       serviceApi,
-                                                                       onGetTree,
-                                                                       onAfterDelItem,
-                                                                       rootName = Fa.Constant.TREE_SUPER_ROOT_LABEL,
-                                                                       tips = '右键新增、编辑、删除节点',
-                                                                       renderTreeLabel,
-                                                                       extraEffectArgs = [],
-                                                                       ...props
-                                                                     }: BaseTreeProp<RecordType, KeyType>, ref: any) {
+   showRoot = false,
+   showTopBtn = true,
+   showTopAddBtn = true,
+   showTips = false,
+   showOprBtn = false,
+   showOprBtnAdd = true,
+   showOprBtnEdit = true,
+   serviceName = '',
+   className,
+   bodyStyle,
+   treeStyle,
+   ServiceModal = Modal,
+   extraContextMenus,
+   serviceApi,
+   onGetTree,
+   onAfterDelItem,
+   rootName = Fa.Constant.TREE_SUPER_ROOT_LABEL,
+   tips = '右键新增、编辑、删除节点',
+   renderTreeLabel,
+   extraEffectArgs = [],
+   maxLevel,
+   ...props
+ }: BaseTreeProp<RecordType, KeyType>, ref: any) {
   const {renderCount} = useContext(BaseTreeContext);
 
   const [loading, setLoading] = useState(false);
   const [addItemModalVisible, setAddItemModalVisible] = useState(false);
   const [editItemModalVisible, setEditItemModalVisible] = useState(false);
   const [treeData, setTreeData] = useState<Fa.TreeNode<RecordType, KeyType>[]>([]);
-  const [clickItem, setClickItem] = useState<BaseTreeProps.TreeNode<RecordType, KeyType> | RecordType>();
+  const [clickItem, setClickItem] = useState<BaseTreeProps.TreeNode<RecordType, KeyType>>();
   const [expandedKeys, setExpandedKeys] = useState<any[]>([]);
 
   useEffect(() => {
@@ -120,11 +122,18 @@ function BaseTree<RecordType extends object = any, KeyType = number>({
     id: MENU_ID,
   });
 
-  function handleContextMenu(event: any, props: BaseTreeProps.TreeNode<RecordType>) {
+  function handleContextMenu(event: any, props: BaseTreeProps.TreeNode<RecordType, KeyType>) {
     // 默认根节点无右键菜单
+    if (event) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
     if (props.value === Fa.Constant.TREE_SUPER_ROOT_ID) return;
     if (!showOprBtn) return;
-    show({event, props});
+    setClickItem(props);
+    setTimeout(() => {
+      show({event, props});
+    }, 50)
   }
 
   // I'm using a single event handler for all items
@@ -151,7 +160,7 @@ function BaseTree<RecordType extends object = any, KeyType = number>({
   }
 
   function handleEditItem(item: BaseTreeProps.TreeNode<RecordType, KeyType>) {
-    setClickItem(item.sourceData);
+    setClickItem(item);
     setAddItemModalVisible(false);
     setEditItemModalVisible(true);
   }
@@ -276,6 +285,12 @@ function BaseTree<RecordType extends object = any, KeyType = number>({
     setExpandedKeys(flatTree.map((i) => i.key));
   }
 
+  function canShowAddBtn(): boolean {
+    if (isNil(maxLevel)) return true;
+    if (isNil(clickItem)) return false;
+    return clickItem.level < maxLevel;
+  }
+
   return (
     <div
       className={className}
@@ -335,7 +350,7 @@ function BaseTree<RecordType extends object = any, KeyType = number>({
             <ServiceModal
               title={`编辑${serviceName}`}
               open={editItemModalVisible}
-              record={clickItem}
+              record={clickItem ? clickItem.sourceData : undefined}
               onCancel={afterEditItem}
               fetchFinish={afterEditItem}
               destroyOnClose
@@ -346,7 +361,7 @@ function BaseTree<RecordType extends object = any, KeyType = number>({
 
       {/* context menu */}
       <Menu id={MENU_ID} className="contextMenu">
-        {showOprBtnAdd && (
+        {canShowAddBtn() && showOprBtnAdd && (
           <Item id="add" onClick={handleItemClick}>
             <PlusOutlined style={{width: 20}}/> 新增
           </Item>
