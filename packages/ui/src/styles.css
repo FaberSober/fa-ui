@@ -452,6 +452,26 @@ ul {
     margin: 0 !important;
 }
 
+.fa-pos-abs {
+    position: absolute;
+}
+
+.fa-pos-t {
+    top: 0;
+}
+
+.fa-pos-b {
+    bottom: 0;
+}
+
+.fa-pos-l {
+    left: 0;
+}
+
+.fa-pos-r {
+    right: 0;
+}
+
 /*----------------------------------------- fa-corn -----------------------------------------*/
 .fa-cron-react-editor-tab {
     background-color: var(--fa-bg-grey) !important;
