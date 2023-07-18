@@ -17,8 +17,8 @@ export default function Captcha({ onCodeChange, style }: CaptchaProps) {
   const config = {
     // code: '',
     codeLength: 4,
-    fontSizeMin: 20,
-    fontSizeMax: 22,
+    fontSizeMin: 26,
+    fontSizeMax: 30,
     backgroundColorMin: 240,
     backgroundColorMax: 250,
     colorMin: 10,
