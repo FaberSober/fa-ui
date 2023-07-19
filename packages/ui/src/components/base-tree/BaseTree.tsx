@@ -59,6 +59,8 @@ export interface BaseTreeProp<T, KeyType = number> extends TreeProps {
   maxLevel?: number; // 最大的层级，超过这个层级不展示新增按钮
 }
 
+let menuClickItem: any = undefined;
+
 /**
  * @author xu.pengfei
  * @date 2020/12/25
@@ -124,16 +126,15 @@ function BaseTree<RecordType extends object = any, KeyType = number>({
 
   function handleContextMenu(event: any, props: BaseTreeProps.TreeNode<RecordType, KeyType>) {
     // 默认根节点无右键菜单
-    if (event) {
-      event.preventDefault()
-      event.stopPropagation()
-    }
+    // if (event) {
+    //   event.preventDefault()
+    //   event.stopPropagation()
+    // }
     if (props.value === Fa.Constant.TREE_SUPER_ROOT_ID) return;
     if (!showOprBtn) return;
     setClickItem(props);
-    setTimeout(() => {
-      show({event, props});
-    }, 50)
+    menuClickItem = props;
+    show({event, props});
   }
 
   // I'm using a single event handler for all items
@@ -196,7 +197,7 @@ function BaseTree<RecordType extends object = any, KeyType = number>({
     serviceApi.allTree().then((res) => {
       let treeArr: any[] = TreeUtils.parseNode<RecordType>(res.data) || [];
       if (showRoot) {
-        treeArr = [{...Fa.ROOT_DEFAULT, name: rootName, children: treeArr}] as any[];
+        treeArr = [{...Fa.ROOT_DEFAULT, name: rootName, level: 0, children: treeArr}] as any[];
       }
       // const newTreeData = renderTreeData(treeArr);
       setTreeData(treeArr);
@@ -287,8 +288,8 @@ function BaseTree<RecordType extends object = any, KeyType = number>({
 
   function canShowAddBtn(): boolean {
     if (isNil(maxLevel)) return true;
-    if (isNil(clickItem)) return false;
-    return clickItem.level < maxLevel;
+    if (isNil(menuClickItem)) return false;
+    return menuClickItem.level < maxLevel;
   }
 
   return (

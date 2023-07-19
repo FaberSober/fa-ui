@@ -68,7 +68,7 @@ export default function BaseCascader<RecordType extends object = any, KeyType = 
     serviceApi.allTree({}).then((res) => {
       let treeArr = res.data;
       if (showRoot) {
-        treeArr = [{ ...Fa.ROOT_DEFAULT, id: rootId, name: rootName, children: res.data } as any];
+        treeArr = [{ ...Fa.ROOT_DEFAULT, id: rootId, name: rootName, level: 0, children: res.data } as any];
       }
       setTreeDisabled(treeArr, disabledIds);
       setOptions(treeArr);

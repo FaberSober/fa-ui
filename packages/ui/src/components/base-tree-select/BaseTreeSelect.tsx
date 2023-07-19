@@ -37,7 +37,7 @@ export default function BaseTreeSelect<RecordType extends object = any, KeyType 
     serviceApi.allTree({}).then((res) => {
       let treeArr = BaseTreeUtils.parseNode(res.data);
       if (showRoot) {
-        treeArr = [{ ...{ ...Fa.ROOT_DEFAULT, label: rootName }, children: treeArr }];
+        treeArr = [{ ...{ ...Fa.ROOT_DEFAULT, label: rootName }, children: treeArr, level: 0 }];
       }
       setOptions(treeArr);
     });
