@@ -42,6 +42,9 @@ export default class BaseApi<T, KeyType, PageT = T> extends BaseZeroApi {
   /** ids批量永久删除 */
   removePerBatchByIds = (ids: KeyType[]): Promise<Fa.Ret> => this.post('removePerBatchByIds', ids);
 
+  /** 通过查询条件删除 */
+  removeByQuery = (params: Fa.BaseQueryParams): Promise<Fa.Ret<T[]>> => this.post('removeByQuery', params);
+
   /** 获取所有List */
   all = (): Promise<Fa.Ret<T[]>> => this.get('all');
 
