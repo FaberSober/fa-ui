@@ -5,14 +5,45 @@
 import React from 'react';
 import { BaseSelect, BaseSelectProps } from '@fa/ui';
 import { Rbac } from '@/types';
-import { rbacRoleApi as api } from '@/services';
+import { userApi as api } from '@/services';
 
 /**
  * @author xu.pengfei
  * @date 2022/9/28
  */
-export default function RbacRoleSelect({ ...props }: Omit<BaseSelectProps<Rbac.RbacRole>, 'serviceApi'>) {
-  return <BaseSelect serviceApi={api} placeholder="请选择角色" {...props} />;
+export default function UserSelect({ ...props }: Omit<BaseSelectProps<Rbac.RbacRole>, 'serviceApi'>) {
+  return <BaseSelect serviceApi={api} placeholder="请选择用户" {...props} />;
+}
+```
+
+## 通用业务数据Select查询框-外部传入其他参数
+```typescript jsx
+import React from 'react';
+import { BaseSelect, BaseSelectProps } from '@fa/ui';
+import { Rbac } from '@/types';
+import { userApi as api } from '@/services';
+
+
+export interface UserSelect extends Omit<BaseSelectProps<Rbac.RbacRole>, 'serviceApi'> {
+  departmentId?: string; // 外部传入其他参数
+}
+
+/**
+ * @author xu.pengfei
+ * @date 2022/9/28
+ */
+export default function UserSelect({ departmentId, ...props }: UserSelect) {
+  return (
+    <BaseSelect
+      serviceApi={{
+        ...api,
+        list: () => api.list({ query: { departmentId } })
+      }}
+      placeholder="请选择用户"
+      extraParams={[departmentId]} // 外部传入其他参数变更会触发Select重新获取数据
+      {...props}
+    />
+  );
 }
 ```
 
