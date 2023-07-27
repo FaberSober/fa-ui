@@ -13,7 +13,7 @@ export interface BaseSelectProps<T> extends SelectProps<T> {
   };
   value?: any;
   onChange?: (v: any, option?: any) => void;
-  extraParams?: any;
+  extraParams?: any[];
   showAll?: boolean; // 是否展示所有选项
   transValueToString?: boolean; // 是否将value转换为string
   onApiGetData?: (arr: T[]) => void; // api获取数据回调
@@ -29,7 +29,7 @@ export default function BaseSelect<RecordType extends object = any>({
   valueKey = 'id',
   serviceApi,
   value,
-  extraParams,
+  extraParams = [],
   showAll,
   transValueToString,
   onApiGetData,
@@ -63,7 +63,7 @@ export default function BaseSelect<RecordType extends object = any>({
     }
 
     fetchList();
-  }, [extraParams]);
+  }, [...extraParams]);
 
   function parseLabel(data: RecordType) {
     if (labelKey instanceof Function) {
