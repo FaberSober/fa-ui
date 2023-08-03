@@ -401,6 +401,10 @@ ul {
     background-color: var(--fa-bg-color-hover);
 }
 
+.fa-cursor-pointer {
+    cursor: pointer;
+}
+
 .fa-hover {
     cursor: pointer;
     transition: var(--fa-transition);
