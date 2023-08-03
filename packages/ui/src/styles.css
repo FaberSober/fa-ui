@@ -414,6 +414,15 @@ ul {
     box-shadow: var(--fa-box-shadow);
 }
 
+.fa-link-grey {
+    cursor: pointer;
+    transition: var(--fa-transition);
+}
+
+.fa-link-grey:hover {
+    background-color: var(--fa-bg-color-hover);
+}
+
 .fa-box-shadow-b {
     box-shadow: var(--fa-box-shadow-b);
 }
