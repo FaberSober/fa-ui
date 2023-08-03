@@ -7,6 +7,7 @@ import DictDataRadio from './DictDataRadio';
 import DictDataShow from './DictDataShow';
 import BaseBoolRadio from './BaseBoolRadio';
 import BaseBoolSelector from './BaseBoolSelector';
+import IntBoolSelector from "./IntBoolSelector";
 
 export {
   DictDataSelector,
@@ -18,6 +19,7 @@ export {
   DictDataShow,
   BaseBoolRadio,
   BaseBoolSelector,
+  IntBoolSelector,
 };
 
 export * from './hooks'
