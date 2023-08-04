@@ -1,7 +1,7 @@
 import React, { createContext, CSSProperties, ReactNode, useContext, useEffect, useImperativeHandle, useState } from 'react';
 import { each, find, get, isNil } from 'lodash';
 import { Modal, Space, Spin, Tree } from 'antd';
-import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { showResponse } from '@ui/utils/utils';
 import BaseTreeProps from '@ui/types/core/BaseTreeProps';
 import * as TreeUtils from './utils';
@@ -313,8 +313,8 @@ function BaseTree<RecordType extends object = any, KeyType = number>({
             )}
           </div>
           <Space>
-            <a onClick={() => handleExpandAll()}>展开</a>
-            <a onClick={() => setExpandedKeys([])}>收起</a>
+            <a onClick={() => setExpandedKeys([])}><MinusCircleOutlined /></a>
+            <a onClick={() => handleExpandAll()}><PlusCircleOutlined /></a>
           </Space>
         </div>
       )}
