@@ -204,8 +204,24 @@ ul {
     padding: 4px;
 }
 
+.fa-p6 {
+    padding: 6px;
+}
+
 .fa-p8 {
     padding: 8px;
+}
+
+.fa-m4 {
+    margin: 4px;
+}
+
+.fa-mt4 {
+    margin-top: 4px;
+}
+
+.fa-mt6 {
+    margin-top: 6px;
 }
 
 .fa-mt8 {
@@ -218,6 +234,18 @@ ul {
 
 .fa-mt24 {
     margin-top: 24px;
+}
+
+.fa-mb4 {
+    margin-bottom: 4px;
+}
+
+.fa-mb6 {
+    margin-bottom: 6px;
+}
+
+.fa-mb8 {
+    margin-bottom: 8px;
 }
 
 .fa-mb12 {
