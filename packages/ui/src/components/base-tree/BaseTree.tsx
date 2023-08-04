@@ -54,7 +54,7 @@ export interface BaseTreeProp<T, KeyType = number> extends TreeProps {
   onGetTree?: (tree: Fa.TreeNode<T, KeyType>[]) => void; // 每次api拉取tree数据后的回调
   onAfterDelItem?: (item: BaseTreeProps.TreeNode<T, KeyType>) => void;
   rootName?: string;
-  renderTreeLabel?: (item: BaseTreeProps.TreeNode<T>) => ReactNode; // 自定义渲染Tree的节点名称
+  renderTreeLabel?: (item: Fa.TreeNode<T, KeyType>) => ReactNode; // 自定义渲染Tree的节点名称
   extraEffectArgs?: any[];
   maxLevel?: number; // 最大的层级，超过这个层级不展示新增按钮
 }
@@ -334,7 +334,7 @@ function BaseTree<RecordType extends object = any, KeyType = number>({
               fieldNames={{key: 'id', title: 'name'}}
               titleRender={(item: any) => (
                 <div className="fa-base-tree-title-div" onContextMenu={(e) => handleContextMenu(e, item)}>
-                  {item.name}
+                  {renderTreeLabel ? renderTreeLabel(item) : `${item.name}`}
                 </div>
               )}
               {...props}
