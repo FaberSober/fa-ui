@@ -126,6 +126,7 @@ function BaseTinyMCE({ initialValue, value, onChange, onSave, onReady, style, ed
           content_css: themeDark ? "dark" : "default",
           // 代码片段-语言类型
           codesample_languages: [
+            { text: 'Bash', value: 'bash' },
             { text: 'HTML/XML', value: 'markup' },
             { text: 'JavaScript', value: 'javascript' },
             { text: 'TypeScript', value: 'typeScript' },
@@ -139,6 +140,8 @@ function BaseTinyMCE({ initialValue, value, onChange, onSave, onReady, style, ed
             { text: 'C', value: 'c' },
             { text: 'C#', value: 'csharp' },
             { text: 'C++', value: 'cpp' },
+            { text: 'yaml', value: 'yaml' },
+            { text: 'properties', value: 'properties' },
           ],
           /**
            * 需要在后台提供对应API的接口，参考：https://www.tiny.cloud/docs/advanced/php-upload-handler/
