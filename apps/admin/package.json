@@ -48,7 +48,8 @@
     "react-router-dom": "6.8.1",
     "react-use": "17.4.0",
     "use-bus": "2.5.2",
-    "uuid": "9.0.0"
+    "uuid": "9.0.0",
+    "video.js": "^8.3.0"
   },
   "devDependencies": {
     "@fa/eslint-config-custom": "workspace:*",

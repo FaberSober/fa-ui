@@ -66,7 +66,11 @@ export function isUrlImg(url: string) {
 }
 
 export function isImg(type: string) {
-  return ["png", "jpg", "jpeg", "gif"].indexOf(type) > -1
+  return ['png', 'jpg', 'jpeg', 'ico', 'bmp', 'gif'].indexOf(type.toLowerCase()) > -1
+}
+
+export function isVideo(type: string) {
+  return ['mp4', 'webm', 'ogg'].indexOf(type.toLowerCase()) > -1
 }
 
 /**
