@@ -120,12 +120,16 @@ function BaseTinyMCE({ initialValue, value, onChange, onSave, onReady, style, ed
             'paste',
             'save'
           ],
-          toolbar: 'blocks bold italic forecolor bullist numlist table link image media charmap emoticons codesample code fullscreen help',
-          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; } ' + ' img {max-width: 100%;} ',
+          toolbar: 'blocks fontsize lineheight fontfamily blockquote bold italic forecolor bullist numlist table link image media charmap emoticons codesample code fullscreen help',
+          content_style: 'body { font-family:"Microsoft YaHei", "Helvetica Neue", "PingFang SC"; font-size:14px; line-height: 1.2; } ' + ' img, video {max-width: 100%;height: auto;} ',
+          selector: "textarea",
           skin: themeDark ? "oxide-dark" : "oxide",
           content_css: themeDark ? "dark" : "default",
-          fontsize_formats: "12px 14px 16px 18px 20px 22px 24px 28px 32px 36px 48px 56px 72px", //字体大小
-          font_formats: "微软雅黑=Microsoft YaHei,Helvetica Neue,PingFang SC;苹果苹方=PingFang SC,Microsoft YaHei;宋体=simsun,serif;仿宋体=FangSong,serif;黑体=SimHei;Arial=arial,helvetica;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;",
+          font_size_formats: "12px 14px 16px 18px 20px 22px 24px 28px 32px 36px 48px 56px 72px", //字体大小
+          line_height_formats: "1 1.2 1.4 1.6 2 2.2 2.4 2.6 3 4 5", // 行高
+          font_family_formats: "微软雅黑=Microsoft YaHei,Helvetica Neue,PingFang SC;苹果苹方=PingFang SC,Microsoft YaHei;宋体=simsun,serif;仿宋体=FangSong,serif;黑体=SimHei;Arial=arial,helvetica;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;",
+          paste_webkit_styles: "all",
+          paste_merge_formats: true,
           branding: false, //tiny技术支持信息是否显示
           // 代码片段-语言类型
           codesample_languages: [
@@ -197,19 +201,42 @@ function BaseTinyMCE({ initialValue, value, onChange, onSave, onReady, style, ed
           file_picker_types: 'file image media',
           relative_urls: false,
           /* and here's our custom image picker*/
-          file_picker_callback: (cb) => {
+          file_picker_callback: (cb, value, meta) => {
+            console.log('value', value, 'meta', meta)
+            //限制文件的上传类型
+            let filetype = ".pdf, .txt, .zip, .rar, .7z, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .mp3, .mp4,.mkv, .avi, .wmv, .rmvb, .mov, .mpg, .mpeg, .webm, .jpg, .jpeg, .png, .gif, .ico, .bmp, .webp";
+            if (meta.filetype === 'image') {
+              filetype = ".jpg, .jpeg, .png, .gif, .ico, .bmp, .we";
+            } else if (meta.filetype === 'video') {
+              filetype = ".mp3, .mp4,.mkv, .avi, .wmv, .rmvb, .mov, .mpg, .mpeg, .webm";
+            }
+
             const input = document.createElement('input');
             input.setAttribute('type', 'file');
-            input.setAttribute('accept', 'image/*,video/*');
+            // input.setAttribute('accept', 'image/*,video/*');
+            input.setAttribute("accept", filetype);
 
             input.addEventListener('change', (e: any) => {
-              const file = e.target.files[0];
+              const file = e.target.files[0]; //获取文件信息
+              if (file.type.slice(0, 5) == "image" && file.size / 1024 / 1024 > 10) {
+                alert("上传失败，图片大小请控制在 10M 以内");
+                return;
+              } else if (
+                file.type.slice(0, 5) == "video" &&
+                file.size / 1024 / 1024 > 500
+              ) {
+                alert("上传失败，视频大小请控制在 500M 以内");
+                return;
+              } else if (file.size / 1024 / 1024 > 100) {
+                alert("上传失败，文件大小请控制在 100M 以内");
+                return;
+              }
 
               const reader = new FileReader();
               reader.addEventListener('load', () => {
                 // 走自己服务器上传，会占据自己服务器带宽
                 fileSaveApi.uploadFile(file).then((res) => {
-                  cb(fileSaveApi.genLocalGetFile(res.data.id), { title: file.name });
+                  cb(fileSaveApi.genLocalGetFile(res.data.id), { title: file.name, text: file.name });
                 });
 
                 // 走七牛云服务器上传，节省自己服务器带宽
