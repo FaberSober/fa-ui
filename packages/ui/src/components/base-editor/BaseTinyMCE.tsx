@@ -124,6 +124,9 @@ function BaseTinyMCE({ initialValue, value, onChange, onSave, onReady, style, ed
           content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; } ' + ' img {max-width: 100%;} ',
           skin: themeDark ? "oxide-dark" : "oxide",
           content_css: themeDark ? "dark" : "default",
+          fontsize_formats: "12px 14px 16px 18px 20px 22px 24px 28px 32px 36px 48px 56px 72px", //字体大小
+          font_formats: "微软雅黑=Microsoft YaHei,Helvetica Neue,PingFang SC;苹果苹方=PingFang SC,Microsoft YaHei;宋体=simsun,serif;仿宋体=FangSong,serif;黑体=SimHei;Arial=arial,helvetica;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;",
+          branding: false, //tiny技术支持信息是否显示
           // 代码片段-语言类型
           codesample_languages: [
             { text: 'Bash', value: 'bash' },
@@ -191,7 +194,7 @@ function BaseTinyMCE({ initialValue, value, onChange, onSave, onReady, style, ed
             images_upload_url: 'postAcceptor.php',
             here we add custom filepicker only to Image dialog
           */
-          file_picker_types: 'image',
+          file_picker_types: 'file image media',
           relative_urls: false,
           /* and here's our custom image picker*/
           file_picker_callback: (cb) => {

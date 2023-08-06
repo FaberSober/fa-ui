@@ -27,6 +27,12 @@ class FileSaveApi extends BaseApi<Admin.FileSave, string> {
 
   uploadApi = this.getUrl(`upload`);
 
+  getPlainFile = (fileId: string) => {
+    if (fileId === undefined || fileId == null) return '';
+    if (trim(fileId) === '') return '';
+    return this.getUrl(`getPlainFile/${fileId}`);
+  };
+
   genLocalGetFile = (fileId: string) => {
     if (fileId === undefined || fileId == null) return '';
     if (trim(fileId) === '') return '';
