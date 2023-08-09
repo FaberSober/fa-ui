@@ -39,6 +39,7 @@ export interface BaseTreeProp<T, KeyType = number> extends TreeProps {
   className?: any;
   bodyStyle?: CSSProperties; // body补充样式
   treeStyle?: CSSProperties; // body补充样式
+  topBarStyle?: CSSProperties; // 顶部工具栏补充样式
   extraContextMenus?: BaseTreeProps.ExtraContextMenus[]; // 外部传入的右键菜单
   /** [外部定义]Tree节点标准API接口 */
   serviceApi: {
@@ -77,6 +78,7 @@ function BaseTree<RecordType extends object = any, KeyType = number>({
    className,
    bodyStyle,
    treeStyle,
+   topBarStyle,
    ServiceModal = Modal,
    extraContextMenus,
    serviceApi,
@@ -306,7 +308,7 @@ function BaseTree<RecordType extends object = any, KeyType = number>({
     >
       {/* top tools */}
       {showTopBtn && (
-        <div style={{padding: 12, display: 'flex', alignItems: 'center'}}>
+        <div style={{padding: 12, display: 'flex', alignItems: 'center', ...topBarStyle}}>
           <div style={{flex: 1}}>
             {showTopAddBtn && (
               <FaHref onClick={() => handleAddItem()} icon={<PlusOutlined/>} text={`新增${serviceName}`}/>
