@@ -1,8 +1,7 @@
-import React, {createContext, useEffect, useState} from 'react';
-import useBus from 'use-bus';
+import React, { createContext, useEffect } from 'react';
 import { Fa } from '@ui/types';
-import {useLocalStorage} from "react-use";
-import {each} from "lodash";
+import { useLocalStorage } from "react-use";
+import { each } from "lodash";
 
 const DEFAULT_PRIMARY_COLOR = '#1890FF';
 
