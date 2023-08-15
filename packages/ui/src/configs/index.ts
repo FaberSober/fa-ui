@@ -19,5 +19,7 @@ declare global {
     FA_QINIU_ZONE: any;
     /** socket.io */
     io: any;
+    /** socket.io */
+    faHeader: any;
   }
 }

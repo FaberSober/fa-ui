@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { get } from 'lodash';
+import { each, get } from 'lodash';
 import { message } from 'antd';
-import {getTnCorpId, getToken} from './cache';
+import { getTnCorpId, getToken } from './cache';
 import { dispatch } from 'use-bus';
 import { Fa } from '@ui/types';
 
@@ -44,6 +44,14 @@ instance.interceptors.request.use(
     config.headers[Fa.Constant.FA_FROM] = window.FaFrom;
     config.headers[Fa.Constant.FA_VERSION_CODE] = window.FaVersionCode;
     config.headers[Fa.Constant.FA_VERSION_NAME] = window.FaVersionName;
+
+    // 读取window.faHeader中配置的
+    if (window.faHeader) {
+      each(window.faHeader, (v,k) => {
+        // console.log('v', v, 'k', k)
+        config.headers[k] = v;
+      })
+    }
 
     // axios 拦截器统一在接口增加时间戳参数，防止走缓存。
     // if (config.method == 'post') {
