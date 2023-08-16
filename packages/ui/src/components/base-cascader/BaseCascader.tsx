@@ -100,11 +100,11 @@ export default function BaseCascader<RecordType extends object = any, KeyType = 
     <Cascader<any>
       fieldNames={{ label: 'name', value: 'id' }}
       placeholder="请选择"
+      changeOnSelect
       {...props}
       value={innerValue}
       options={options}
       onChange={(v: any, s: any) => handleChange(v, s)}
-      changeOnSelect
     />
   );
 }
