@@ -397,6 +397,15 @@ ul {
     border-bottom: 1px solid var(--fa-border-color) !important;
 }
 
+.fa-input-underline {
+    border: none !important;
+    border-radius: 0 !important;
+}
+
+.fa-input-underline:focus {
+    border-bottom: 1px solid var(--fa-border-color) !important;
+}
+
 .fa-table-subtitle {
     line-height: 30px;
     color: var(--fa-subtitle-color);
