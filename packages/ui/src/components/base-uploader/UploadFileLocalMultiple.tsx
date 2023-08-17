@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { find } from 'lodash';
 import { Button, Upload, UploadProps } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import {fileSaveApi} from '@ui/services/base';
-import { getToken } from '@ui/utils/cache';
+import { fileSaveApi } from '@ui/services/base';
+import { genAuthHeaders } from '@ui/utils/cache';
 import { UploadChangeParam } from 'antd/es/upload/interface';
-import { Fa } from '@ui/types';
+
 
 export interface UploadFileLocalMultipleProps extends Omit<UploadProps, 'onChange'> {
   children?: any;
@@ -75,9 +75,7 @@ export default function UploadFileLocalMultiple({ children, description, onChang
     <Upload
       name="file"
       action={fileSaveApi.uploadApi}
-      headers={{
-        [Fa.Constant.TOKEN_KEY]: getToken() || '',
-      }}
+      headers={genAuthHeaders()}
       onChange={handleOnChange}
       fileList={array}
       multiple

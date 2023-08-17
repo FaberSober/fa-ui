@@ -2,12 +2,12 @@ import React, { CSSProperties, useEffect, useState } from 'react';
 import { Image, message, Upload, UploadProps } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import {fileSaveApi} from '@ui/services/base';
-import { getToken } from '@ui/utils/cache';
+import { genAuthHeaders, getToken } from '@ui/utils/cache';
 import { RcFile } from 'antd/es/upload';
 import { UploadChangeParam } from 'antd/lib/upload/interface';
 import { UploadFile } from 'antd/es/upload/interface';
-import { Fa } from '@ui/types';
 import {FileAccept} from "@ui/utils/utils";
+
 
 export interface UploadImgLocalProps extends Omit<UploadProps, 'onChange'> {
   value?: string;
@@ -110,9 +110,7 @@ export default function UploadImgLocal({ value, onChange, style, ...props }: Upl
         listType="picture-card"
         // className="avatar-uploader"
         action={fileSaveApi.uploadApi}
-        headers={{
-          [Fa.Constant.TOKEN_KEY]: getToken() || '',
-        }}
+        headers={genAuthHeaders()}
         beforeUpload={beforeUpload}
         onChange={handleOnChange}
         onRemove={handleRemove}

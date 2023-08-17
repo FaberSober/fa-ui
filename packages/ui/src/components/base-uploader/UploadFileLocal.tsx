@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Button, message, Upload, UploadProps } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import {fileSaveApi} from '@ui/services/base';
-import { getToken } from '@ui/utils/cache';
+import { genAuthHeaders, getToken } from '@ui/utils/cache';
 import { RcFile } from 'antd/es/upload';
 import { UploadChangeParam } from 'antd/es/upload/interface';
-import { Fa } from '@ui/types';
+
 
 export interface UploadFileLocalProps extends Omit<UploadProps, 'onChange'> {
   children?: any;
@@ -83,9 +83,7 @@ export default function UploadFileLocal({ children, description, onChange, value
     <Upload
       name="file"
       action={fileSaveApi.uploadApi}
-      headers={{
-        [Fa.Constant.TOKEN_KEY]: getToken() || '',
-      }}
+      headers={genAuthHeaders()}
       beforeUpload={beforeUpload}
       onChange={handleOnChange}
       onRemove={handleRemove}
