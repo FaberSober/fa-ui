@@ -144,7 +144,7 @@ namespace Fa {
   export interface Pagination {
     current: number;
     pageSize: number;
-    total?: number;
+    total: number;
   }
 
   export interface Page<T = any> {
