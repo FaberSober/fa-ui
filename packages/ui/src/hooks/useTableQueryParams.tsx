@@ -156,7 +156,7 @@ export default function useTableQueryParams<T>(
       </span>
     ),
     onChange: (page, pageSize) => {
-      setPagination({current: page, pageSize: pageSize || queryParams.pagination.pageSize});
+      setPagination({current: page, pageSize: pageSize || queryParams.pagination.pageSize, total: queryParams.pagination.total});
     },
     pageSizeOptions: ['10', '17', '20', '30', '50', '100', '500', '1000'],
     ...ret.showPagination,
