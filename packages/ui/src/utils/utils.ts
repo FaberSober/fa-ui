@@ -538,3 +538,20 @@ export function generateId(size = 8) {
   }
   return str;
 }
+
+/**
+ * 判断checkList是否全部在allList中
+ * @param allList
+ * @param checkList
+ */
+export function allInList(allList: any[], checkList: any[]) {
+  if (isNil(allList) || allList.length === 0) return false;
+  if (isNil(checkList) || checkList.length === 0) return false;
+
+  for (let i = 0; i < checkList.length; i++) {
+    if (allList.indexOf(checkList[i]) === -1) {
+      return false;
+    }
+  }
+  return true;
+}

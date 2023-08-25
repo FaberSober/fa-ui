@@ -1,5 +1,6 @@
-import { isNil, trim } from 'lodash';
+import { find, isNil, trim } from 'lodash';
 import { Fa } from '@ui/types';
+
 
 export function parseNode<T = any>(nodeList: Fa.TreeNode<T, any>[] | undefined): Fa.BaseTreeNode<T>[] | undefined {
   if (isNil(nodeList) || nodeList.length === 0) return undefined;
@@ -25,6 +26,20 @@ export function flatTreeList<T>(tree: Fa.TreeNode<T>[] = []): T[] {
       list.push(...flatTreeList(children));
     }
     list.push(sourceData);
+  });
+  return list;
+}
+
+
+/** 平铺Tree型结构 */
+export function flatTreeSourceList<T>(tree: Fa.TreeNode<T>[] = []): Fa.TreeNode<T>[] {
+  const list: Fa.TreeNode<T>[] = [];
+  tree.forEach((item) => {
+    const { children } = item;
+    if (children && children[0]) {
+      list.push(...flatTreeSourceList(children));
+    }
+    list.push(item);
   });
   return list;
 }
@@ -71,4 +86,10 @@ function findPathInner(options: any[] | undefined, destId: any): any {
 
 export function findPath(options: any[] | undefined, destId: any) {
   return findPathInner(options, destId) || [];
+}
+
+export function findNodeInTree<T>(tree: Fa.TreeNode<T>[] | undefined, checkFun: (item: T) => boolean): any {
+  if (isNil(tree)) return undefined;
+  const list = flatTreeList(tree)
+  return find(list, i => checkFun(i));
 }
