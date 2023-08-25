@@ -1,5 +1,6 @@
-import { find, isNil, trim } from 'lodash';
+import { difference, each, find, isNil, trim } from 'lodash';
 import { Fa } from '@ui/types';
+import { allInList } from "@ui/utils/utils";
 
 
 export function parseNode<T = any>(nodeList: Fa.TreeNode<T, any>[] | undefined): Fa.BaseTreeNode<T>[] | undefined {
@@ -92,4 +93,38 @@ export function findNodeInTree<T>(tree: Fa.TreeNode<T>[] | undefined, checkFun: 
   if (isNil(tree)) return undefined;
   const list = flatTreeList(tree)
   return find(list, i => checkFun(i));
+}
+
+/**
+ * 计算key在tree中的全勾选、半勾选状态，返回全勾选的。
+ */
+export function calCheckedKey<T>(treeData: Fa.TreeNode<T>[] | undefined, checkedKeys: any[]):any[]|undefined {
+  // treeData尚未初始化
+  if (isNil(treeData) || treeData.length === 0) return undefined;
+
+  const flatTree = flatTreeSourceList(treeData)
+  // console.log('flatTree', flatTree)
+
+  const cks:any[] = [];
+  each(flatTree, node => {
+    // 不在勾选的keys中，过滤掉
+    if (checkedKeys.indexOf(node.id) === -1) {
+      return;
+    }
+    // 以下为在勾选的keys中的情况判断
+    // 1. 节点为叶子节点，无子节点，本身勾选则为全勾选
+    if (isNil(node.children) || node.children.length === 0) {
+      cks.push(node.id)
+      return;
+    }
+    // 2. 节点为父节点，判断父节点的子节点是否全勾选，如果是，则该父节点为全勾选
+    const cids = node?.children?.map(c => c.id) || [];
+    const childrenAllCheck = allInList(cks, cids)
+    if (childrenAllCheck) {
+      cks.push(node.id)
+      return;
+    }
+  })
+
+  return cks;
 }
