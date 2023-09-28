@@ -89,6 +89,15 @@ export function trimObj(obj: any): any {
   return newObj;
 }
 
+export const COLORS = ['#f5222d', '#fa541c', '#fa8c16', '#faad14', '#fadb14', '#a0d911', '#52c41a', '#13c2c2', '#1677ff', '#2f54eb', '#722ed1', '#eb2f96'];
+
+/**
+ * 从颜色数组中按照余数取颜色
+ * @param num
+ */
+export function seqColor(num: number) {
+  return COLORS[num % COLORS.length]
+}
 
 export function tryHexToRgba(hex: string | undefined) {
   // console.log('hex', hex)
