@@ -7,5 +7,6 @@ declare global {
     FaFrom: any;
     FaVersionCode: any;
     FaVersionName: any;
+    fa: any;
   }
 }
