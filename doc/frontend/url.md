@@ -1,3 +1,4 @@
+
 # URL
 ## 获取URL中query参数
 
@@ -34,6 +35,9 @@ const search = useQs();
 ## 操作标签页
 
 ```typescript jsx
+import React, { useContext } from 'react';
+import { MenuLayoutContext } from "@features/fa-admin-pages/layout";
+
 const {addTab, removeTab} = useContext(MenuLayoutContext)
 
 function handleAddTabIframe() {
