@@ -6,17 +6,18 @@ export interface FaLabelProps {
   className?: string;
   style?: CSSProperties;
   textStyle?: CSSProperties;
+  block?: boolean; // 是否块式
 }
 
 /**
  * @author xu.pengfei
  * @date 2021/6/16
  */
-export default function FaLabel({ title, barColor, className, style, textStyle }: FaLabelProps) {
+export default function FaLabel({ title, barColor, className, style, textStyle, block }: FaLabelProps) {
   return (
     <div
       style={{
-        display: 'flex',
+        display: block ? 'flex' : 'inline-flex',
         alignItems: 'center',
         padding: '4px 12px',
         borderLeft: `4px solid #00878b`,
