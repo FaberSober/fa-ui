@@ -533,6 +533,10 @@ ul {
     right: 0;
 }
 
+.fa-cover {
+    background-color: rgba(238, 238, 238, 0.4);
+}
+
 /*----------------------------------------- fa-corn -----------------------------------------*/
 .fa-cron-react-editor-tab {
     background-color: var(--fa-bg-grey) !important;
