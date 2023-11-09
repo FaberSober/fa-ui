@@ -6,6 +6,29 @@ namespace FaEnums {
     UNKNOWN = 2,
   }
 
+  export enum UserWorkStatusEnum {
+    ON_JOB = 0,
+    ASK_LEAVE = 1,
+    DEPART = 2,
+  }
+
+  export enum KqglClockInTypeEnum {
+    ON_WORK = 0,
+    OFF_WORK = 1
+  }
+
+  export enum KqglKqStatusEnum {
+    NORMAL = 0,
+    LATE = 1,
+    LEAVE_EARLY = 2,
+    LACK_CARD = 3
+  }
+
+  export enum RydwPositionDeviceStatusEnum {
+    NORMAL = 0,
+    ABNORMAL = 1,
+  }
+
   export enum FileSaveDriveEnum {
     LOCAL = 1,
     QINIU = 2,
