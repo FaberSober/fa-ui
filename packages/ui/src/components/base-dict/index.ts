@@ -1,3 +1,4 @@
+import BaseAuditBoolSelector from './BaseAuditBoolSelector';
 import DictDataSelector from './DictDataSelector';
 import DictEnumSelector from './DictEnumSelector';
 import DictEnumApiSelector from './DictEnumApiSelector';
@@ -10,6 +11,7 @@ import BaseBoolSelector from './BaseBoolSelector';
 import IntBoolSelector from "./IntBoolSelector";
 
 export {
+  BaseAuditBoolSelector,
   DictDataSelector,
   DictEnumSelector,
   DictEnumApiSelector,
