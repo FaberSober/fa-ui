@@ -1,3 +1,7 @@
+import React from 'react'
+import { Badge } from "antd";
+
+
 namespace FaEnums {
   // ------------------------------------ BASE ------------------------------------
   export enum SexEnum {
@@ -120,6 +124,26 @@ namespace FaEnums {
     CREATOR = 1, // 创建者
     USER = 2, // 操作者
   }
+
+  // ------------------------------------ 审核流程 ------------------------------------
+  export enum AuditEnum {
+    TODO = 0,
+    PASS = 1,
+    NO_PASS = 2,
+  }
+
+  export const AuditEnumMap = {
+    [AuditEnum.TODO]: '待审核',
+    [AuditEnum.PASS]: '通过',
+    [AuditEnum.NO_PASS]: '不通过',
+  }
+
+  export const AuditEnumBadge = {
+    [AuditEnum.TODO]: <Badge status="processing" text="待审核" />,
+    [AuditEnum.PASS]: <Badge status="success" text="通过" />,
+    [AuditEnum.NO_PASS]: <Badge status="error" text="未通过" />,
+  }
+
 }
 
 export default FaEnums;
