@@ -11,7 +11,7 @@
     "postinstall": "rimraf /s/d dist && rimraf /s/d .turbo",
     "ncu": "ncu -u --timeout 120000",
     "clean": "rimraf /s/d node_modules dist .turbo",
-    "dev": "tsup --watch",
+    "dev1": "tsup --watch",
     "build": "tsup",
     "dev:tsup": "tsup --watch",
     "build:tsup": "tsup",
