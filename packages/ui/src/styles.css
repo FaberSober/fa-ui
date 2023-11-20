@@ -10,9 +10,11 @@ body {
     --fa-bg-color-hover: #99999933; /* 适配主题-背景色 */
     --fa-bg-color2: #eee; /* 适配主题-背景色-2级 */
     --fa-bg-color-highlight: #1c5e88; /* 适配主题-背景色-高亮 */
+    --fa-bg-color-highlight-hover: #1081c9; /* 适配主题-背景色-高亮-hover */
     --fa-text-color: #353535; /* 适配主题-文字颜色 */
     --fa-text-color2: #353535; /* 适配主题-文字颜色-2级 */
     --fa-text-color-hover: #353535; /* 适配主题-文字颜色 */
+    --fa-text-color-highlight: #FFFFFF; /* 适配主题-文字颜色-高亮 */
     --fa-subtitle-color: #666; /* 适配主题-文字颜色-副标题 */
     --fa-border-color: #eee; /* 适配主题-边框颜色 */
     --fa-border-dark-color: #66666666; /* 适配主题-边框颜色 */

@@ -14,7 +14,7 @@ export interface FaSortListProps<T> {
   list: T[];
   rowKey?: string; // T对象的ID属性，默认值：id
   renderItem: (item: T) => ReactNode;
-  onSortEnd?: (list: T[]) => void;
+  onSortEnd?: (list: T[], oldIndex: number, newIndex: number) => void;
   handle?: boolean; // 是否使用拖动把手
   handleNode?: ReactNode;
   itemStyle?: CSSProperties;
@@ -52,8 +52,11 @@ export default function FaSortList<T>({
       const oldIndex = findIndex(list, (i) => getRowKey(i) === active.id);
       const newIndex = findIndex(list, (i) => getRowKey(i) === over.id);
 
+      // const moveItems = [list[oldIndex], list[newIndex]]
       const newList = arrayMove(list, oldIndex, newIndex);
-      if (onSortEnd) onSortEnd(newList);
+      if (onSortEnd) {
+        onSortEnd(newList, oldIndex, newIndex);
+      }
     }
   }
 
