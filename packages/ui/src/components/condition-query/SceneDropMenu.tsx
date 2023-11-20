@@ -18,7 +18,7 @@ export interface SceneDropMenuProps<T> {
 /**
  * 场景下拉菜单组件
  */
-function SceneDropMenu<T>({ biz, columns, onChange }: SceneDropMenuProps<T>, ref: any) {
+const SceneDropMenu = React.forwardRef<HTMLElement, SceneDropMenuProps<any>>(function SceneDropMenu<T>({ biz, columns, onChange }: SceneDropMenuProps<T>, ref: any) {
   const manageModalRef = useRef<any | null>(null);
 
   const [configList, setConfigList] = useState<Admin.ConfigScene[]>([]);
@@ -91,6 +91,6 @@ function SceneDropMenu<T>({ biz, columns, onChange }: SceneDropMenuProps<T>, ref
       />
     </div>
   );
-}
+})
 
-export default React.forwardRef(SceneDropMenu);
+export default SceneDropMenu;

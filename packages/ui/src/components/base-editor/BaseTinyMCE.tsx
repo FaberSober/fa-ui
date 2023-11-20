@@ -24,7 +24,7 @@ export interface BaseTinyMCEProps {
  * @author xu.pengfei
  * @date 2022/2/17 14:17
  */
-function BaseTinyMCE({ initialValue, value, onChange, onSave, onReady, style, editorInit, editorProps, loading }: BaseTinyMCEProps, ref: any) {
+const BaseTinyMCE = React.forwardRef<HTMLElement, BaseTinyMCEProps>(function BaseTinyMCE({ initialValue, value, onChange, onSave, onReady, style, editorInit, editorProps, loading }: BaseTinyMCEProps, ref: any) {
   const {themeDark} = useContext(ThemeLayoutContext)
   const editorRef = useRef<any>(null);
 
@@ -301,6 +301,6 @@ function BaseTinyMCE({ initialValue, value, onChange, onSave, onReady, style, ed
       {loading && <div className="fa-full-content fa-flex-center"><Spin size="large" /></div>}
     </div>
   );
-}
+})
 
-export default React.forwardRef(BaseTinyMCE);
+export default BaseTinyMCE;

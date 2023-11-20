@@ -4,7 +4,7 @@ module.exports = {
   },
   parser: '@typescript-eslint/parser',
   extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'react-refresh'],
   parserOptions: {
     sourceType: 'module',
     ecmaVersion: 2020,
@@ -19,5 +19,6 @@ module.exports = {
     '@typescript-eslint/no-namespace': 'off', // 不可使用namespace
     '@typescript-eslint/ban-ts-comment': 'off', // 不可使用@ts-ignore
     'no-useless-escape': 'off', // 不可使用@ts-ignore
+    "react-refresh/only-export-components": "warn", // 只允许导出组件，保证react刷新时能正确更新组件
   },
 };

@@ -66,7 +66,7 @@ let menuClickItem: any = undefined;
  * @author xu.pengfei
  * @date 2020/12/25
  */
-function BaseTree<RecordType extends object = any, KeyType = number>({
+const BaseTree = React.forwardRef<HTMLElement, BaseTreeProp<any, any>>(function BaseTree<RecordType extends object = any, KeyType = number>({
    showRoot = false,
    showTopBtn = true,
    showTopAddBtn = true,
@@ -392,6 +392,6 @@ function BaseTree<RecordType extends object = any, KeyType = number>({
       {showTips && <div style={{padding: 12, color: '#aaa'}} className="fa-bg-white">{tips}</div>}
     </div>
   );
-}
+})
 
-export default React.forwardRef(BaseTree<any, any>);
+export default BaseTree;

@@ -22,7 +22,7 @@ export interface SceneManageModalProps<T> extends DragModalProps {
  * 1. 场景排序；
  * 2. 场景编辑、删除；
  */
-function SceneManageModal<T>({ biz, columns, onOk, ...restProps }: SceneManageModalProps<T>, ref: any) {
+const SceneManageModal = React.forwardRef<HTMLElement, SceneManageModalProps<any>>(function SceneManageModal<T>({ biz, columns, onOk, ...restProps }: SceneManageModalProps<T>, ref: any) {
   const [loading, setLoading] = useState(false);
   const [configList, setConfigList] = useState<Admin.ConfigScene[]>([]);
 
@@ -120,6 +120,6 @@ function SceneManageModal<T>({ biz, columns, onOk, ...restProps }: SceneManageMo
       </div>
     </DragModal>
   );
-}
+})
 
-export default React.forwardRef(SceneManageModal);
+export default SceneManageModal;

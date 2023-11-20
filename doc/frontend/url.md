@@ -9,7 +9,7 @@ URL格式为：http://xxx/path/111
 import React from 'react';
 import {useParams} from "react-router-dom";
 
-export default function index() {
+export default function Page() {
   const { id } = useParams()
 
   return (
