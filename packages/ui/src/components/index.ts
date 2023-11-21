@@ -8,6 +8,7 @@ export * from './base-drawer';
 export * from './base-editor';
 export * from './base-entity-log';
 export * from './base-field';
+export * from './base-image';
 export * from './base-input';
 export * from './base-layout';
 export * from './base-modal';
