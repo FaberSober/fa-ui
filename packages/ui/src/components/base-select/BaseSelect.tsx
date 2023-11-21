@@ -83,7 +83,7 @@ export default function BaseSelect<RecordType extends object = any>({
     <Select
       allowClear
       defaultActiveFirstOption={false}
-      showArrow={false}
+      // suffixIcon={null}
       filterOption={false}
       notFoundContent={null}
       placeholder="请选择..."
