@@ -80,10 +80,10 @@ export default function TreeTransfer({ targetKeys, serviceApi, extraEffectArgs =
                 checkedKeys={checkedKeys}
                 treeData={generateTree(treeData, targetKeys)}
                 onCheck={(_, { node: { key } }) => {
-                  onItemSelect(key as string, !isChecked(checkedKeys, key));
+                  onItemSelect(key as string, !isChecked(checkedKeys, key as string));
                 }}
                 onSelect={(_, { node: { key } }) => {
-                  onItemSelect(key as string, !isChecked(checkedKeys, key));
+                  onItemSelect(key as string, !isChecked(checkedKeys, key as string));
                 }}
               />
             </div>

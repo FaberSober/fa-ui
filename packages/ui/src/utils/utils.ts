@@ -434,8 +434,8 @@ export function previewImageQiniu(url: string, width = 200, height?: number) {
  * 文件大小可视化
  * @param size
  */
-export function sizeToHuman(size: number, base = 2): string {
-  return filesize(size, {base, standard: 'jedec'}) as string;
+export function sizeToHuman(size: number, round = 2): string {
+  return filesize(size, {round, standard: 'jedec'}) as string;
 }
 
 export const REGEX_TEL_NO = /^(13[0-9]|14[5-9]|15[012356789]|166|17[0-8]|18[0-9]|19[8-9])[0-9]{8}$/;

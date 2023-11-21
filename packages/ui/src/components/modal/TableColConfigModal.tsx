@@ -1,8 +1,9 @@
+
 import React, {ReactNode, useContext, useEffect, useState} from 'react';
 import {find, isNil, sortBy} from 'lodash';
 import {Button, Checkbox, Drawer, Input} from 'antd';
 import {showResponse} from '@ui/utils/utils';
-import {ModalProps} from 'antd/es/modal';
+import { DrawerProps } from "antd/es/drawer";
 import {FaberTable} from '@ui/components/base-table';
 import * as BaseTableUtils from '@ui/components/base-table/utils';
 import {Admin, Fa, FaEnums} from '@ui/types';
@@ -14,7 +15,7 @@ import {FaSortList} from "@ui/components/base-drag";
 
 const colWidthCache: { [key: string]: number } = {};
 
-export interface TableColConfigModalProps<T> extends ModalProps {
+export interface TableColConfigModalProps<T> extends DrawerProps {
   columns: FaberTable.ColumnsProp<T>[]; // 配置字段
   biz: string; // Config#biz业务模块
   onConfigChange: (v: FaberTable.ColumnsProp<T>[]) => void; // 排序结束
@@ -137,8 +138,8 @@ function TableColConfigModal<T>({ columns = [], biz, onConfigChange, children, .
       <Drawer
         title="自定义表格字段"
         open={open}
-        onOk={handleSave}
-        confirmLoading={loading}
+        // onOk={handleSave}
+        // confirmLoading={loading}
         onClose={() => setOpen(false)}
         width={500}
         destroyOnClose

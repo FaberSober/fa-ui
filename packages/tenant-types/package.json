@@ -20,7 +20,7 @@
   "devDependencies": {
     "@fa/tsconfig": "workspace:*",
     "@fa/ui": "workspace:*",
-    "tsup": "7.1.0",
-    "typescript": "5.1.6"
+    "tsup": "8.0.0",
+    "typescript": "5.3.2"
   }
 }
