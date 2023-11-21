@@ -141,7 +141,7 @@ export default function BaseSearchSelect<RecordType extends object = any, KeyTyp
       allowClear
       // value={this.state.value}
       defaultActiveFirstOption={false}
-      showArrow={false}
+      // showArrow={false}
       filterOption={false}
       searchValue={search}
       onSearch={(v) => {
