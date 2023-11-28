@@ -464,6 +464,10 @@ ul {
     box-shadow: var(--fa-box-shadow);
 }
 
+.fa-disabled {
+    cursor: not-allowed;
+}
+
 .fa-link-grey {
     cursor: pointer;
     transition: var(--fa-transition);
