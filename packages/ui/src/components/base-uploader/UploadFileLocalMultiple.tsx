@@ -132,6 +132,7 @@ export default function UploadFileLocalMultiple({ children, description, onChang
             onVisibleChange: (value) => {
               setPreviewOpen(value);
             },
+            getContainer: () => document.body,
           }}
         />
       </div>
