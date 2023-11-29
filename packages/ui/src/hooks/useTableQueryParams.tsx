@@ -119,14 +119,17 @@ export default function useTableQueryParams<T>(
   /** 获取分页数据 */
   function fetchPageList() {
     setLoading(true);
+    // 表单中拆出_search关键字，用作搜索
+    const { _search, ...restFormValues } = queryParams.formValues;
     const params = {
       current: queryParams.pagination.current,
       pageSize: queryParams.pagination.pageSize,
       sorter: BaseTableUtils.getSorter(queryParams.sorter),
       sceneId: queryParams.sceneId,
       conditionList: queryParams.conditionList,
+      search: _search,
       query: {
-        ...queryParams.formValues,
+        ...restFormValues,
         // 外部补充查询条件
         ...queryParams.extraParams,
       },

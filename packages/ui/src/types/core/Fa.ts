@@ -174,6 +174,8 @@ namespace Fa {
     pagination?: Pagination;
     /** 排序 */
     sorter?: Sorter;
+    /** 单查询字段 */
+    search?: string | undefined;
     /** 查询Form字段 */
     formValues?: any | undefined;
     /** 外部补充参数 */
@@ -192,6 +194,8 @@ namespace Fa {
     pagination: Pagination;
     /** 排序 */
     sorter: Sorter;
+    /** 单查询字段 */
+    search?: string | undefined;
     /** 查询Form字段 */
     formValues: any | undefined;
     /** 外部补充参数 */
