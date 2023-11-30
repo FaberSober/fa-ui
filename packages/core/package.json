@@ -12,7 +12,7 @@
     "ncu": "ncu -u --timeout 120000",
     "clean": "rimraf /s/d node_modules dist .turbo",
     "dev1": "tsup --watch",
-    "build": "tsup",
+    "build1": "tsup",
     "dev:tsup": "tsup --watch",
     "build:tsup": "tsup",
     "lint": "eslint \"**/*.{ts,tsx}\""
