@@ -25,7 +25,7 @@ body {
     --fa-hover-bg: #e1e1e1;
     --fa-transition: all ease-in-out 0.3s;
     --fa-border-radius: 3px;
-    --fa-box-shadow: 0 2px 4px 4px #eeeeeeee;
+    --fa-box-shadow: 0 2px 4px 4px #ddd;
     --fa-box-shadow-b: 0px -2px 2px 2px #666;
     --focus-border: var(--primary-color) !important;
 }
