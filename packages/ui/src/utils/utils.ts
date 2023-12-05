@@ -564,3 +564,11 @@ export function allInList(allList: any[], checkList: any[]) {
   }
   return true;
 }
+
+/**
+ * 数组生成
+ * @param end
+ */
+export function range(end: number) {
+  return Array.from({length: end}, (_, index) => index + 1);
+}
