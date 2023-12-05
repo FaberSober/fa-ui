@@ -163,6 +163,7 @@ namespace Fa {
 
   export interface BaseQueryParams {
     query?: any;
+    search?: any;
     [key: string]: any;
   }
 
