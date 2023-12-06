@@ -129,84 +129,86 @@ export default function BaseBizTable<RecordType extends object = any>({
   }
 
   return (
-    <div className="fa-flex-column" style={{ flex: 1 }}>
-      {showTopDiv && <div>
-        {/* 多选删除 */}
-        {selectedRowKeys.length > 0 && (
-          <Space style={{ padding: 8, display: 'flex', lineHeight: '32px' }}>
-            <div className="fa-text fa-mr12">
-              已选中&nbsp;<a>{selectedRowKeys.length}</a>&nbsp;条数据
-            </div>
-            {renderCheckBtns && renderCheckBtns(selectedRowKeys)}
-            {showBatchBelBtn && (
-              <Button loading={batchDeleting} onClick={handleBatchDelete} icon={<DeleteOutlined />} danger>
-                {batchDelBtn || '删除'}
+    <div style={{ flex: 1, position:'relative' }}>
+      <div className="fa-flex-column fa-full-content">
+        {showTopDiv && <div>
+          {/* 多选删除 */}
+          {selectedRowKeys.length > 0 && (
+            <Space style={{ padding: 8, display: 'flex', lineHeight: '32px' }}>
+              <div className="fa-text fa-mr12">
+                已选中&nbsp;<a>{selectedRowKeys.length}</a>&nbsp;条数据
+              </div>
+              {renderCheckBtns && renderCheckBtns(selectedRowKeys)}
+              {showBatchBelBtn && (
+                <Button loading={batchDeleting} onClick={handleBatchDelete} icon={<DeleteOutlined />} danger>
+                  {batchDelBtn || '删除'}
+                </Button>
+              )}
+              <Button onClick={() => updateRowKeys([])} icon={<ClearOutlined />}>
+                取消选中
               </Button>
-            )}
-            <Button onClick={() => updateRowKeys([])} icon={<ClearOutlined />}>
-              取消选中
-            </Button>
-          </Space>
-        )}
-        {/* 高级组合查询 */}
-        {selectedRowKeys.length === 0 && (
-          <div style={{ padding: 8, display: 'flex', alignItems: 'center' }}>
-            {showComplexQuery && (
-              <ComplexQuery
-                columns={columns}
-                biz={biz}
-                onSceneChange={onSceneChange}
-                onConditionChange={onConditionChange}
-              />
-            )}
-            <div className="fa-text" style={{ flex: 1 }}>{renderQuerySuffix && renderQuerySuffix()}</div>
-            <div className="fa-text" style={{ lineHeight: '32px' }}>
-              共<a style={{ fontWeight: 600, margin: '0 4px' }}>{get(props, 'pagination.total')}</a>条数据
+            </Space>
+          )}
+          {/* 高级组合查询 */}
+          {selectedRowKeys.length === 0 && (
+            <div style={{ padding: 8, display: 'flex', alignItems: 'center' }}>
+              {showComplexQuery && (
+                <ComplexQuery
+                  columns={columns}
+                  biz={biz}
+                  onSceneChange={onSceneChange}
+                  onConditionChange={onConditionChange}
+                />
+              )}
+              <div className="fa-text" style={{ flex: 1 }}>{renderQuerySuffix && renderQuerySuffix()}</div>
+              <div className="fa-text" style={{ lineHeight: '32px' }}>
+                共<a style={{ fontWeight: 600, margin: '0 4px' }}>{get(props, 'pagination.total')}</a>条数据
+              </div>
             </div>
-          </div>
-        )}
-      </div>}
+          )}
+        </div>}
 
-      <FaFlexRestLayout id={id}>
-        <Table
-          id={id}
-          columns={parseColumns}
-          rowSelection={showCheckbox ? myRowSelection : undefined}
-          scroll={{ x: scrollWidthX, y: innerScrollY }}
-          onRow={(record) => ({
-            onClick: () => {
-              // 点击row选中功能实现
-              if (!rowClickSelected) return;
-              const clickId = get(record, 'id');
-              let newRowKey = [];
-              if (rowClickSingleSelected) {
-                newRowKey = [clickId];
-              } else {
-                if (selectedRowKeys.indexOf(clickId) > -1) {
-                  newRowKey = selectedRowKeys.filter((i) => i === clickId);
+        <FaFlexRestLayout id={id}>
+          <Table
+            id={id}
+            columns={parseColumns}
+            rowSelection={showCheckbox ? myRowSelection : undefined}
+            scroll={{ x: scrollWidthX, y: innerScrollY }}
+            onRow={(record) => ({
+              onClick: () => {
+                // 点击row选中功能实现
+                if (!rowClickSelected) return;
+                const clickId = get(record, 'id');
+                let newRowKey = [];
+                if (rowClickSingleSelected) {
+                  newRowKey = [clickId];
                 } else {
-                  newRowKey = [...selectedRowKeys, get(record, keyName!)];
+                  if (selectedRowKeys.indexOf(clickId) > -1) {
+                    newRowKey = selectedRowKeys.filter((i) => i === clickId);
+                  } else {
+                    newRowKey = [...selectedRowKeys, get(record, keyName!)];
+                  }
                 }
-              }
-              setSelectedRowKeys(newRowKey);
-              if (onSelectedRowsChange) {
-                onSelectedRowsChange(newRowKey);
-              }
-            },
-          })}
-          size="small"
-          showSorterTooltip={false}
-          {...props}
-        />
-        {/* 表格自定义配置 */}
-        {showTableColConfigBtn ? (
-          <div style={{ position: 'absolute', right: 4, top: 4, zIndex: 9 }}>
-            <TableColConfigModal columns={columns} biz={biz} onConfigChange={handleTableColConfigChange}>
-              <Button icon={<SettingOutlined />} type="text" />
-            </TableColConfigModal>
-          </div>
-        ) : null}
-      </FaFlexRestLayout>
+                setSelectedRowKeys(newRowKey);
+                if (onSelectedRowsChange) {
+                  onSelectedRowsChange(newRowKey);
+                }
+              },
+            })}
+            size="small"
+            showSorterTooltip={false}
+            {...props}
+          />
+          {/* 表格自定义配置 */}
+          {showTableColConfigBtn ? (
+            <div style={{ position: 'absolute', right: 4, top: 4, zIndex: 9 }}>
+              <TableColConfigModal columns={columns} biz={biz} onConfigChange={handleTableColConfigChange}>
+                <Button icon={<SettingOutlined />} type="text" />
+              </TableColConfigModal>
+            </div>
+          ) : null}
+        </FaFlexRestLayout>
+      </div>
     </div>
   );
 }
