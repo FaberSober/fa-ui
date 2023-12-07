@@ -166,6 +166,19 @@ export function getCurDate(format = 'YYYY-MM-DD') {
   return dayjs().format(format);
 }
 
+/**
+ * get start of today: YYYY-MM-DD HH:mm:ss
+ */
+export function startOfToday():string {
+  return dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss');
+}
+
+/**
+ * get end of today: YYYY-MM-DD HH:mm:ss
+ */
+export function endOfToday():string {
+  return dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss');
+}
 
 /**
  * date('YYYY-MM-DD')格式化str
