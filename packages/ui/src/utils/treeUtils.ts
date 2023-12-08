@@ -23,10 +23,10 @@ export function flatTreeList<T>(tree: Fa.TreeNode<T>[] = []): T[] {
   const list: T[] = [];
   tree.forEach((item) => {
     const { children, sourceData } = item;
+    list.push(sourceData);
     if (children && children[0]) {
       list.push(...flatTreeList(children));
     }
-    list.push(sourceData);
   });
   return list;
 }
