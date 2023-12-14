@@ -46,7 +46,20 @@ export function flatTreeSourceList<T>(tree: Fa.TreeNode<T>[] = []): Fa.TreeNode<
 }
 
 /**
- * 根据条件，查询树钟一个节点的完整路径
+ * 根据条件，查询树中一个节点
+ * @param tree
+ * @param checkFun
+ */
+export function findTreeNode<T>(tree: Fa.TreeNode<T>[] | undefined, checkFun: (item: Fa.TreeNode<T>) => boolean): Fa.TreeNode<T>|undefined {
+  const list: Fa.TreeNode<T>[] = findTreePath(tree, checkFun)
+  if (list && list[0]) {
+    return list[list.length - 1]
+  }
+  return undefined
+}
+
+/**
+ * 根据条件，查询树中一个节点的完整路径
  * @param tree
  * @param checkFun
  */
