@@ -7,7 +7,7 @@ body {
     --primary-color: theme('colors.blue');
     --primary-dark: theme('colors.blueDark');
     --fa-bg-color: #fff; /* 适配主题-背景色 */
-    --fa-bg-color-hover: #99999933; /* 适配主题-背景色 */
+    --fa-bg-color-hover: #eee; /* 适配主题-背景色 */
     --fa-bg-color2: #eee; /* 适配主题-背景色-2级 */
     --fa-bg-color-highlight: #1c5e88; /* 适配主题-背景色-高亮 */
     --fa-bg-color-highlight-hover: #1081c9; /* 适配主题-背景色-高亮-hover */
