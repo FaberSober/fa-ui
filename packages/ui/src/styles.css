@@ -133,6 +133,26 @@ ul {
     position: relative;
 }
 
+.fa-absolute {
+    position: absolute;
+}
+
+.fa-top {
+    top: 0;
+}
+
+.fa-left {
+    left: 0;
+}
+
+.fa-right {
+    right: 0;
+}
+
+.fa-bottom {
+    bottom: 0;
+}
+
 .fa-bg-white {
     background-color: var(--fa-bg-color);
 }
@@ -147,6 +167,10 @@ ul {
 
 .fa-bg-grey-darker {
     background-color: var(--fa-bg-grey-darker);
+}
+
+.fa-bg-dark {
+    background-color: var(--fa-text-color);
 }
 
 .fa-card {
