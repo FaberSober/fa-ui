@@ -319,6 +319,8 @@ namespace Fa {
     startTime: string;
   }
 
+  export type ForwardRefComponent<P, T> = React.ForwardRefExoticComponent<React.PropsWithoutRef<P> & React.RefAttributes<T>>
+
 }
 
 export default Fa;
