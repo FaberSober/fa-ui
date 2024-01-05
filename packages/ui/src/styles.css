@@ -340,6 +340,10 @@ ul {
     overflow: hidden;
 }
 
+.fa-scroll {
+    overflow: hidden;
+}
+
 .fa-scroll-auto-y {
     overflow-y: auto;
     overflow-x: hidden;
