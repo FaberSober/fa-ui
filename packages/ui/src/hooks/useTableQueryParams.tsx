@@ -18,16 +18,16 @@ export interface UseTableQueryParamsProps<T> {
   setExtraParams: (extraParams: any) => void;
   handleTableChange: (paginationArg: TablePaginationConfig, filtersArg: any, sorterArg: any) => void;
 
-  // ------------------------------------------ 表格查询结果更新 ------------------------------------------
+  // ------------------------------------------ 表格查询结果输出 ------------------------------------------
   loading: boolean;
   list: T[];
   dicts: Fa.PageDict;
   fetchPageList: () => void;
-  //
-  // // ------------------------------------------ 表格展示分页数据 ------------------------------------------
+  // ------------------------------------------ 表格查询结果更新 ------------------------------------------、
+  setList: (list: T[]) => void;
+  // ------------------------------------------ 表格展示分页数据 ------------------------------------------
   showPagination: Fa.Pagination;
   // setShowPagination: any;
-  //
   // ------------------------------------------ 表格展示 ------------------------------------------
   paginationProps: TablePaginationConfig;
 }
@@ -165,6 +165,14 @@ export default function useTableQueryParams<T>(
     ...ret.showPagination,
   };
 
+  /**
+   * 外部手动更新list，适用于减少网络请求
+   * @param list
+   */
+  function setList(list: T[]) {
+    setRet({list, dicts: ret.dicts, showPagination: ret.showPagination});
+  }
+
   return {
     queryParams,
     updateQueryParams,
@@ -179,6 +187,7 @@ export default function useTableQueryParams<T>(
     loading,
     list: ret.list,
     dicts: ret.dicts,
+    setList,
     showPagination: ret.showPagination,
     paginationProps,
   };
