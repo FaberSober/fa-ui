@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {getDateStr, optionsToLabel, toLine, tryToFixed} from '@ui/utils/utils';
-import {Badge} from 'antd';
+import { Badge, Tooltip } from 'antd';
 import {find, isEmpty, trim} from 'lodash';
 import {
   renderDatePicker,
@@ -94,6 +94,29 @@ export function genSimpleSorterColumn(
     sortOrder: getSortOrder(sorter, dataIndex),
     tcChecked,
     width,
+  } as FaberTable.ColumnsProp<any>;
+}
+
+export function genEllipsisSorterColumn(
+  title: string,
+  dataIndex: string,
+  width: number | undefined,
+  sorter: Fa.Sorter,
+  tcChecked = true,
+): FaberTable.ColumnsProp<any> {
+  return {
+    title,
+    dataIndex,
+    sorter: true,
+    sortOrder: getSortOrder(sorter, dataIndex),
+    tcChecked,
+    width,
+    ellipsis: true,
+    render: (v) => (
+      <Tooltip placement="topLeft" title={<div className="fa-break-word">{v}</div>}>
+        {v}
+      </Tooltip>
+    ),
   } as FaberTable.ColumnsProp<any>;
 }
 
