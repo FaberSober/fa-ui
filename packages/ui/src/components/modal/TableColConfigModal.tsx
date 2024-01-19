@@ -1,19 +1,16 @@
-
-import React, {ReactNode, useContext, useEffect, useState} from 'react';
-import {find, isNil, sortBy} from 'lodash';
-import {Button, Checkbox, Drawer, Input} from 'antd';
-import {showResponse} from '@ui/utils/utils';
+import React, { ReactNode, useContext, useEffect, useState } from 'react';
+import { find, isNil, sortBy } from 'lodash';
+import { Button, Checkbox, Drawer, Input } from 'antd';
+import { showResponse } from '@ui/utils/utils';
 import { DrawerProps } from "antd/es/drawer";
-import {FaberTable} from '@ui/components/base-table';
-import * as BaseTableUtils from '@ui/components/base-table/utils';
-import {Admin, Fa, FaEnums} from '@ui/types';
-import {configApi} from '@ui/services/base';
-import {ApiEffectLayoutContext} from "@ui/layout";
+import { FaberTable } from '@ui/components/base-table';
+import { Admin, Fa, FaEnums } from '@ui/types';
+import { configApi } from '@ui/services/base';
+import { ApiEffectLayoutContext } from "@ui/layout";
 import './TableColConfigModal.css';
-import {FaFlexRestLayout} from "@ui/components/base-layout";
-import {FaSortList} from "@ui/components/base-drag";
+import { FaFlexRestLayout } from "@ui/components/base-layout";
+import { FaSortList } from "@ui/components/base-drag";
 
-const colWidthCache: { [key: string]: number } = {};
 
 export interface TableColConfigModalProps<T> extends DrawerProps {
   columns: FaberTable.ColumnsProp<T>[]; // 配置字段
@@ -26,8 +23,8 @@ export interface TableColConfigModalProps<T> extends DrawerProps {
  * 表格自定义列Modal
  * 1. 操作一栏不进行排序，默认放在最后一排
  */
-function TableColConfigModal<T>({ columns = [], biz, onConfigChange, children, ...restProps }: TableColConfigModalProps<T>) {
-  const { loadingEffect } = useContext(ApiEffectLayoutContext);
+function TableColConfigModal<T>({columns = [], biz, onConfigChange, children, ...restProps}: TableColConfigModalProps<T>) {
+  const {loadingEffect} = useContext(ApiEffectLayoutContext);
   const [config, setConfig] = useState<Admin.Config<FaberTable.ColumnsProp<any>[]>>();
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState<FaberTable.ColumnsProp<T>[]>(columns);
@@ -45,7 +42,7 @@ function TableColConfigModal<T>({ columns = [], biz, onConfigChange, children, .
         const cIndex = item.dataIndex instanceof Array ? item.dataIndex.join() : item.dataIndex;
         return dIndex === cIndex;
       });
-      return { ...item, ...remoteItem };
+      return {...item, ...remoteItem};
     });
     return sortBy(itemList, (i) => i.sort);
   }
@@ -84,17 +81,8 @@ function TableColConfigModal<T>({ columns = [], biz, onConfigChange, children, .
   function handleSave() {
     // 合并修改配置&之前的配置
     const columnsMerge: FaberTable.ColumnsProp<T>[] = items.map((item, index) => {
-      const { dataIndex, tcRequired, tcChecked, width } = item;
-      if (BaseTableUtils.dataIndexToString(dataIndex) in colWidthCache) {
-        return {
-          dataIndex,
-          tcRequired,
-          tcChecked,
-          width: colWidthCache[BaseTableUtils.dataIndexToString(dataIndex)],
-          sort: index,
-        };
-      }
-      return { dataIndex, tcRequired, tcChecked, width, sort: index };
+      const {dataIndex, tcRequired, tcChecked, width} = item;
+      return {dataIndex, tcRequired, tcChecked, width, sort: index};
     }) as FaberTable.ColumnsProp<T>[];
 
     // 新增or更新
@@ -104,31 +92,29 @@ function TableColConfigModal<T>({ columns = [], biz, onConfigChange, children, .
       data: columnsMerge,
     };
 
+    let api = null;
     if (config === undefined) {
-      configApi.save(params).then((res) => showResponse(res, '保存自定义表格配置'));
+      api = configApi.save(params).then((res) => showResponse(res, '保存自定义表格配置'));
     } else {
-      configApi.update(config.id, { id: config.id, ...params }).then((res) => showResponse(res, '更新自定义表格配置'));
+      api = configApi.update(config.id, {id: config.id, ...params}).then((res) => showResponse(res, '更新自定义表格配置'));
     }
 
-    setOpen(false);
-    // 通知外部
-    if (onConfigChange) onConfigChange(columnsMerge);
+    api.then(() => {
+      setOpen(false);
+      // 通知外部
+      if (onConfigChange) onConfigChange(columnsMerge);
+    })
   }
 
   /** 处理Item勾选 */
   function handleItemCheck(item: FaberTable.ColumnsProp<T>, checked: boolean) {
     const newItems = items.map((i) => {
       if (i.dataIndex === item.dataIndex) {
-        return { ...i, tcChecked: checked };
+        return {...i, tcChecked: checked};
       }
       return i;
     });
     setItems(newItems);
-  }
-
-  /** item#width变化 */
-  function handleWidthChange(value: number, item: FaberTable.ColumnsProp<T>) {
-    colWidthCache[BaseTableUtils.dataIndexToString(item.dataIndex)] = value;
   }
 
   const loading = loadingEffect[configApi.getUrl('save')] || loadingEffect[configApi.getUrl('update')];
@@ -138,8 +124,6 @@ function TableColConfigModal<T>({ columns = [], biz, onConfigChange, children, .
       <Drawer
         title="自定义表格字段"
         open={open}
-        // onOk={handleSave}
-        // confirmLoading={loading}
         onClose={() => setOpen(false)}
         width={500}
         destroyOnClose
@@ -151,14 +135,14 @@ function TableColConfigModal<T>({ columns = [], biz, onConfigChange, children, .
         {...restProps}
       >
         <div className="fa-full-content-p12 fa-flex-column">
-          <div className="fa-flex-row-center fa-text" style={{ borderBottom: '1px solid #ccc', padding: '8px 0' }}>
-            <div className="fa-table-col-thead-item" style={{ flex: 1, borderRight: '1px solid #ccc' }}>
+          <div className="fa-flex-row-center fa-text" style={{borderBottom: '1px solid #ccc', padding: '8px 0'}}>
+            <div className="fa-table-col-thead-item" style={{flex: 1, borderRight: '1px solid #ccc'}}>
               字段
             </div>
-            <div className="fa-table-col-thead-item" style={{ width: 100 }}>
+            <div className="fa-table-col-thead-item" style={{width: 100}}>
               宽度(px)
             </div>
-            <div className="fa-table-col-thead-item" style={{ width: 10 }} />
+            <div className="fa-table-col-thead-item" style={{width: 10}}/>
           </div>
           <FaFlexRestLayout>
             <FaSortList
@@ -172,25 +156,27 @@ function TableColConfigModal<T>({ columns = [], biz, onConfigChange, children, .
                     onChange={(e) => handleItemCheck(item, e.target.checked)}
                   />
                   <div
-                    style={{ flex: 1, paddingLeft: 8, fontSize: '14px' }}
+                    style={{flex: 1, paddingLeft: 8, fontSize: '14px'}}
                     onClick={() => handleItemCheck(item, !item.tcChecked)}
                   >
                     <span>{item.title}</span>
                   </div>
-                  {item.tcRequired ? <span style={{ color: '#666', marginRight: 16 }}>（必选）</span> : null}
-                  <div style={{ width: 100, marginRight: 8 }}>
+                  {item.tcRequired ? <span style={{color: '#666', marginRight: 16}}>（必选）</span> : null}
+                  <div style={{width: 100, marginRight: 8}}>
                     <Input
                       // addonBefore="宽度"
                       // addonAfter="px"
                       size="small"
-                      defaultValue={item.width}
+                      value={item.width}
                       placeholder="auto"
-                      onChange={(e) => handleWidthChange(Number(e.target.value), item)}
+                      onChange={(e) => {
+                        setItems(items.map(i => i.dataIndex === item.dataIndex ? { ...i, width: Number(e.target.value) } : i))
+                      }}
                     />
                   </div>
                 </div>
               )}
-              itemStyle={{ borderBottom: '1px solid #ccc' }}
+              itemStyle={{borderBottom: '1px solid #ccc'}}
               onSortEnd={(l) => {
                 setItems([...l, ...items.filter((i) => i.tcType === 'menu')]);
               }}
