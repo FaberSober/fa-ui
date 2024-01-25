@@ -25,8 +25,9 @@ export interface BaseCascaderProps<T extends BaseOptionType, KeyType = number> e
   onChangeWithItem?: (key: KeyType | undefined, data: T | undefined, vList: KeyType[], itemList: Fa.TreeNode<T, KeyType>[],) => void;
   rootId?: KeyType;
   rootName?: string;
-  extraParams?: any; // 补充副作用参数，变更会触发cascader重新拉取api tree数据
+  extraParams?: any[]; // 补充副作用参数，变更会触发cascader重新拉取api tree数据
   disabledIds?: any[]; // 禁止选择的选项IDs
+  maxLevel?: number; // 最大的展示层级，超过这个层级不展示
 }
 
 /**
@@ -42,8 +43,9 @@ export default function BaseCascader<RecordType extends object = any, KeyType = 
   onChangeWithItem,
   rootId = Fa.Constant.TREE_SUPER_ROOT_ID as any,
   rootName = Fa.Constant.TREE_SUPER_ROOT_LABEL,
-  extraParams,
+  extraParams=[],
   disabledIds,
+  maxLevel,
   ...props
 }: BaseCascaderProps<RecordType, KeyType>) {
   const [innerValue, setInnerValue] = useState<any[]>([]);
@@ -55,7 +57,7 @@ export default function BaseCascader<RecordType extends object = any, KeyType = 
 
   useEffect(() => {
     fetchTreeData();
-  }, [extraParams]);
+  }, [maxLevel, ...extraParams]);
 
   useEffect(() => {
     if (isNil(options) || options.length === 0) return;
@@ -65,7 +67,7 @@ export default function BaseCascader<RecordType extends object = any, KeyType = 
   }, [disabledIds]);
 
   function fetchTreeData() {
-    serviceApi.allTree({}).then((res) => {
+    serviceApi.allTree({ level: maxLevel }).then((res) => {
       let treeArr = res.data;
       if (showRoot) {
         treeArr = [{ ...Fa.ROOT_DEFAULT, id: rootId, name: rootName, level: 0, children: res.data } as any];

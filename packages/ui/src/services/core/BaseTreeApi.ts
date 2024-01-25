@@ -6,7 +6,7 @@ export default class BaseTreeApi<T, KeyType, PageT = T> extends BaseApi<T, KeyTy
   path = (id: KeyType): Promise<Fa.Ret<T[]>> => this.get(`path/${id}`);
 
   /** 获取所有实体列表Tree */
-  allTree = (): Promise<Fa.Ret<Fa.TreeNode<T, KeyType>[]>> => this.get(`allTree`);
+  allTree = (params?: { level?: number }): Promise<Fa.Ret<Fa.TreeNode<T, KeyType>[]>> => this.get(`allTree`, params);
 
   /** 获取所有实体列表Tree */
   getTree = (params: Fa.BaseQueryParams = {}): Promise<Fa.Ret<Fa.TreeNode<T, KeyType>[]>> => this.post(`getTree`, params);
