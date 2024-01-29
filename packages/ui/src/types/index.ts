@@ -7,6 +7,7 @@ declare global {
     FaFrom: any;
     FaVersionCode: any;
     FaVersionName: any;
+    FaRoutes: any[];
     fa: any;
   }
 }
