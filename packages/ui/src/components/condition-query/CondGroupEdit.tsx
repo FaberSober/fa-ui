@@ -4,7 +4,7 @@ import { Button, Input, Radio, Select, Space } from 'antd';
 import { each, find, remove } from 'lodash';
 import { CloseCircleFilled, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { BaseTableUtils, FaberTable } from '@ui/components/base-table';
-import { v1 as uuidv1 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import {optionsToLabel} from "@ui/utils/utils";
 
 export interface CondGroupEditProps<T> {
@@ -71,7 +71,7 @@ export default function CondGroupEdit<T>({ condGroup, columns, onChange, onDelet
 
   /** 添加筛选条件 */
   function handleAddCondition() {
-    setConditionList([...condGroup.condList, { id: uuidv1(), opr: ConditionQuery.CondOpr.equal }]);
+    setConditionList([...condGroup.condList, { id: uuidv4(), opr: ConditionQuery.CondOpr.equal }]);
   }
 
   function setConditionList(condList: ConditionQuery.Cond[]) {

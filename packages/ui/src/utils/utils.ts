@@ -3,6 +3,7 @@ import {Fa, FaEnums} from '@ui/types';
 import {findIndex, isNil, isUndefined, map, trim} from 'lodash';
 import dayjs from "dayjs";
 import {filesize} from "filesize";
+import { v4 as uuidv4 } from 'uuid';
 
 
 /**
@@ -584,4 +585,12 @@ export function allInList(allList: any[], checkList: any[]) {
  */
 export function range(end: number) {
   return Array.from({length: end}, (_, index) => index + 1);
+}
+
+
+/**
+ * uuid
+ */
+export function uuid() {
+  return uuidv4();
 }

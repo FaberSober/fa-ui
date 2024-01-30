@@ -1,6 +1,6 @@
 import React, { ReactNode, useState } from 'react';
 import { trim } from 'lodash';
-import { v1 as uuidv1 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { Checkbox, Divider, Input, message } from 'antd';
 import { DragModal } from '@ui/components/base-modal';
 import ConditionQuery from './ConditionQuery';
@@ -23,9 +23,9 @@ export interface ConditionQueryModalProps<T> {
 
 function genOneEmptyCondGroup(): ConditionQuery.CondGroup {
   return {
-    id: uuidv1(),
+    id: uuidv4(),
     type: ConditionQuery.Type.AND,
-    condList: [{ id: uuidv1(), opr: ConditionQuery.CondOpr.equal }],
+    condList: [{ id: uuidv4(), opr: ConditionQuery.CondOpr.equal }],
   };
 }
 
