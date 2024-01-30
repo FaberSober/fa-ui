@@ -211,6 +211,13 @@ ul {
     line-height: 1.5;
 }
 
+.fa-h4 {
+    color: var(--fa-text-color);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
 .fa-normal {
     color: var(--fa-text-color);
     font-weight: 400;
