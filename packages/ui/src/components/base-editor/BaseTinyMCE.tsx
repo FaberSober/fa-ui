@@ -42,7 +42,7 @@ const BaseTinyMCE = React.forwardRef<HTMLElement, BaseTinyMCEProps>(function Bas
   const divRef = useRef<any | null>();
   const height = useHeight(divRef);
   const [ready, setReady] = useState(false);
-  const [innerValue, setInnerValue] = useState(value);
+  const [innerValue, setInnerValue] = useState<string|undefined>(value);
 
   useImperativeHandle(ref, () => ({
     getContent: () => {
@@ -77,7 +77,7 @@ const BaseTinyMCE = React.forwardRef<HTMLElement, BaseTinyMCEProps>(function Bas
   }, [themeDark])
 
   const editor = useMemo(() => {
-    console.log('useMemo.editor', height, 'themeDark', themeDark)
+    // console.log('useMemo.editor', height, 'themeDark', themeDark)
     if (height === undefined) return null;
     if (flash) return null;
     return (
@@ -91,7 +91,7 @@ const BaseTinyMCE = React.forwardRef<HTMLElement, BaseTinyMCEProps>(function Bas
           setReady(true)
           if (onReady) onReady();
         }}
-        initialValue={initialValue}
+        initialValue={initialValue||innerValue}
         init={{
           height,
           menubar: false,
