@@ -7,7 +7,7 @@
     "postinstall": "rimraf /s/d .turbo",
     "ncu": "ncu -u --timeout 120000 -x pdfjs-dist",
     "clean": "rimraf /s/d node_modules dist .turbo",
-    "dev": "vite --port 8080",
+    "dev": "vite --debug hmr --port 9000",
     "dev:debug": "vite --debug hmr --port 9000",
     "build": "vite build",
     "preview": "vite preview",
