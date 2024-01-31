@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from 'vite';
-import react from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react-swc';
+// import react from '@vitejs/plugin-react';
 import Pages from 'vite-plugin-pages';
 // import { visualizer } from 'rollup-plugin-visualizer';
 import * as path from 'path';
@@ -20,8 +21,8 @@ export default defineConfig(({ mode }) => {
       }),
       // visualizer({
       //   open: true, //注意这里要设置为true，否则无效
-      //   gzipSize: true,
-      //   brotliSize: true,
+      //   // gzipSize: true,
+      //   // brotliSize: true,
       // }),
     ],
     //* css模块化
@@ -51,18 +52,18 @@ export default defineConfig(({ mode }) => {
       sourcemap: true,
       minify: 'esbuild',
       chunkSizeWarningLimit: 1500,
-      // terserOptions: {
-      //   compress: {
-      //     drop_console: true,
-      //     drop_debugger: true
-      //   }
-      // },
       rollupOptions: {
         // external: [],
         output: {
           manualChunks: {
-            lodash: ['lodash'],
+            'react': ['react'],
             'react-dom': ['react-dom'],
+            'react-grid-layout': ['react-grid-layout'],
+            lodash: ['lodash'],
+            dayjs: ['dayjs'],
+            // 'react-monaco-editor': ['react-monaco-editor'],
+            'pdfjs-dist': ['pdfjs-dist'],
+            'react-pdf-viewer': ['@react-pdf-viewer/core', '@react-pdf-viewer/default-layout', '@react-pdf-viewer/highlight'],
             // fortawesome: [
             //   '@fortawesome/fontawesome-svg-core',
             //   '@fortawesome/free-solid-svg-icons',
@@ -70,27 +71,10 @@ export default defineConfig(({ mode }) => {
             // ],
             '@fa/ui': ['@fa/ui'],
             '@fa/icons': ['@fa/icons'],
+            antd: ['antd', '@ant-design/colors', '@ant-design/icons'],
+            echarts: ['echarts'],
+            // three: ['three-stdlib', '@react-three/drei', '@react-three/fiber'],
           },
-          // manualChunks(id) {
-          //   if (id.includes('node_modules')) {
-          //     return id
-          //       .toString()
-          //       .split('node_modules/')[1]
-          //       .split('/')[0]
-          //       .toString();
-          //   } else if (id.includes('.pnpm')) {
-          //     return id
-          //       .toString()
-          //       .split('node_modules/')[1]
-          //       .split('/')[0]
-          //       .toString();
-          //   }
-          // },
-          // chunkFileNames: (chunkInfo) => {
-          //   const facadeModuleId = chunkInfo.facadeModuleId ? chunkInfo.facadeModuleId.split('/') : [];
-          //   const fileName = facadeModuleId[facadeModuleId.length - 2] || '[name]';
-          //   return `js/${fileName}/[name].[hash].js`;
-          // },
         },
       },
     },

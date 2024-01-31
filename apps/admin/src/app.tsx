@@ -1,8 +1,9 @@
+/* eslint-disable react-refresh/only-export-components */
 import { Suspense } from 'react';
 // import ReactDOM from "react-dom";
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, useRoutes } from 'react-router-dom';
-import { HelmetProvider } from "react-helmet-async";
+import { HelmetProvider } from 'react-helmet-async';
 // import { AliveScope } from 'react-activation'
 
 import '@fa/ui/index.css';
@@ -19,6 +20,8 @@ import { PageLoading } from '@fa/ui';
 window.FaFrom = import.meta.env.VITE_APP_FA_FROM;
 window.FaVersionCode = import.meta.env.VITE_APP_FA_VERSION_CODE;
 window.FaVersionName = import.meta.env.VITE_APP_FA_VERSION_NAME;
+
+window.FaRoutes = routes;
 
 
 function App() {

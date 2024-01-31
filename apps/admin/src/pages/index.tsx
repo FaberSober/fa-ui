@@ -30,7 +30,7 @@ export default function App() {
         <p>value: {JSON.stringify(array.map((i) => i.id))}</p>
       </Card>
 
-      <p>更多组建查看<code>packages/ui</code>目录</p>
+      <p>更多组件查看<code>packages/ui</code>目录</p>
     </div>
   );
 }
