@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {FaLabel, FaSortGrid} from "@fa/ui";
-import {Card} from "antd";
+import {Button, Card} from "antd";
 
 function genList(i: number): { id: number; name: string }[] {
   return Array.from({ length: i }, (_, k) => ({ id: k + 1, name: `第${k + 1}个数据` }));
@@ -12,6 +12,7 @@ export default function App() {
   return (
     <div className="px-8">
       <p>Hello</p>
+      <Button type='primary'>Hello</Button>
 
       <FaLabel title="Hello, ui" />
 
