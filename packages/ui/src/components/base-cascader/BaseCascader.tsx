@@ -78,7 +78,11 @@ export default function BaseCascader<RecordType extends object = any, KeyType = 
   }
 
   function setValuePath(v: any) {
-    if (isNil(v)) return;
+    if (isNil(v)) {
+      setInnerValue([])
+      handleChange([], [])
+      return;
+    }
     const path = BaseTreeUtils.findPath(options, value, 'id');
     const values = path.map((d: any) => d.id);
     setInnerValue(values);
@@ -86,16 +90,16 @@ export default function BaseCascader<RecordType extends object = any, KeyType = 
 
   function handleChange(newValue: KeyType[], selectedOptions: Fa.TreeNode<RecordType, KeyType>[]) {
     setInnerValue(newValue);
-    const lastValue = newValue[newValue.length - 1];
-    const lastItem = selectedOptions[selectedOptions.length - 1] as Fa.TreeNode<RecordType, KeyType>;
+    const lastValue = newValue && newValue.length > 0 ? newValue[newValue.length - 1] : undefined;
+    const lastItem = selectedOptions && selectedOptions.length > 0? selectedOptions[selectedOptions.length - 1] as Fa.TreeNode<RecordType, KeyType> : undefined;
     if (onChange)
       onChange(
         lastValue,
         lastItem,
         newValue,
-        selectedOptions.map((i) => i.sourceData),
+        selectedOptions?.map((i) => i.sourceData),
       );
-    if (onChangeWithItem) onChangeWithItem(lastValue, lastItem.sourceData, newValue, selectedOptions.map((i) => i),);
+    if (onChangeWithItem) onChangeWithItem(lastValue, lastItem?.sourceData, newValue, selectedOptions?.map((i) => i),);
   }
 
   return (
@@ -103,6 +107,7 @@ export default function BaseCascader<RecordType extends object = any, KeyType = 
       fieldNames={{ label: 'name', value: 'id' }}
       placeholder="请选择"
       changeOnSelect
+      style={{minWidth: 170}}
       {...props}
       value={innerValue}
       options={options}

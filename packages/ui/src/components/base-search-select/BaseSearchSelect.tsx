@@ -46,12 +46,18 @@ export default function BaseSearchSelect<RecordType extends object = any, KeyTyp
       // 多选数据
       if (value === undefined || value === null || value.length === 0) {
         searchNow();
+        if (onChange) {
+          onChange([])
+        }
       } else {
         updateValue(value);
       }
     } else {
       if (value === undefined || value === null) {
         searchNow();
+        if (onChange) {
+          onChange(undefined)
+        }
       } else {
         updateValue(value);
       }
