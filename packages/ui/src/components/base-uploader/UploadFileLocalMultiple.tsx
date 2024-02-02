@@ -30,7 +30,12 @@ export default function UploadFileLocalMultiple({ children, description, onChang
   const [srcImage, setSrcImage] = useState('');
 
   useEffect(() => {
-    if (value === undefined || value === null) return;
+    if (value === undefined || value === null) {
+      return;
+    }
+    if (value instanceof Array && value.length === 0) {
+      return;
+    }
 
     setLoading(true);
     fileSaveApi.getByIds(value).then((res) => {
