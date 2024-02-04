@@ -594,3 +594,11 @@ export function range(end: number) {
 export function uuid() {
   return uuidv4();
 }
+
+/**
+ * antd form number rules
+ */
+export const formNumberRule:any = {
+  type: 'number',
+  transform: (value:any) => Number(value),
+}
