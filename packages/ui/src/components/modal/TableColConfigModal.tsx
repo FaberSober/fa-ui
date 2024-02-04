@@ -1,6 +1,6 @@
 import React, { ReactNode, useContext, useEffect, useState } from 'react';
 import { find, isNil, sortBy } from 'lodash';
-import { Button, Checkbox, Drawer, Input } from 'antd';
+import { Button, Checkbox, Drawer, Input, Space } from 'antd';
 import { showResponse } from '@ui/utils/utils';
 import { DrawerProps } from "antd/es/drawer";
 import { FaberTable } from '@ui/components/base-table';
@@ -77,6 +77,16 @@ function TableColConfigModal<T>({columns = [], biz, onConfigChange, children, ..
     fetchRemoteConfig();
   }
 
+  function handleReset() {
+    if (config && config.id) {
+      configApi.remove(config.id).then(res => {
+        setConfig(undefined)
+        setItems(columns);
+        if (onConfigChange) onConfigChange(columns);
+      })
+    }
+  }
+
   /** 保存配置 */
   function handleSave() {
     // 合并修改配置&之前的配置
@@ -128,9 +138,14 @@ function TableColConfigModal<T>({columns = [], biz, onConfigChange, children, ..
         width={500}
         destroyOnClose
         extra={
-          <Button size="small" type="primary" onClick={handleSave} loading={loading}>
-            更新
-          </Button>
+          <Space>
+            <Button size="small" onClick={handleReset} loading={loading}>
+              重置
+            </Button>
+            <Button size="small" type="primary" onClick={handleSave} loading={loading}>
+              更新
+            </Button>
+          </Space>
         }
         {...restProps}
       >
