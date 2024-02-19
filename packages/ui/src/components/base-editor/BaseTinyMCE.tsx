@@ -62,6 +62,7 @@ const BaseTinyMCE = React.forwardRef<HTMLElement, BaseTinyMCEProps>(function Bas
 
   useEffect(() => {
     if (!ready) return;
+    if (value === null || value === undefined) return;
     if (value !== innerValue) {
       if (editorRef.current) {
         console.log('update innerValue from props.value = ', value);
