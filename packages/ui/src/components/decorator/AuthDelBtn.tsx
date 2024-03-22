@@ -6,6 +6,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 export interface AuthDelBtnProps {
   handleDelete: () => void;
   permission?: string;
+  showIcon?: boolean;
   text?: string;
 }
 
@@ -14,12 +15,13 @@ export interface AuthDelBtnProps {
  * @author xu.pengfei
  * @date 2022/12/5
  */
-export default function AuthDelBtn({ handleDelete, permission, text = '删除' }: AuthDelBtnProps) {
+export default function AuthDelBtn({ handleDelete, permission, showIcon = true, text = '删除' }: AuthDelBtnProps) {
   return (
     <ShiroPermissionContainer permission={permission}>
       <Popconfirm title="确认删除?" onConfirm={() => handleDelete()} placement="topRight">
         <a className="fa-link-btn" style={{ color: 'red' }}>
-          <DeleteOutlined /> {text}
+          {showIcon && <DeleteOutlined /> }
+          {text}
         </a>
       </Popconfirm>
     </ShiroPermissionContainer>
