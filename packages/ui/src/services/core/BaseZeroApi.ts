@@ -11,16 +11,16 @@ export default class BaseZeroApi {
     this.apiModal = apiModal;
   }
 
-  get = <E>(api: string, params?: any, config?: AxiosRequestConfig) =>
+  protected get = <E>(api: string, params?: any, config?: AxiosRequestConfig) =>
     requestGet<E>(`${this.apiPrefix}/${this.apiModal}/${api}`, { ...config, params });
 
-  delete = <E>(api: string, config?: AxiosRequestConfig) =>
+  protected delete = <E>(api: string, config?: AxiosRequestConfig) =>
     requestDelete<E>(`${this.apiPrefix}/${this.apiModal}/${api}`, config);
 
-  post = <E>(api: string, body: object, config?: AxiosRequestConfig) =>
+  protected post = <E>(api: string, body: object, config?: AxiosRequestConfig) =>
     requestPost<E>(`${this.apiPrefix}/${this.apiModal}/${api}`, body, config);
 
-  postFile = <E>(api: string, file: any, config?: AxiosRequestConfig) => {
+  protected postFile = <E>(api: string, file: any, config?: AxiosRequestConfig) => {
     const formData = new FormData();
     formData.append('file', file);
     return requestPost<E>(`${this.apiPrefix}/${this.apiModal}/${api}`, formData, {
@@ -30,17 +30,17 @@ export default class BaseZeroApi {
     });
   };
 
-  postForm = <E>(api: string, formData: any, config?: AxiosRequestConfig) => {
+  protected postForm = <E>(api: string, formData: any, config?: AxiosRequestConfig) => {
     return requestPost<E>(`${this.apiPrefix}/${this.apiModal}/${api}`, formData, {
       ...config,
       headers: { 'Content-type': 'multipart/form-data' },
     });
   };
 
-  put = <E>(api: string, body: object, config?: AxiosRequestConfig) =>
+  protected put = <E>(api: string, body: object, config?: AxiosRequestConfig) =>
     requestPut<E>(`${this.apiPrefix}/${this.apiModal}/${api}`, body, config);
 
-  download = (api: string, body: object, config?: AxiosRequestConfig) =>
+  protected download = (api: string, body: object, config?: AxiosRequestConfig) =>
     requestDownload(`${this.apiPrefix}/${this.apiModal}/${api}`, body, config);
 
   getUrl = (api: string) => `${this.apiPrefix}/${this.apiModal}/${api}`;
