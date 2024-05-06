@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {Transfer, Tree} from 'antd';
-import type {TransferDirection, TransferItem} from 'antd/es/transfer';
-import type {DataNode} from 'antd/es/tree';
-import {Fa} from "@ui/types";
+import React, { Key, useEffect, useState } from 'react';
+import { Transfer, Tree } from 'antd';
+import { TransferDirection, TransferItem, TransferProps } from 'antd/es/transfer';
+import type { DataNode } from 'antd/es/tree';
+import { Fa } from "@ui/types";
 import * as TreeUtils from "@ui/components/base-tree/utils";
 
-export interface TreeTransferProps {
+export interface TreeTransferProps extends Omit<TransferProps<any>, 'onChange'> {
   targetKeys: string[];
-  onChange: (targetKeys: string[], direction: TransferDirection, moveKeys: string[]) => void;
+  onChange: (targetKeys: Key[], direction: TransferDirection, moveKeys: Key[]) => void;
   /** [外部定义]Tree节点标准API接口 */
   serviceApi: {
     /** [外部定义]获取所有Tree节点 */
@@ -69,7 +69,7 @@ export default function TreeTransfer({ targetKeys, serviceApi, extraEffectArgs =
     >
       {({ direction, onItemSelect, selectedKeys }) => {
         if (direction === 'left') {
-          const checkedKeys = [...selectedKeys, ...targetKeys];
+          const checkedKeys: any[] = [...selectedKeys, ...targetKeys];
           return (
             <div >
               <Tree
