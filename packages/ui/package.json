@@ -1,7 +1,7 @@
 {
   "name": "@fa/ui",
   "version": "0.0.1",
-  "main": "./index.tsx",
+  "main": "./src/index.ts",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": "./dist",
