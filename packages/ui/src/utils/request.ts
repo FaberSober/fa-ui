@@ -14,7 +14,7 @@ const instance = axios.create({
 // 现在，在超时前，所有请求都会等待 2.5 秒
 instance.defaults.timeout = 60000;
 
-const codeMessage = {
+const codeMessage: any = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
   202: '一个请求已经进入后台排队（异步任务）。',
@@ -88,10 +88,14 @@ instance.interceptors.response.use(
     // 对响应错误做点什么
     console.log('error', error);
     const status: number = get(error, 'response.status', error.name);
-    let defaultErrorMsg: string = status + get(codeMessage, status, '未知错误，请联系管理员');
-    if (error.response && error.response.data && error.response.data.message) {
+    const msgText = codeMessage[status] || '未知错误，请联系管理员';
+
+    const needLogin = isNeedLogin(status);
+
+    let defaultErrorMsg = `${status}: ${msgText}`;
+    if (error.response?.data?.message) {
       defaultErrorMsg = status + error.response.data.message;
-      if (error.config.headers.hideErrorMsg !== '1') {
+      if (error.config.headers.hideErrorMsg !== '1' && !needLogin) {
         message.error(defaultErrorMsg);
       }
     } else if (error.response.data instanceof Blob) {
@@ -110,10 +114,10 @@ instance.interceptors.response.use(
           message.error(json.message);
         }
       };
-    } else {
-      if (error.config.headers.hideErrorMsg !== '1') {
-        message.error(defaultErrorMsg);
-      }
+    } else if (error.config.headers.hideErrorMsg !== '1') {
+      message.error(defaultErrorMsg);
+    } else if (!needLogin) {
+      message.error(defaultErrorMsg);
     }
 
     if (error.response) {
@@ -131,10 +135,10 @@ instance.interceptors.response.use(
       // Something happened in setting up the request that triggered an Error
     }
 
-    if (status === 401 || status === 40101) {
+    if (needLogin) {
       message.error(`${status}登录失效，跳转登录`).then(() => {
         // 跳转登录页面
-        window.location.href = '/login';
+        window.location.href = `/login?redirect=${window.location.pathname}`;
       });
     }
     return Promise.reject(error);
@@ -182,4 +186,8 @@ export function requestDownload(api: string, body: object, config?: AxiosRequest
     window.URL.revokeObjectURL(url1);
     return undefined;
   });
+}
+
+function isNeedLogin(status: any) {
+  return status === 401 || status === 40101;
 }

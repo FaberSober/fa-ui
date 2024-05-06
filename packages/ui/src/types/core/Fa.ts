@@ -130,6 +130,10 @@ namespace Fa {
     data: T;
   }
 
+  export interface LoginToken {
+    tokenValue: string;
+  }
+
   export interface Dict {
     value: any;
     label: string;
