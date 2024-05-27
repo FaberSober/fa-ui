@@ -63,11 +63,10 @@ export function flatTreeList(
 
 function findPathInner(options: any[] | undefined, destId: any, valueKey = 'value'): any {
   if (isNil(options)) return undefined;
-  const findPathArr: T[] = [];
+  const findPathArr: any[] = [];
   for (const o of options) {
     // first check self is desc
-    // @ts-expect-error
-    if (trim(o[label]) === trim(destId)) {
+    if (trim(o[valueKey]) === trim(destId)) {
       return [o];
     }
 
