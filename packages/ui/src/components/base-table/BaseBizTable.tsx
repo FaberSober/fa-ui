@@ -21,6 +21,7 @@ export default function BaseBizTable<RecordType extends object = any>({
   showComplexQuery = true,
   showCheckbox = true,
   showTopDiv = true,
+  showRowNum = false,
   biz = '',
   columns,
   refreshList,
@@ -60,7 +61,7 @@ export default function BaseBizTable<RecordType extends object = any>({
   const processColumns = () => {
     // 表格字段配置
     // 解析自定义配置
-    let parseColumns = [];
+    let parseColumns:FaberTable.ColumnsProp<RecordType>[] = [];
     if (config) {
       // 取自定义配置
       parseColumns = config.map((c) => {
@@ -74,6 +75,25 @@ export default function BaseBizTable<RecordType extends object = any>({
     } else {
       // 取默认值
       parseColumns = columns.filter((c) => c.tcRequired || c.tcChecked);
+    }
+
+    if (showRowNum) {
+      parseColumns = [
+        {
+          dataIndex: 'id',
+          title: '序号',
+          render: (_value:any, _record:any, index:any) => {
+            // if (props.pagination) {
+            //   const current = props.pagination.current || 1
+            //   const pageSize = props.pagination.pageSize || 10
+            //   return (current - 1) * pageSize + index + 1;
+            // }
+            return index + 1;
+          },
+          width: 80,
+        },
+        ...parseColumns,
+      ]
     }
 
     // 计算table滚动width
@@ -167,7 +187,7 @@ export default function BaseBizTable<RecordType extends object = any>({
                   {querySuffix}
                 </div>
                 <div className="fa-text" style={{lineHeight: '32px'}}>
-                  共<a style={{fontWeight: 600, margin: '0 4px'}}>{get(props, 'pagination.total')}</a>条数据
+                  共<a style={{fontWeight: 600, margin: '0 4px'}}>{props.pagination ? get(props, 'pagination.total') : props.dataSource?.length}</a>条数据
                 </div>
               </div>
             )}

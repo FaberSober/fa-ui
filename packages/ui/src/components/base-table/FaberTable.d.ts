@@ -52,6 +52,7 @@ namespace FaberTable {
    * BaseTable的定义
    */
   export interface BaseSimpleTableProps<RecordType extends object = any> extends TableProps<RecordType> {
+    showRowNum?: boolean; // 是否展示行号
     showCheckbox?: boolean; // 是否展示勾选框
     columns: FaberTable.ColumnsProp<RecordType>[]; // antd表格字段
     refreshList: () => void; // 刷新列表
