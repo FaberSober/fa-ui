@@ -8,10 +8,12 @@ import {Modal} from "antd";
  * 根据当前查询条件全量删除
  * @param api API
  * @param queryParams 表格查询参数
+ * @param onFinish onFinish
  */
 export default function useDeleteByQuery(
   api: (params: any) => Promise<Fa.Ret<boolean>>,
   queryParams: Fa.QueryParams,
+  onFinish: () => void,
 ): [deleting: boolean, deleteByQuery: () => void] {
   const [deleting, setDeleting] = useState(false);
 
@@ -24,7 +26,10 @@ export default function useDeleteByQuery(
         setDeleting(true);
         const params = BaseTableUtils.getQueryParams(queryParams);
         return api(params)
-          .then(() => setDeleting(false))
+          .then(() => {
+            onFinish()
+            setDeleting(false)
+          })
           .catch(() => setDeleting(false));
       },
       okText: '删除',
