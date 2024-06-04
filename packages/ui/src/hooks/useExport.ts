@@ -21,16 +21,7 @@ export default function useExport(
       title: '确认导出？',
       onOk: () => {
         setExporting(true);
-        const params = {
-          sorter: BaseTableUtils.getSorter(queryParams.sorter),
-          sceneId: queryParams.sceneId,
-          conditionList: queryParams.conditionList,
-          query: {
-            ...queryParams.formValues,
-            // 外部补充查询条件
-            ...queryParams.extraParams,
-          },
-        };
+        const params = BaseTableUtils.getQueryParams(queryParams);
         return exportApi(params)
           .then(() => setExporting(false))
           .catch(() => setExporting(false));

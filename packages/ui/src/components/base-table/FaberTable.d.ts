@@ -80,6 +80,8 @@ namespace FaberTable {
     querySuffix?: ReactNode; // 自定义追加的查询条件后缀
     onSceneChange?: (sceneId: string) => void; // 查询场景变更
     onConditionChange?: (conditionList: ConditionQuery.CondGroup[]) => void; // 组合查询条件变更
+    showDeleteByQuery?: boolean; // 是否展示-根据当前查询条件全量删除
+    onDeleteByQuery?: () => void; // 根据当前查询条件全量删除
   }
 }
 

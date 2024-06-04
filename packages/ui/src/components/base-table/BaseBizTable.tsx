@@ -9,7 +9,7 @@ import ComplexQuery from '@ui/components/condition-query/ComplexQuery';
 import { TableRowSelection } from 'antd/es/table/interface';
 import { v4 } from 'uuid';
 import TableColConfigModal from '../modal/TableColConfigModal';
-import {FaFlexRestLayout} from "@ui/components/base-layout";
+import { FaFlexRestLayout } from "@ui/components/base-layout";
 
 
 /**
@@ -38,6 +38,8 @@ export default function BaseBizTable<RecordType extends object = any>({
   showBatchBelBtn = true,
   keyName = 'id',
   batchDelBtn,
+  showDeleteByQuery = false,
+  onDeleteByQuery = () => {},
   ...props
 }: FaberTable.BaseTableProps<RecordType>) {
   const [id] = useState(v4());
@@ -149,6 +151,15 @@ export default function BaseBizTable<RecordType extends object = any>({
     }
   }
 
+  /**
+   * delete all by current query condition
+   */
+  function handleDeleteQueryAll() {
+    if (onDeleteByQuery) {
+      onDeleteByQuery();
+    }
+  }
+
   return (
     <div style={{ flex: 1, position:'relative' }}>
       <div className="fa-flex-column fa-full-content">
@@ -186,6 +197,13 @@ export default function BaseBizTable<RecordType extends object = any>({
                   {renderQuerySuffix &&  renderQuerySuffix()}
                   {querySuffix}
                 </div>
+                <Space style={{padding: 8, display: 'flex', lineHeight: '32px'}}>
+                  {showDeleteByQuery && (
+                    <Button danger onClick={() => handleDeleteQueryAll()} icon={<DeleteOutlined />}>
+                      全部删除
+                    </Button>
+                  )}
+                </Space>
                 <div className="fa-text" style={{lineHeight: '32px'}}>
                   共<a style={{fontWeight: 600, margin: '0 4px'}}>{props.pagination ? get(props, 'pagination.total') : props.dataSource?.length}</a>条数据
                 </div>

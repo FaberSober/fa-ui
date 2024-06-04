@@ -8,7 +8,7 @@ import {
   renderTimePicker,
   renderTimeRangePicker,
 } from '@ui/components/condition-query/ConditionQueryUtils';
-import {FaberTable} from '@ui/components/base-table/index';
+import {BaseTableUtils, FaberTable} from '@ui/components/base-table/index';
 import {BaseBoolSelector, DictDataSelector, DictEnumSelector} from '@ui/components/base-dict';
 import {SortOrder} from 'antd/es/table/interface';
 import {UserSearchSelect} from '@ui/components/biz-user-select';
@@ -45,6 +45,24 @@ export function getSortOrder(sorter: Fa.Sorter, field: string): SortOrder {
     return sorter.order;
   }
   return null;
+}
+
+/**
+ * 解析生成通用查询入参
+ * @param params
+ */
+export function getQueryParams(queryParams: Fa.QueryParams): any {
+  const params = {
+    sorter: getSorter(queryParams.sorter),
+    sceneId: queryParams.sceneId,
+    conditionList: queryParams.conditionList,
+    query: {
+      ...queryParams.formValues,
+      // 外部补充查询条件
+      ...queryParams.extraParams,
+    },
+  };
+  return params;
 }
 
 /**
