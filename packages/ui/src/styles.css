@@ -153,6 +153,10 @@ ul {
     bottom: 0;
 }
 
+.fa-bg-primary {
+  background-color: var(--primary-color);
+}
+
 .fa-bg-white {
     background-color: var(--fa-bg-color);
 }
