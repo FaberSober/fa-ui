@@ -52,12 +52,14 @@ export function getSortOrder(sorter: Fa.Sorter, field: string): SortOrder {
  * @param params
  */
 export function getQueryParams(queryParams: Fa.QueryParams): any {
+  const { _search, ...restFormValues } = queryParams.formValues;
   const params = {
     sorter: getSorter(queryParams.sorter),
     sceneId: queryParams.sceneId,
     conditionList: queryParams.conditionList,
+    search: _search,
     query: {
-      ...queryParams.formValues,
+      ...restFormValues,
       // 外部补充查询条件
       ...queryParams.extraParams,
     },

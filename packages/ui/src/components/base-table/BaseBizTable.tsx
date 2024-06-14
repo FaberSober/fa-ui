@@ -197,7 +197,7 @@ export default function BaseBizTable<RecordType extends object = any>({
                   {renderQuerySuffix &&  renderQuerySuffix()}
                   {querySuffix}
                 </div>
-                <Space style={{padding: 8, display: 'flex', lineHeight: '32px'}}>
+                <Space style={{marginRight: 8, display: 'flex', lineHeight: '32px'}}>
                   {showDeleteByQuery && (
                     <Button danger onClick={() => handleDeleteQueryAll()} icon={<DeleteOutlined />}>
                       全部删除
