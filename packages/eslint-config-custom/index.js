@@ -19,6 +19,7 @@ module.exports = {
     '@typescript-eslint/no-namespace': 'off', // 不可使用namespace
     '@typescript-eslint/ban-ts-comment': 'off', // 不可使用@ts-ignore
     'no-useless-escape': 'off', // 不可使用@ts-ignore
+    'no-empty-pattern': 'off', // 不可使用no-empty-pattern
     "react-refresh/only-export-components": "warn", // 只允许导出组件，保证react刷新时能正确更新组件
   },
 };
