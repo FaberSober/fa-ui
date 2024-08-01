@@ -504,6 +504,7 @@ ul {
 
 .fa-normal-btn:hover {
     background-color: var(--fa-bg-color-hover);
+    color: var(--fa-text-color);
 }
 
 .fa-cursor-pointer {
