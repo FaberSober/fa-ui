@@ -18,6 +18,7 @@ body {
     --fa-subtitle-color: #666; /* 适配主题-文字颜色-副标题 */
     --fa-border-color: #ccc; /* 适配主题-边框颜色 */
     --fa-border-dark-color: #66666666; /* 适配主题-边框颜色 */
+    --fa-border-darker-color: #333; /* 适配主题-边框颜色 */
     --fa-bg-grey: #f1f1f1; /* 适配主题-背景色-灰色 */
     --separator-border: #eee; /* 适配主题-allocate-分割面板的分割线颜色 */
 
@@ -597,6 +598,20 @@ ul {
 
 .fa-cover {
     background-color: rgba(238, 238, 238, 0.4);
+}
+
+.fa-table table {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+.fa-table table, .fa-table tr, .fa-table td {
+  border: 1px solid var(--fa-border-darker-color);
+}
+
+.fa-table td {
+  padding: 2px;
 }
 
 /*----------------------------------------- fa-corn -----------------------------------------*/
