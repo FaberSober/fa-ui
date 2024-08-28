@@ -32,7 +32,7 @@ const ThemeConfig = {
     'fa-text-color2': '#353535',
     'fa-text-color-hover': '#353535',
     'fa-subtitle-color': '#666',
-    'fa-border-color': '#eee',
+    'fa-border-color': '#ddd',
     'separator-border': '#eee',
   },
   dark: {
