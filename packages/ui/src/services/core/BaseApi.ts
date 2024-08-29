@@ -51,6 +51,9 @@ export default class BaseApi<T, KeyType, PageT = T> extends BaseZeroApi {
   /** 获取List，带过滤查询条件 */
   list = (params: Fa.BaseQueryParams): Promise<Fa.Ret<T[]>> => this.post('list', params);
 
+  /** 获取List，带过滤查询条件 */
+  listN = (params: Fa.BaseQueryParams, topN: number): Promise<Fa.Ret<T[]>> => this.post(`listN?topN=${topN}`, params);
+
   /** 获取List(限定登录用户创建)，带过滤查询条件 */
   mineList = (params: Fa.BaseQueryParams): Promise<Fa.Ret<T[]>> => this.post('mineList', params);
 
