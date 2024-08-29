@@ -23,6 +23,7 @@ export const ThemeLayoutContext = createContext<ThemeLayoutContextProps>({
 const ThemeConfig = {
   light: {
     'fa-bg-color': '#fff',
+    'fa-bg-selected': '#ddd',
     'fa-bg-color-hover': '#eee',
     'fa-bg-color2': '#eee',
     'fa-bg-color-highlight': '#1c5e88',
@@ -37,7 +38,8 @@ const ThemeConfig = {
   },
   dark: {
     'fa-bg-color': '#05202F',
-    'fa-bg-color-hover': '#eee',
+    'fa-bg-selected': '#1c5e88',
+    'fa-bg-color-hover': '#1c5e88',
     'fa-bg-color2': '#012C4A',
     'fa-bg-color-highlight': '#1c5e88',
     'fa-bg-grey': '#05202F',

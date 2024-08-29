@@ -20,6 +20,7 @@ body {
     --fa-border-dark-color: #66666666; /* 适配主题-边框颜色 */
     --fa-border-darker-color: #333; /* 适配主题-边框颜色 */
     --fa-bg-grey: #f1f1f1; /* 适配主题-背景色-灰色 */
+    --fa-bg-selected: #ddd; /* 适配主题-背景色-灰色 */
     --separator-border: #eee; /* 适配主题-allocate-分割面板的分割线颜色 */
 
     --fa-bg-grey-darker: #e1e1e1;
@@ -482,7 +483,7 @@ ul {
 }
 
 .fa-base-btn-selected {
-  background: var(--fa-text-color-highlight);
+  background: var(--fa-bg-selected);
 }
 
 .fa-base-btn {
