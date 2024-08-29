@@ -481,6 +481,10 @@ ul {
     color: var(--fa-subtitle-color);
 }
 
+.fa-base-btn-selected {
+  background: var(--fa-text-color-highlight);
+}
+
 .fa-base-btn {
   cursor: pointer;
   transition: all ease-in-out 0.3s;
