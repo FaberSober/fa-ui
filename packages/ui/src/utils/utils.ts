@@ -539,6 +539,14 @@ export function scrollToBottom(dom: HTMLElement) {
   dom.scrollTo(0, dom.scrollHeight)
 }
 
+export function scrollToBottomById(domId: string, delay = 0) {
+  setTimeout(() => {
+    const dom = document.getElementById(domId);
+    if (dom === undefined || dom === null) return;
+    dom.scrollTo(0, dom.scrollHeight)
+  }, delay);
+}
+
 /**
  * 滚动到元素
  * @param domId
