@@ -19,7 +19,7 @@ body {
     --fa-border-color: #ddd; /* 适配主题-边框颜色 */
     --fa-border-dark-color: #66666666; /* 适配主题-边框颜色 */
     --fa-border-darker-color: #333; /* 适配主题-边框颜色 */
-    --fa-bg-grey: #f1f1f1; /* 适配主题-背景色-灰色 */
+    --fa-bg-grey: #f7f7f7; /* 适配主题-背景色-灰色 */
     --fa-bg-selected: #ddd; /* 适配主题-背景色-灰色 */
     --separator-border: #eee; /* 适配主题-allocate-分割面板的分割线颜色 */
 
