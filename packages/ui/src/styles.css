@@ -20,13 +20,14 @@ body {
     --fa-border-dark-color: #66666666; /* 适配主题-边框颜色 */
     --fa-border-darker-color: #333; /* 适配主题-边框颜色 */
     --fa-bg-grey: #f7f7f7; /* 适配主题-背景色-灰色 */
+    --fa-bg-grey2: #e7e7e7; /* 适配主题-背景色-灰色 */
     --fa-bg-selected: #ddd; /* 适配主题-背景色-灰色 */
     --separator-border: #eee; /* 适配主题-allocate-分割面板的分割线颜色 */
 
     --fa-bg-grey-darker: #e1e1e1;
     --fa-hover-bg: #e1e1e1;
     --fa-transition: all ease-in-out 0.3s;
-    --fa-border-radius: 3px;
+    --fa-border-radius: 2px;
     --fa-box-shadow: 0 2px 4px 4px #ddd;
     --fa-box-shadow-b: 0px -2px 2px 2px #666;
     --focus-border: var(--primary-color) !important;
@@ -171,6 +172,10 @@ ul {
     background-color: var(--fa-bg-grey);
 }
 
+.fa-bg-grey2 {
+    background-color: var(--fa-bg-grey2);
+}
+
 .fa-bg-grey-darker {
     background-color: var(--fa-bg-grey-darker);
 }
@@ -184,6 +189,10 @@ ul {
     background-color: var(--fa-bg-color);
     border-radius: var(--fa-border-radius);
     border: 1px solid var(--fa-border-color);
+}
+
+.fa-radius {
+  border-radius: var(--fa-border-radius);
 }
 
 .fa-text {
