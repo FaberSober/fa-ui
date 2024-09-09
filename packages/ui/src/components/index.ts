@@ -15,6 +15,7 @@ export * from './base-modal';
 export * from './base-notice';
 export * from './base-search-select';
 export * from './base-select';
+export * from './base-switch';
 export * from './base-table';
 export * from './base-title';
 export * from './base-transfer';

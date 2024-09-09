@@ -71,6 +71,13 @@ namespace Fa {
     deleted?: boolean;
   }
 
+  export interface BaseExtendEntity extends BaseDelEntity {
+    /** 排序 */
+    sort?: boolean;
+    /** 是否有效 */
+    valid?: boolean;
+  }
+
   // ------------------------------------- Tenant ENTITY -------------------------------------
   export interface TnBaseEntity {
     /** 企业ID */
