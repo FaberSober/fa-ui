@@ -24,7 +24,7 @@ const ThemeConfig = {
   light: {
     'fa-bg-color': '#fff',
     'fa-bg-selected': '#e3e3e3',
-    'fa-bg-color-hover': '#eee',
+    'fa-bg-color-hover': '#ccc',
     'fa-bg-color2': '#eee',
     'fa-bg-color-highlight': '#1c5e88',
     'fa-bg-grey': '#f7f7f7',
