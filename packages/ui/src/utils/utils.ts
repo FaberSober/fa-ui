@@ -338,6 +338,16 @@ export function isJson(input: string | undefined): boolean {
   return false;
 }
 
+export function tryParseJson(input: string | undefined, defaultValue = {}): any {
+  if (input === undefined) return defaultValue;
+  try {
+    return JSON.parse(input);
+  } catch (err) {
+    // console.error(err)
+  }
+  return defaultValue;
+}
+
 export function tryFormatJson(input: string | undefined): string {
   if (input === undefined) return '';
   try {
