@@ -12,8 +12,8 @@ export interface EncryptionParams {
 }
 
 export class AesEncryption {
-  private key;
-  private iv;
+  private key: any;
+  private iv: any;
 
   constructor(opt: Partial<EncryptionParams> = {}) {
     const { key, iv } = opt;
@@ -25,7 +25,7 @@ export class AesEncryption {
     }
   }
 
-  get getOptions() {
+  get getOptions(): any {
     return {
       mode: ECB,
       padding: pkcs7,
