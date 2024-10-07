@@ -77,6 +77,7 @@ namespace FaberTable {
     showComplexQuery?: boolean; // 是否展示高级查询
     biz: string; // 业务模块：用于区分存储表格自定义配置的Key
     renderQuerySuffix?: () => ReactNode; // 自定义追加的查询条件后缀
+    renderQueryAll?: () => ReactNode; // 自定义追加的全部查询
     querySuffix?: ReactNode; // 自定义追加的查询条件后缀
     onSceneChange?: (sceneId: string) => void; // 查询场景变更
     onConditionChange?: (conditionList: ConditionQuery.CondGroup[]) => void; // 组合查询条件变更

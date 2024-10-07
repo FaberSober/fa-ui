@@ -27,6 +27,7 @@ export default function BaseBizTable<RecordType extends object = any>({
   refreshList,
   batchDelete,
   renderQuerySuffix = () => null,
+  renderQueryAll = () => null,
   querySuffix = null,
   renderCheckBtns = () => null,
   onSceneChange = () => {},
@@ -198,6 +199,7 @@ export default function BaseBizTable<RecordType extends object = any>({
                   {querySuffix}
                 </div>
                 <Space style={{marginRight: 8, display: 'flex', lineHeight: '32px'}}>
+                  {renderQueryAll && renderQueryAll()}
                   {showDeleteByQuery && (
                     <Button danger onClick={() => handleDeleteQueryAll()} icon={<DeleteOutlined />}>
                       全部删除
