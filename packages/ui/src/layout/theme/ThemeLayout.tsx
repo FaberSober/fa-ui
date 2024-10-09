@@ -2,6 +2,8 @@ import React, { createContext, useEffect } from 'react';
 import { Fa } from '@ui/types';
 import { useLocalStorage } from "react-use";
 import { each } from "lodash";
+import chroma from 'chroma-js';
+
 
 const DEFAULT_PRIMARY_COLOR = '#1890FF';
 
@@ -74,8 +76,19 @@ export default function ThemeLayout({ children, colorPrimary }: ThemeLayoutProps
     const rootDom = document.getElementsByTagName('body')[0].style;
     rootDom.setProperty('--primary-color', colorPrimaryInner!);
 
+    // calculate primary color variants - use chroma-js
+    rootDom.setProperty('--primary-color-dark100', chroma(colorPrimaryInner!).darken(0.5).hex());
+    rootDom.setProperty('--primary-color-dark200', chroma(colorPrimaryInner!).darken(1.0).hex());
+    rootDom.setProperty('--primary-color-dark300', chroma(colorPrimaryInner!).darken(1.5).hex());
+    rootDom.setProperty('--primary-color-dark400', chroma(colorPrimaryInner!).darken(2.0).hex());
+
+    rootDom.setProperty('--primary-color-light100', chroma(colorPrimaryInner!).brighten(0.5).hex());
+    rootDom.setProperty('--primary-color-light200', chroma(colorPrimaryInner!).brighten(1.0).hex());
+    rootDom.setProperty('--primary-color-light300', chroma(colorPrimaryInner!).brighten(1.5).hex());
+    rootDom.setProperty('--primary-color-light400', chroma(colorPrimaryInner!).brighten(2.0).hex());
+
     changeTheme(themeDark);
-  }, []);
+  }, [colorPrimaryInner]);
 
   function changeTheme(dark: boolean|undefined) {
     const themeData:any = dark ? 'dark' : 'light';
