@@ -96,21 +96,21 @@ $scrollbar-thumb-hover-color: (
 }
 
 [data-theme=dark] .ant-menu-dark {
-  background: #08202f !important;
+  background: var(--fa-bg-color) !important;
 }
 
 [data-theme=dark] .ant-menu-item-selected {
   color: #fff !important;
-  background-color: #1B5E88 !important;
+  background-color: var(--fa-bg-selected) !important;
 }
 
 [data-theme=dark] .ant-dropdown-menu-item-selected {
   color: #fff !important;
-  background-color: #1B5E88 !important;
+  background-color: var(--fa-bg-selected) !important;
 }
 
 [data-theme=dark] .ant-popover-inner {
-  background-color: #05202F !important;
+  background-color: var(--fa-bg-color) !important;
 }
 
 [data-theme=dark] .ant-empty-description {
