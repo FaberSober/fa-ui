@@ -79,18 +79,31 @@ export default function ThemeLayout({ children, colorPrimary }: ThemeLayoutProps
     rootDom.setProperty('--primary-color', colorPrimaryInner!);
 
     // calculate primary color variants - use chroma-js
-    rootDom.setProperty('--primary-color-dark100', chroma(colorPrimaryInner!).darken(0.5).hex());
-    rootDom.setProperty('--primary-color-dark200', chroma(colorPrimaryInner!).darken(1.0).hex());
-    rootDom.setProperty('--primary-color-dark300', chroma(colorPrimaryInner!).darken(1.5).hex());
-    rootDom.setProperty('--primary-color-dark400', chroma(colorPrimaryInner!).darken(2.0).hex());
+    const colorPrimary = chroma(colorPrimaryInner!);
+    if (themeDark) {
+      rootDom.setProperty('--primary-color-dark100', colorPrimary.brighten(0.5).hex());
+      rootDom.setProperty('--primary-color-dark200', colorPrimary.brighten(1.0).hex());
+      rootDom.setProperty('--primary-color-dark300', colorPrimary.brighten(1.5).hex());
+      rootDom.setProperty('--primary-color-dark400', colorPrimary.brighten(2.0).hex());
 
-    rootDom.setProperty('--primary-color-light100', chroma(colorPrimaryInner!).brighten(0.5).hex());
-    rootDom.setProperty('--primary-color-light200', chroma(colorPrimaryInner!).brighten(1.0).hex());
-    rootDom.setProperty('--primary-color-light300', chroma(colorPrimaryInner!).brighten(1.5).hex());
-    rootDom.setProperty('--primary-color-light400', chroma(colorPrimaryInner!).brighten(2.0).hex());
+      rootDom.setProperty('--primary-color-light100', colorPrimary.darken(0.5).hex());
+      rootDom.setProperty('--primary-color-light200', colorPrimary.darken(1.0).hex());
+      rootDom.setProperty('--primary-color-light300', colorPrimary.darken(1.5).hex());
+      rootDom.setProperty('--primary-color-light400', colorPrimary.darken(2.0).hex());
+    } else {
+      rootDom.setProperty('--primary-color-dark100', colorPrimary.darken(0.5).hex());
+      rootDom.setProperty('--primary-color-dark200', colorPrimary.darken(1.0).hex());
+      rootDom.setProperty('--primary-color-dark300', colorPrimary.darken(1.5).hex());
+      rootDom.setProperty('--primary-color-dark400', colorPrimary.darken(2.0).hex());
+
+      rootDom.setProperty('--primary-color-light100', colorPrimary.brighten(0.5).hex());
+      rootDom.setProperty('--primary-color-light200', colorPrimary.brighten(1.0).hex());
+      rootDom.setProperty('--primary-color-light300', colorPrimary.brighten(1.5).hex());
+      rootDom.setProperty('--primary-color-light400', colorPrimary.brighten(2.0).hex());
+    }
 
     changeTheme(themeDark);
-  }, [colorPrimaryInner]);
+  }, [colorPrimaryInner, themeDark]);
 
   function changeTheme(dark: boolean|undefined) {
     const themeData:any = dark ? 'dark' : 'light';
