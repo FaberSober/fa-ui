@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {getDateStr, optionsToLabel, toLine, tryToFixed} from '@ui/utils/utils';
 import { Badge, Tooltip } from 'antd';
-import {find, isEmpty, trim} from 'lodash';
+import { find, isEmpty, isNil, trim } from 'lodash';
 import {
   renderDatePicker,
   renderDateRangerPicker,
@@ -29,6 +29,7 @@ export function dataIndexToString(dataIndex: string | string[]) {
  * @param {*} sorter
  */
 export function getSorter(sorter: Fa.Sorter) {
+  if (isNil(sorter.field) || trim(sorter.field) === '') return null;
   const order = sorter.order === 'descend' ? 'DESC' : 'ASC';
   const column = toLine(sorter.field);
   return `${column} ${order}`;
