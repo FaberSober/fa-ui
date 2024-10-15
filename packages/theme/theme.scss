@@ -116,4 +116,9 @@ $scrollbar-thumb-hover-color: (
 [data-theme=dark] .ant-empty-description {
   color: #fff !important;
 }
+
+[data-theme=dark] .ant-tree-node-selected {
+  color: #fff !important;
+  background-color: var(--fa-bg-selected) !important;
+}
 // ------------------------- 自定义修改antd样式，适配dark样式 -------------------------

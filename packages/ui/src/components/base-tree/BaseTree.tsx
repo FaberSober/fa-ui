@@ -314,11 +314,11 @@ const BaseTree = React.forwardRef<HTMLElement, BaseTreeProp<any, any>>(function 
               <FaHref onClick={() => handleAddItem()} icon={<PlusOutlined/>} text={`新增${serviceName}`}/>
             )}
           </div>
-          <Space>
-            <a onClick={() => fetchTree()}><ReloadOutlined /></a>
-            <a onClick={() => setExpandedKeys([])}><MinusCircleOutlined /></a>
-            <a onClick={() => handleExpandAll()}><PlusCircleOutlined /></a>
-          </Space>
+          <div>
+            <a onClick={() => fetchTree()} className="fa-link-btn"><ReloadOutlined /></a>
+            <a onClick={() => setExpandedKeys([])} className="fa-link-btn"><MinusCircleOutlined /></a>
+            <a onClick={() => handleExpandAll()} className="fa-link-btn"><PlusCircleOutlined /></a>
+          </div>
         </div>
       )}
 
