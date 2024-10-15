@@ -21,6 +21,7 @@ export interface FaSortGridProps<T> {
   handle?: boolean; // 是否使用拖动把手
   handleNode?: ReactNode;
   itemStyle?: CSSProperties;
+  itemClassName?: string|undefined;
   handleStyle?: CSSProperties;
   gridStyle?: CSSProperties;
   columns?: number; // grid columns
@@ -39,6 +40,7 @@ export default function FaSortGrid<T>({
   handle,
   handleNode,
   itemStyle,
+  itemClassName,
   handleStyle,
   gridStyle,
   columns,
@@ -87,6 +89,7 @@ export default function FaSortGrid<T>({
               key={getRowKey(i)}
               id={getRowKey(i)}
               style={itemStyle}
+              className={itemClassName}
               handle={handle}
               handleNode={handleNode}
               handleStyle={handleStyle}

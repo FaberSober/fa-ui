@@ -171,6 +171,10 @@ namespace Fa {
   export interface BaseQueryParams {
     query?: any;
     search?: any;
+    sorter?: any;
+    current?: number;
+    pageSize?: number;
+    sceneId?: any;
     [key: string]: any;
   }
 

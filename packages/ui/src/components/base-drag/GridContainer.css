@@ -4,7 +4,7 @@
   display: grid;
   grid-template-columns: repeat(var(--col-count), 1fr);
   grid-gap: 10px;
-  padding: 20px;
+  padding: 0;
 }
 
 @media (max-width: 850px) {

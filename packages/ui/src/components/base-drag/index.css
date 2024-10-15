@@ -1,3 +1,11 @@
+.fa-drag-item .fa-drag-handle {
+  display: none;
+}
+
+.fa-drag-item:hover .fa-drag-handle {
+  display: flex;
+}
+
 .fa-drag-handle {
   cursor: grab;
   transition: all ease-in-out 0.3s;

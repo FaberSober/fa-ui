@@ -8,6 +8,7 @@ export interface FaSortItemProps {
   handle?: boolean;
   handleNode?: ReactNode;
   style?: CSSProperties;
+  className?: string | undefined;
   handleStyle?: CSSProperties;
   children?: ReactNode;
   vertical?: boolean;
@@ -21,6 +22,7 @@ export interface FaSortItemProps {
 export default function FaSortItem({
   id,
   style,
+  className,
   handle,
   handleNode,
   handleStyle,
@@ -50,7 +52,7 @@ export default function FaSortItem({
   }
 
   return (
-    <div ref={setNodeRef} style={{ ...styleTrans, ...style }} {...(handle ? {} : listeners)} {...attributes}>
+    <div ref={setNodeRef} className={className} style={{ ...styleTrans, ...style }} {...(handle ? {} : listeners)} {...attributes}>
       {children}
       {handle && (
         <div className="fa-drag-handle" style={handleStyle} {...listeners}>
