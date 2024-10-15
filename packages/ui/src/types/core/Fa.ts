@@ -13,6 +13,8 @@ namespace Fa {
     /** 约定：tree结构数据，根结点的ID默认为0 */
     TREE_SUPER_ROOT_ID: 0,
     TREE_SUPER_ROOT_LABEL: '根节点',
+    /** Tree Event Bus默认刷新key */
+    TREE_REFRESH_BUS_KEY: '@@api/BASE_TREE_REFRESH',
     /** Token Header字段名 */
     TOKEN_KEY: 'Authorization',
     /** 登录模式： 1-本地、2-CAS */

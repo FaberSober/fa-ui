@@ -4,6 +4,7 @@ import {findIndex, isNil, isUndefined, map, trim} from 'lodash';
 import dayjs from "dayjs";
 import {filesize} from "filesize";
 import { v4 as uuidv4 } from 'uuid';
+import {dispatch} from 'use-bus'
 
 
 /**
@@ -619,4 +620,13 @@ export function uuid() {
 export const formNumberRule:any = {
   type: 'number',
   transform: (value:any) => Number(value),
+}
+
+// ------------------------------------------ event bus ------------------------------------------
+export function refreshTree(refreshBusKey = Fa.Constant.TREE_REFRESH_BUS_KEY, payload = {}) {
+  dispatch({ type: refreshBusKey, payload })
+}
+
+export function busEmit(key: string, payload = {}) {
+  dispatch({ type: key, payload })
 }

@@ -58,6 +58,7 @@ export interface BaseTreeProp<T, KeyType = number> extends TreeProps {
   renderTreeLabel?: (item: Fa.TreeNode<T, KeyType>) => ReactNode; // 自定义渲染Tree的节点名称
   extraEffectArgs?: any[];
   maxLevel?: number; // 最大的层级，超过这个层级不展示新增按钮
+  refreshBusKey?: string; // bus通知刷新key
 }
 
 let menuClickItem: any = undefined;
@@ -89,6 +90,7 @@ const BaseTree = React.forwardRef<HTMLElement, BaseTreeProp<any, any>>(function 
    renderTreeLabel,
    extraEffectArgs = [],
    maxLevel,
+   refreshBusKey = Fa.Constant.TREE_REFRESH_BUS_KEY,
    ...props
  }: BaseTreeProp<RecordType, KeyType>, ref: any) {
   const {renderCount} = useContext(BaseTreeContext);
@@ -105,7 +107,7 @@ const BaseTree = React.forwardRef<HTMLElement, BaseTreeProp<any, any>>(function 
   }, [renderCount, ...extraEffectArgs]);
 
   useBus(
-    ['@@api/BASE_TREE_REFRESH'],
+    [refreshBusKey],
     () => {
       fetchTree();
     },
