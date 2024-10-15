@@ -1,6 +1,6 @@
 import React, { createContext, CSSProperties, ReactNode, useContext, useEffect, useImperativeHandle, useState } from 'react';
 import { each, find, get, isNil } from 'lodash';
-import { Modal, Space, Spin, Tree } from 'antd';
+import { Modal, Space, Spin, Tooltip, Tree } from 'antd';
 import { DeleteOutlined, EditOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import { showResponse } from '@ui/utils/utils';
 import BaseTreeProps from '@ui/types/core/BaseTreeProps';
@@ -311,20 +311,26 @@ const BaseTree = React.forwardRef<HTMLElement, BaseTreeProp<any, any>>(function 
         <div style={{padding: 12, display: 'flex', alignItems: 'center', ...topBarStyle}}>
           <div style={{flex: 1}}>
             {showTopAddBtn && (
-              <FaHref onClick={() => handleAddItem()} icon={<PlusOutlined/>} text={`新增${serviceName}`}/>
+              <FaHref onClick={() => handleAddItem()} text={`新增${serviceName}`}/>
             )}
           </div>
           <div>
-            <a onClick={() => fetchTree()} className="fa-link-btn"><ReloadOutlined /></a>
-            <a onClick={() => setExpandedKeys([])} className="fa-link-btn"><MinusCircleOutlined /></a>
-            <a onClick={() => handleExpandAll()} className="fa-link-btn"><PlusCircleOutlined /></a>
+            <Tooltip title="刷新" mouseEnterDelay={1}>
+              <a onClick={() => fetchTree()} className="fa-link-btn"><ReloadOutlined/></a>
+            </Tooltip>
+            <Tooltip title="折叠" mouseEnterDelay={1}>
+              <a onClick={() => setExpandedKeys([])} className="fa-link-btn"><MinusCircleOutlined/></a>
+            </Tooltip>
+            <Tooltip title="展开" mouseEnterDelay={1}>
+              <a onClick={() => handleExpandAll()} className="fa-link-btn"><PlusCircleOutlined/></a>
+            </Tooltip>
           </div>
         </div>
       )}
 
       {/* main tree */}
       <div className="fa-base-tree-div" style={{flex: 1, overflowY: 'auto'}}>
-        <div style={{paddingLeft: 7, ...treeStyle}}>
+        <div style={{paddingRight: 12, ...treeStyle}}>
           <Spin spinning={loading}>
             <Tree
               blockNode
