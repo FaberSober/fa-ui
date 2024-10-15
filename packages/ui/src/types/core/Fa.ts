@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import ConditionQuery from '@ui/types/core/ConditionQuery';
+import { BaseOptionType } from "antd/es/cascader";
 
 namespace Fa {
   // ------------------------------------- Constant -------------------------------------
@@ -70,6 +71,8 @@ namespace Fa {
     /** 删除状态 */
     deleted?: boolean;
   }
+
+  export type BaseTreeDelEntity = BaseDelEntity & BaseOptionType
 
   // ------------------------------------- Tenant ENTITY -------------------------------------
   export interface TnBaseEntity {
