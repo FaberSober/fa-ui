@@ -15,6 +15,7 @@ body {
     --fa-text-color2: #353535; /* 适配主题-文字颜色-2级 */
     --fa-text-color-hover: #353535; /* 适配主题-文字颜色 */
     --fa-text-color-highlight: #FFFFFF; /* 适配主题-文字颜色-高亮 */
+    --fa-text-color-light100: #999; /* 适配主题-文字颜色-已读类型 */
     --fa-subtitle-color: #666; /* 适配主题-文字颜色-副标题 */
     --fa-border-color: #ddd; /* 适配主题-边框颜色 */
     --fa-border-dark-color: #66666666; /* 适配主题-边框颜色 */
@@ -195,10 +196,15 @@ ul {
 
 .fa-radius {
     border-radius: var(--fa-border-radius);
+    overflow: hidden;
 }
 
 .fa-text {
     color: var(--fa-text-color);
+}
+
+.fa-text-light100 {
+  color: var(--fa-text-color-light100);
 }
 
 .fa-text-center {
@@ -512,7 +518,7 @@ ul {
 
 .fa-link-btn {
     border-radius: var(--fa-border-radius);
-    padding: 2px 4px;
+    padding: 2px;
     cursor: pointer;
     transition: all ease-in-out 0.3s;
 }
