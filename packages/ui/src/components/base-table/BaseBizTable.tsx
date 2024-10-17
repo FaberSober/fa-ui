@@ -93,6 +93,7 @@ export default function BaseBizTable<RecordType extends object = any>({
             // }
             return index + 1;
           },
+          fixed: 'left',
           width: 80,
         },
         ...parseColumns,
