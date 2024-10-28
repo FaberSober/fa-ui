@@ -642,13 +642,22 @@ ul {
   border-collapse: collapse;
 }
 
-.fa-table table, .fa-table tr, .fa-table td {
+.fa-table table, .fa-table tr, .fa-table td, .fa-table th {
   border: 1px solid var(--fa-border-darker-color);
 }
 
-.fa-table td {
+.fa-table td, .fa-table th {
   padding: 2px;
 }
+
+.fa-table-p4 td, .fa-table th {
+  padding: 4px 6px;
+}
+
+.fa-table-hover td:hover, .fa-table-hover th:hover {
+  background: var(--fa-bg-color-hover);
+}
+
 
 /*----------------------------------------- fa-corn -----------------------------------------*/
 .fa-cron-react-editor-tab {
