@@ -358,6 +358,16 @@ ul {
     padding-right: 12px;
 }
 
+.fa-plr12 {
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.fa-plr6 {
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
 .fa-mr4 {
     margin-right: 4px;
 }
