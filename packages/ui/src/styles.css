@@ -558,6 +558,10 @@ ul {
     cursor: pointer;
 }
 
+.fa-transition {
+    transition: var(--fa-transition);
+}
+
 .fa-hover {
     cursor: pointer;
     transition: var(--fa-transition);
