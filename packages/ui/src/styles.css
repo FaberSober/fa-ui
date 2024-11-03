@@ -538,6 +538,21 @@ ul {
   color: var(--fa-text-color-disable);
 }
 
+.fa-btn {
+  border-radius: var(--fa-border-radius);
+  cursor: pointer;
+  transition: all ease-in-out 0.3s;
+  padding: 12px;
+  background: var(--fa-bg-color2);
+  border: 1px solid transparent;
+}
+
+.fa-btn:hover {
+  background-color: var(--fa-bg-color-hover);
+  color: var(--fa-text-color);
+  border: 1px solid var(--fa-border-color);
+}
+
 .fa-normal-btn {
     border-radius: var(--fa-border-radius);
     cursor: pointer;
