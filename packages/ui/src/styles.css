@@ -185,7 +185,7 @@ ul {
 }
 
 .fa-bg-dark {
-    background-color: var(--fa-text-color);
+    background-color: var(--fa-bg-color2);
 }
 
 .fa-card {
