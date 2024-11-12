@@ -1,3 +1,4 @@
+@use "sass:map";
 // 所有主题样式
 $bg-color: (
   light: #fff,
@@ -36,7 +37,7 @@ $scrollbar-thumb-hover-color: (
 
   @each $theme in $themes {
     [data-theme='#{$theme}'] & {
-      #{$key}: map-get($valueMap, $theme);
+      #{$key}: map.get($valueMap, $theme);
     }
   }
 }
