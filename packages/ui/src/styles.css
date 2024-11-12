@@ -216,6 +216,13 @@ ul {
     color: var(--fa-text-color-hover);
 }
 
+.fa-text-link {
+    cursor: pointer;
+}
+.fa-text-link:hover {
+    color: var(--primary-color);
+}
+
 .fa-h1 {
     color: var(--fa-text-color);
     font-size: 24px;
