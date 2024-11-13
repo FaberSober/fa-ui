@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {getDateStr, optionsToLabel, toLine, tryToFixed} from '@ui/utils/utils';
-import { Badge, Tooltip } from 'antd';
+import { Badge, TablePaginationConfig, Tooltip } from 'antd';
 import { find, isEmpty, isNil, trim } from 'lodash';
 import {
   renderDatePicker,
@@ -15,6 +15,10 @@ import {UserSearchSelect} from '@ui/components/biz-user-select';
 import {useSize} from 'ahooks';
 import {Fa} from "@ui/types";
 
+/**
+ * 将dataIndex 数组转换为字符串
+ * @param dataIndex
+ */
 export function dataIndexToString(dataIndex: string | string[]) {
   if (dataIndex instanceof Array) {
     return dataIndex.join(',');
@@ -82,12 +86,41 @@ export function getValueFromDicts(value: string, dicts: Fa.PageDict, column: str
   return value;
 }
 
+/**
+ * 生成从1开始自增序号列
+ * @param paginationProps
+ */
+export function genIndexColumn(paginationProps: { current?: number; pageSize?: number; total?: number }): FaberTable.ColumnsProp<any> {
+  const current = paginationProps.current || 1;
+  const pageSize = paginationProps.pageSize || 20;
+  const startIndex = (current - 1) * pageSize + 1;
+  return {
+    title: '序号',
+    dataIndex: 'index',
+    width: 70,
+    fixed: 'left',
+    render: (_, r, i) => startIndex + i,
+    tcChecked: true,
+    tcConditionHide: true,
+  }
+}
+
+/**
+ * 生成ID列
+ * @param title
+ * @param dataIndex
+ * @param width
+ * @param sorter
+ * @param tcChecked
+ * @param fixLeft
+ */
 export function genIdColumn(
   title: string,
   dataIndex: string,
   width: number,
   sorter: Fa.Sorter,
   tcChecked = true,
+  fixLeft = true,
 ): FaberTable.ColumnsProp<any> {
   return {
     title,
@@ -96,11 +129,19 @@ export function genIdColumn(
     sortOrder: getSortOrder(sorter, dataIndex),
     tcRequired: false,
     width,
-    fixed: 'left',
+    fixed: fixLeft ? 'left' : undefined,
     tcChecked,
   } as FaberTable.ColumnsProp<any>;
 }
 
+/**
+ * 生成简单文本列
+ * @param title
+ * @param dataIndex
+ * @param width
+ * @param sorter
+ * @param tcChecked
+ */
 export function genSimpleSorterColumn(
   title: string,
   dataIndex: string,
@@ -118,6 +159,14 @@ export function genSimpleSorterColumn(
   } as FaberTable.ColumnsProp<any>;
 }
 
+/**
+ * 生成过长文本会自动截断的文本列
+ * @param title
+ * @param dataIndex
+ * @param width
+ * @param sorter
+ * @param tcChecked
+ */
 export function genEllipsisSorterColumn(
   title: string,
   dataIndex: string,
@@ -141,6 +190,15 @@ export function genEllipsisSorterColumn(
   } as FaberTable.ColumnsProp<any>;
 }
 
+/**
+ * 生成数字列表，可以指定数字的精度
+ * @param title
+ * @param dataIndex
+ * @param width
+ * @param sorter
+ * @param fixNum
+ * @param tcChecked
+ */
 export function genNumSorterColumn(
   title: string,
   dataIndex: string,
@@ -160,6 +218,14 @@ export function genNumSorterColumn(
   } as FaberTable.ColumnsProp<any>;
 }
 
+/**
+ * 生成布尔列
+ * @param title
+ * @param dataIndex
+ * @param width
+ * @param sorter
+ * @param tcChecked
+ */
 export function genBoolSorterColumn(
   title: string,
   dataIndex: string,
@@ -181,6 +247,13 @@ export function genBoolSorterColumn(
   } as FaberTable.ColumnsProp<any>;
 }
 
+/**
+ * 生成用户列
+ * @param title
+ * @param dataIndex
+ * @param width
+ * @param sorter
+ */
 export function genUserSorterColumn(title: string, dataIndex: string, width: number, sorter: Fa.Sorter): FaberTable.ColumnsProp<any> {
   return {
     ...genSimpleSorterColumn(title, dataIndex, width, sorter),
@@ -190,6 +263,16 @@ export function genUserSorterColumn(title: string, dataIndex: string, width: num
   };
 }
 
+/**
+ * 生成字典列
+ * @param title
+ * @param dataIndex
+ * @param width
+ * @param sorter
+ * @param dicts
+ * @param dictLabel
+ * @param tcChecked
+ */
 export function genDictSorterColumn(
   title: string,
   dataIndex: string,
@@ -213,6 +296,15 @@ export function genDictSorterColumn(
   } as FaberTable.ColumnsProp<any>;
 }
 
+/**
+ * 生成枚举列
+ * @param title
+ * @param dataIndex
+ * @param width
+ * @param sorter
+ * @param dicts
+ * @param tcChecked
+ */
 export function genEnumSorterColumn(
   title: string,
   dataIndex: string,
@@ -235,6 +327,15 @@ export function genEnumSorterColumn(
   } as FaberTable.ColumnsProp<any>;
 }
 
+/**
+ * 生成日期列
+ * @param title
+ * @param dataIndex
+ * @param width
+ * @param sorter
+ * @param format
+ * @param tcChecked
+ */
 export function genDateSorterColumn(
   title: string,
   dataIndex: string,
@@ -256,6 +357,15 @@ export function genDateSorterColumn(
   } as FaberTable.ColumnsProp<any>;
 }
 
+/**
+ * 生成时间列
+ * @param title
+ * @param dataIndex
+ * @param width
+ * @param sorter
+ * @param format
+ * @param tcChecked
+ */
 export function genTimeSorterColumn(
   title: string,
   dataIndex: string,
@@ -277,6 +387,12 @@ export function genTimeSorterColumn(
   } as FaberTable.ColumnsProp<any>;
 }
 
+/**
+ * 生成创建时间、创建用户列
+ * @param sorter
+ * @param tcChecked
+ * @param crtNameTcChecked
+ */
 export function genCtrColumns(sorter: Fa.Sorter, tcChecked = true, crtNameTcChecked = false): FaberTable.ColumnsProp<any>[] {
   return [
     {
@@ -317,6 +433,10 @@ export function genCtrColumns(sorter: Fa.Sorter, tcChecked = true, crtNameTcChec
   ] as FaberTable.ColumnsProp<any>[];
 }
 
+/**
+ * 生成更新时间、更新用户列
+ * @param sorter
+ */
 export function genUpdateColumns(sorter: Fa.Sorter): FaberTable.ColumnsProp<any>[] {
   return [
     {
@@ -355,6 +475,10 @@ export function genUpdateColumns(sorter: Fa.Sorter): FaberTable.ColumnsProp<any>
   ] as FaberTable.ColumnsProp<any>[];
 }
 
+/**
+ * 滚动Y轴
+ * @param id
+ */
 export function useScrollY(id: string): [scrollY: number | undefined] {
   const size = useSize(document.getElementById(id));
   const [innerScrollY, setInnerScrollY] = useState<number | undefined>(undefined);
