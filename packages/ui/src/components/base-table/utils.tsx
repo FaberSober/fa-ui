@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {getDateStr, optionsToLabel, toLine, tryToFixed} from '@ui/utils/utils';
 import { Badge, TablePaginationConfig, Tooltip } from 'antd';
-import { find, isEmpty, isNil, trim } from 'lodash';
+import { find, isBoolean, isEmpty, isNil, trim } from 'lodash';
 import {
   renderDatePicker,
   renderDateRangerPicker,
@@ -42,7 +42,10 @@ export function getSorter(sorter: Fa.Sorter) {
 /**
  * antd Table column 获取排序
  */
-export function getSortOrder(sorter: Fa.Sorter, field: string): SortOrder {
+export function getSortOrder(sorter: boolean | Fa.Sorter, field: string | string[]): SortOrder {
+  if (!sorter || isBoolean(sorter)) {
+    return null;
+  }
   if (isEmpty(sorter)) {
     return null;
   }
@@ -144,16 +147,16 @@ export function genIdColumn(
  */
 export function genSimpleSorterColumn(
   title: string,
-  dataIndex: string,
+  dataIndex: string | string[],
   width: number | undefined,
-  sorter: Fa.Sorter,
+  sorter: boolean | Fa.Sorter,
   tcChecked = true,
 ): FaberTable.ColumnsProp<any> {
   return {
     title,
     dataIndex,
-    sorter: true,
-    sortOrder: getSortOrder(sorter, dataIndex),
+    sorter: !sorter ? sorter : true,
+    sortOrder: !sorter ? null : getSortOrder(sorter, dataIndex),
     tcChecked,
     width,
   } as FaberTable.ColumnsProp<any>;
