@@ -144,6 +144,7 @@ export function genIdColumn(
  * @param width
  * @param sorter
  * @param tcChecked
+ * @param tcConditionHide
  */
 export function genSimpleSorterColumn(
   title: string,
@@ -151,6 +152,7 @@ export function genSimpleSorterColumn(
   width: number | undefined,
   sorter: boolean | Fa.Sorter,
   tcChecked = true,
+  tcConditionHide = false,
 ): FaberTable.ColumnsProp<any> {
   return {
     title,
@@ -158,6 +160,7 @@ export function genSimpleSorterColumn(
     sorter: !sorter ? sorter : true,
     sortOrder: !sorter ? null : getSortOrder(sorter, dataIndex),
     tcChecked,
+    tcConditionHide,
     width,
   } as FaberTable.ColumnsProp<any>;
 }
