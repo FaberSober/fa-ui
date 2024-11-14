@@ -17,6 +17,7 @@ export interface BaseSelectProps<T> extends SelectProps<T> {
   showAll?: boolean; // 是否展示所有选项
   transValueToString?: boolean; // 是否将value转换为string
   onApiGetData?: (arr: T[]) => void; // api获取数据回调
+  initFirstAsValue?: boolean; // 是否初始化获取的第一条数据作为值
 }
 
 /**
@@ -33,6 +34,7 @@ export default function BaseSelect<RecordType extends object = any>({
   showAll,
   transValueToString,
   onApiGetData,
+  initFirstAsValue,
   ...props
 }: BaseSelectProps<RecordType>) {
   const [loading, setLoading] = useState(false);
@@ -57,6 +59,13 @@ export default function BaseSelect<RecordType extends object = any>({
           setArray(newList);
 
           if (onApiGetData) onApiGetData(res.data)
+
+          if (initFirstAsValue) {
+            if (res.data && res.data[0]) {
+              props.onChange?.(parseValue(res.data[0]));
+            }
+          }
+
           setLoading(false);
         })
         .catch(() => setLoading(false));
