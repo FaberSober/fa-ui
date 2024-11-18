@@ -111,9 +111,9 @@ export function findNodeInTree<T>(tree: Fa.TreeNode<T>[] | undefined, checkFun: 
 /**
  * 计算key在tree中的全勾选、半勾选状态，返回全勾选的。
  */
-export function calCheckedKey<T>(treeData: Fa.TreeNode<T>[] | undefined, checkedKeys: any[]):any[]|undefined {
+export function calCheckedKey<T>(treeData: Fa.TreeNode<T>[] | undefined, checkedKeys: any[]):any[] {
   // treeData尚未初始化
-  if (isNil(treeData) || treeData.length === 0) return undefined;
+  if (isNil(treeData) || treeData.length === 0) return [];
 
   const flatTree = flatTreeSourceList(treeData)
   // console.log('flatTree', flatTree)
@@ -140,4 +140,20 @@ export function calCheckedKey<T>(treeData: Fa.TreeNode<T>[] | undefined, checked
   })
 
   return cks;
+}
+
+/**
+ * 计算key在tree中的全勾选、半勾选状态，返回全勾选和半勾选。
+ * @param treeData
+ * @param checkedKeys
+ */
+export function calCheckedAndHalfKey<T>(treeData: Fa.TreeNode<T>[] | undefined, checkedKeys: any[]):{
+  allCheckedKeys: any[],
+  halfCheckedKeys: any[]
+} {
+  if (isNil(treeData) || treeData.length === 0) return {allCheckedKeys: [], halfCheckedKeys: []}
+
+  const allCheckedKeys = calCheckedKey(treeData, checkedKeys) || []
+  const halfCheckedKeys = difference(checkedKeys, allCheckedKeys) || []
+  return {allCheckedKeys, halfCheckedKeys}
 }
