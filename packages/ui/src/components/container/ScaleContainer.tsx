@@ -12,6 +12,7 @@ export interface ScaleContainerProps {
   showFullscreenBtn?: boolean; // 是否展示切换全屏的按钮-false
   equalRatio?: boolean; // 是否等比缩放-true
   children: ReactNode;
+  containerStyle?: CSSProperties;
 }
 
 /**
@@ -28,6 +29,7 @@ export default function ScaleContainer({
   defaultFullscreen = false,
   showFullscreenBtn = false,
   equalRatio = true,
+  containerStyle,
 }: ScaleContainerProps) {
   const [state, setState] = useState({
     fullscreen: defaultFullscreen,
@@ -67,6 +69,7 @@ export default function ScaleContainer({
     // height: '100%',
     height: `${height * state.ratioX}px`,
     backgroundColor: 'transparent',
+    zIndex: 99,
   };
   if (state.fullscreen) {
     topContainerStyles = {
@@ -104,7 +107,7 @@ export default function ScaleContainer({
   };
 
   return (
-    <div style={{ ...topContainerStyles }} id={state.topContainerId}>
+    <div style={{ ...topContainerStyles, ...containerStyle }} id={state.topContainerId}>
       <div style={scaleStyles} {...bodyProps}>
         {/* 切换全屏按钮 */}
         {showFullscreenBtn ? (
