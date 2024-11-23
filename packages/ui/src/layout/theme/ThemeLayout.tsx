@@ -67,15 +67,16 @@ const ThemeConfig = {
 
 export interface ThemeLayoutProps extends Fa.BaseChildProps {
   colorPrimary?: string;
+  initThemeDark?: boolean;
 }
 
 /**
  * @author xu.pengfei
  * @date 2022/9/21
  */
-export default function ThemeLayout({ children, colorPrimary }: ThemeLayoutProps) {
+export default function ThemeLayout({ children, colorPrimary, initThemeDark }: ThemeLayoutProps) {
   const [colorPrimaryInner, setColorPrimaryInner] = useLocalStorage<string>('colorPrimary', colorPrimary || DEFAULT_PRIMARY_COLOR);
-  const [themeDark, setThemeDark] = useLocalStorage<boolean>('themeDark', document.body.getAttribute('data-theme') === 'dark');
+  const [themeDark, setThemeDark] = useLocalStorage<boolean>('themeDark', document.body.getAttribute('data-theme') === 'dark' || initThemeDark);
 
 
   useEffect(() => {
@@ -115,7 +116,7 @@ export default function ThemeLayout({ children, colorPrimary }: ThemeLayoutProps
 
     const rootDom = document.getElementsByTagName('body')[0].style;
 
-    console.log('themeData', themeData)
+    //console.log('themeData', themeData)
     each(ThemeConfig.light, (_v, k) => {
       // @ts-ignore
       rootDom.setProperty(`--${k}`, ThemeConfig[themeData][k]);
