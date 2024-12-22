@@ -276,6 +276,10 @@ ul {
     padding-bottom: 12px;
 }
 
+.fa-pb0 {
+    padding-bottom: 0;
+}
+
 .fa-pl12 {
     padding-left: 12px;
 }
