@@ -647,6 +647,13 @@ ul {
     white-space: nowrap; /* 中文 */
 }
 
+.fa-word-ellipse {
+  word-break: keep-all; /* 英文 */
+  white-space: nowrap; /* 中文 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .fa-input-underline {
     border-width: 0;
     border-bottom-width: 1px;
