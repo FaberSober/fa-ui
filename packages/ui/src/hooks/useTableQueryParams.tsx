@@ -32,6 +32,17 @@ export interface UseTableQueryParamsProps<T> {
   paginationProps: TablePaginationConfig;
 }
 
+const defaultPagination: Fa.Pagination = {
+  current: 1,
+  pageSize: 20,
+  total: 0,
+  pages: 0,
+  startRow: 0,
+  endRow: 0,
+  hasPreviousPage: false,
+  hasNextPage: false,
+}
+
 export default function useTableQueryParams<T>(
   api: (params: any) => Promise<Fa.Ret<Fa.Page<T>>>,
   initParams: Fa.InitQueryParams = {},
@@ -40,7 +51,7 @@ export default function useTableQueryParams<T>(
   const [loading, setLoading] = useState(false);
 
   const [queryParams, setQueryParams] = useState<Fa.QueryParams>({
-    pagination: {current: 1, pageSize: 20, total: 0}, // 表格分页
+    pagination: defaultPagination, // 表格分页
     sorter: {field: 'id', order: 'descend'}, // 排序
     formValues: {}, // 查询Form字段
     sceneId: undefined, // 场景ID
@@ -51,7 +62,10 @@ export default function useTableQueryParams<T>(
   const [ret, setRet] = useState<{ list: T[]; dicts: Fa.PageDict; showPagination: Fa.Pagination }>({
     list: [], // 表格List
     dicts: {}, // 字典
-    showPagination: {current: 1, pageSize: 10, total: 0, ...initParams?.pagination},
+    showPagination: {
+      ...defaultPagination,
+      ...initParams?.pagination
+    },
   });
 
   useEffect(() => {
@@ -102,6 +116,7 @@ export default function useTableQueryParams<T>(
   /** 表格事件处理：分页、过滤、排序 */
   function handleTableChange(paginationArg: TablePaginationConfig, _: any, sorterArg: any) {
     const newPagination: Fa.Pagination = {
+      ...defaultPagination,
       current: paginationArg.current || 1,
       pageSize: paginationArg.pageSize || 10,
       total: queryParams.pagination?.total || 0,
@@ -142,6 +157,11 @@ export default function useTableQueryParams<T>(
           current: Number(page.current),
           pageSize: Number(page.pageSize),
           total: Number(page.total),
+          pages: Number(page.pages),
+          startRow: Number(page.startRow),
+          endRow: Number(page.endRow),
+          hasPreviousPage: page.hasPreviousPage,
+          hasNextPage: page.hasNextPage,
         };
         setRet({list: res.data.rows, dicts: res.data.dicts, showPagination: pagination});
       })
@@ -159,7 +179,12 @@ export default function useTableQueryParams<T>(
       </span>
     ),
     onChange: (page, pageSize) => {
-      setPagination({current: page, pageSize: pageSize || queryParams.pagination.pageSize, total: queryParams.pagination.total});
+      setPagination({
+        ...defaultPagination,
+        current: page,
+        pageSize: pageSize || queryParams.pagination.pageSize,
+        total: queryParams.pagination.total
+      });
     },
     pageSizeOptions: ['10', '17', '20', '30', '50', '100', '500', '1000'],
     ...ret.showPagination,
