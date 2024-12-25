@@ -154,6 +154,11 @@ namespace Fa {
     current: number;
     pageSize: number;
     total: number;
+    pages: number;
+    startRow: number;
+    endRow: number;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
   }
 
   export interface Page<T = any> {
