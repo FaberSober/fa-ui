@@ -90,6 +90,11 @@ namespace FaEnums {
   }
 
   // ------------------------------------ RBAC ------------------------------------
+  export enum RbacMenuScopeEnum {
+    WEB = 1,
+    APP = 2,
+  }
+
   export enum RbacMenuLevelEnum {
     APP = 0,
     MENU = 1,
@@ -105,6 +110,7 @@ namespace FaEnums {
   export enum RbacLinkTypeEnum {
     INNER = 1,
     OUT = 2,
+    PATH = 3,
   }
 
   export enum JobLogStatusEnum {
