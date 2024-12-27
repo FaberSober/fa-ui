@@ -540,6 +540,23 @@ export function getDomRect(dom: HTMLElement): DOMRect {
   return dom.getBoundingClientRect();
 }
 
+/**
+ * 获取dom元素的相对左上角的坐标
+ * @param element
+ */
+export function getElementPosition(element: HTMLElement): { top: number, left: number } {
+  const rect = element.getBoundingClientRect();
+  const scrollTop = window.scrollY || document.documentElement.scrollTop;
+  const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
+  const clientTop = document.documentElement.clientTop || 0;
+  const clientLeft = document.documentElement.clientLeft || 0;
+
+  const top = rect.top + scrollTop - clientTop;
+  const left = rect.left + scrollLeft - clientLeft;
+
+  return { top, left };
+}
+
 export function scrollToTop(dom: HTMLElement) {
   if (dom === undefined || dom === null) return;
   dom.scrollTo(0, 0)
