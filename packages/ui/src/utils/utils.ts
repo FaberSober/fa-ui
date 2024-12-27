@@ -55,6 +55,13 @@ export function hasPermission(permissions?: string[], permissionCode?: string | 
 }
 
 /**
+ * get file extension
+ * @param name
+ */
+export function getExtension(name: string): string {
+  return name?.slice(name.lastIndexOf('.') + 1).toLowerCase() ?? '';
+}
+/**
  * 判断连接是否为图片
  * @param url
  */
