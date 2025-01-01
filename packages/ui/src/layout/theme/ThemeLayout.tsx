@@ -28,7 +28,7 @@ const ThemeConfig = {
     'fa-bg-color1': '#e1e1e1',
     'fa-bg-color2': '#eee',
     'fa-bg-selected': '#e3e3e3',
-    'fa-bg-color-hover': '#ccc',
+    'fa-bg-color-hover': '#eee',
     'fa-bg-color-highlight': '#3c4c68',
     'fa-bg-grey': '#f7f7f7',
     'fa-bg-grey2': '#e7e7e7',
