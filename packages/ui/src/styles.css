@@ -144,6 +144,16 @@ ul {
     position: absolute;
 }
 
+.fa-absolute0 {
+  position: absolute;
+  inset: 0;
+}
+
+.fa-absolute12 {
+  position: absolute;
+  inset: 12;
+}
+
 .fa-top {
     top: 0;
 }
