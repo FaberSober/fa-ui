@@ -14,18 +14,15 @@
     "dev1": "tsup --watch",
     "build1": "tsup",
     "dev:tsup": "tsup --watch",
-    "build:tsup": "tsup",
-    "lint": "eslint \"**/*.{ts,tsx}\""
+    "build:tsup": "tsup"
   },
   "devDependencies": {
-    "@fa/eslint-config-custom": "workspace:*",
     "@fa/tsconfig": "workspace:*",
     "@types/lodash": "4.17.13",
     "@types/react": "18.3.12",
     "@types/uuid": "10.0.0",
     "axios": "1.7.7",
     "dayjs": "1.11.13",
-    "eslint": "9.14.0",
     "filesize": "10.1.6",
     "lodash": "4.17.21",
     "react": "18.3.1",

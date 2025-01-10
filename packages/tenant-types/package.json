@@ -14,8 +14,7 @@
     "dev1": "tsup --watch",
     "build1": "tsup",
     "dev:tsup": "tsup --watch",
-    "build:tsup": "tsup",
-    "lint": "eslint \"**/*.{ts,tsx}\""
+    "build:tsup": "tsup"
   },
   "devDependencies": {
     "@fa/tsconfig": "workspace:*",
