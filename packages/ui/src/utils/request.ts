@@ -4,6 +4,7 @@ import { message } from 'antd';
 import { addAuthHeaders, getTnCorpId, getToken } from './cache';
 import { dispatch } from 'use-bus';
 import { Fa } from '@ui/types';
+import { md5WithSecret } from "@ui/utils/cipher";
 
 // Set config defaults when creating the instance
 const instance = axios.create({
@@ -34,25 +35,9 @@ const codeMessage: any = {
 
 // 添加请求拦截器
 instance.interceptors.request.use(
-  (config: any) => {
+  (config) => {
     // 在发送请求之前做些什么
     addAuthHeaders(config.headers)
-    // const token = getToken();
-    // if (token) {
-    //   config.headers[Fa.Constant.TOKEN_KEY] = token;
-    // }
-    // config.headers[Fa.Constant.FA_TN_CORP_ID] = getTnCorpId();
-    // config.headers[Fa.Constant.FA_FROM] = window.FaFrom;
-    // config.headers[Fa.Constant.FA_VERSION_CODE] = window.FaVersionCode;
-    // config.headers[Fa.Constant.FA_VERSION_NAME] = window.FaVersionName;
-    //
-    // // 读取window.faHeader中配置的
-    // if (window.faHeader) {
-    //   each(window.faHeader, (v,k) => {
-    //     // console.log('v', v, 'k', k)
-    //     config.headers[k] = v;
-    //   })
-    // }
 
     // axios 拦截器统一在接口增加时间戳参数，防止走缓存。
     // if (config.method == 'post') {
@@ -61,11 +46,20 @@ instance.interceptors.request.use(
     // 		config.data = { ...config.data, _t: Date.parse(new Date()) / 1000 };
     // 	}
     // } else
+    const timestamp = Date.parse(`${new Date()}`) / 1000
     if (config.method === 'get') {
-      config.params = { ...config.params, _t: Date.parse(`${new Date()}`) / 1000 };
+      config.params = { ...config.params, _t: timestamp };
     }
-    console.log('__FA_SECRET__', window.__FA_SECRET__)
 
+    // uri signature
+    console.log('config', axios.getUri(config), config)
+    const uri = axios.getUri(config)
+    const signatureUri = md5WithSecret(uri, timestamp)
+    config.headers.set('us', signatureUri) // us-uri signature
+
+    // config body data signature using md5
+    const signatureBody = md5WithSecret(JSON.stringify(config.data || {}), timestamp)
+    config.headers.set('bs', signatureBody) // bs-body signature
 
     // 通知全局api加载状态
     dispatch({ type: '@@api/CHANGE_URL_LOADING', payload: { url: config.url, loading: true } });

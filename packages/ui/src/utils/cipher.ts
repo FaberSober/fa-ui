@@ -53,3 +53,7 @@ export function decodeByBase64(cipherText: string) {
 export function encryptByMd5(password: string) {
   return md5(password).toString();
 }
+
+export function md5WithSecret(str: string, timestamp: number) {
+  return md5(str + '@@' + timestamp + '@@' + window.__FA_SECRET__).toString();
+}
