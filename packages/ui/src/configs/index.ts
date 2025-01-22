@@ -21,5 +21,7 @@ declare global {
     io: any;
     /** socket.io */
     faHeader: any;
+    /** fa secret */
+    __FA_SECRET__: string;
   }
 }

@@ -61,9 +61,11 @@ instance.interceptors.request.use(
     // 		config.data = { ...config.data, _t: Date.parse(new Date()) / 1000 };
     // 	}
     // } else
-    if (config.method == 'get') {
+    if (config.method === 'get') {
       config.params = { ...config.params, _t: Date.parse(`${new Date()}`) / 1000 };
     }
+    console.log('__FA_SECRET__', window.__FA_SECRET__)
+
 
     // 通知全局api加载状态
     dispatch({ type: '@@api/CHANGE_URL_LOADING', payload: { url: config.url, loading: true } });
@@ -107,7 +109,7 @@ instance.interceptors.response.use(
       //将Blob 对象转换成字符串
       const reader: any = new FileReader();
       reader.readAsText(blob, 'utf-8');
-      reader.onload = function () {
+      reader.onload = () => {
         console.info('reader.result', reader.result);
         const json = JSON.parse(reader.result);
         if (error.config.headers.hideErrorMsg !== '1') {
