@@ -50,6 +50,7 @@ instance.interceptors.request.use(
     if (config.method === 'get') {
       config.params = { ...config.params, _t: timestamp };
     }
+    config.headers.set('timestamp', timestamp)
 
     // uri signature
     console.log('config', axios.getUri(config), config)
