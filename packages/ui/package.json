@@ -13,8 +13,9 @@
     "postinstall": "rimraf /s/d dist && rimraf /s/d .turbo",
     "ncu": "ncu -u --timeout 120000",
     "clean": "rimraf /s/d node_modules dist .turbo",
-    "dev": "concurrently \"tsup --watch\" \"tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch\"",
-    "build": "concurrently \"tsup\" \"tailwindcss -i ./src/styles.css -o ./dist/styles.css\"",
+    "dev": "concurrently \"tsup --watch\" \"postcss ./src/styles.css -o ./dist/styles.css --watch\"",
+    "build": "concurrently \"tsup\" \"postcss ./src/styles.css -o ./dist/styles.css\"",
+    "build:css": "postcss ./src/styles.css -o ./dist/styles.css",
     "dev:tsup": "tsup --watch",
     "build:tsup": "tsup"
   },
@@ -29,7 +30,6 @@
   },
   "devDependencies": {
     "@ant-design/icons": "5.5.1",
-    "@fa/tailwind-config": "workspace:*",
     "@fa/tsconfig": "workspace:*",
     "@tinymce/tinymce-react": "5.1.1",
     "@types/chroma-js": "2.4.4",
@@ -48,11 +48,11 @@
     "filesize": "10.1.6",
     "lodash": "4.17.21",
     "postcss": "8.4.49",
+    "postcss-cli": "11.0.0",
     "postcss-scss": "4.0.9",
     "react": "18.3.1",
     "react-contexify": "6.0.0",
     "react-use": "17.5.1",
-    "tailwindcss": "3.4.14",
     "tsup": "8.3.5",
     "typescript": "5.6.3",
     "use-bus": "2.5.2"

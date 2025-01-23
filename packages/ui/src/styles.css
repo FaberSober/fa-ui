@@ -1,11 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 body {
     /* 使用 tailwind-config/tailwind.config.js 中的theme配置 */
-    --primary-color: theme('colors.blue');
-    --primary-dark: theme('colors.blueDark');
+    --primary-color: #3b82f6;
+    --primary-dark: #1e3a8a;
     --fa-bg-color: #fff; /* 适配主题-背景色 */
     --fa-bg-color-hover: #eee; /* 适配主题-背景色 */
     --fa-bg-color2: #eee; /* 适配主题-背景色-2级 */

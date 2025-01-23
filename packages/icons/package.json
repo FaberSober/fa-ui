@@ -16,7 +16,6 @@
     "@fortawesome/react-fontawesome": "0.2.2"
   },
   "devDependencies": {
-    "@fa/tailwind-config": "workspace:*",
     "@fa/tsconfig": "workspace:*",
     "@types/lodash": "4.17.13",
     "@types/react": "18.3.12",
