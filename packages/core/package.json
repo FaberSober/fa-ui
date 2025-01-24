@@ -9,7 +9,7 @@
   "license": "MIT",
   "scripts": {
     "postinstall": "rimraf /s/d dist && rimraf /s/d .turbo",
-    "ncu": "ncu -u --timeout 120000",
+    "ncu": "ncu -u --timeout 120000 -x react react-dom @types/react @types/react-dom",
     "clean": "rimraf /s/d node_modules dist .turbo",
     "dev1": "tsup --watch",
     "build1": "tsup",
@@ -18,16 +18,16 @@
   },
   "devDependencies": {
     "@fa/tsconfig": "workspace:*",
-    "@types/lodash": "4.17.13",
+    "@types/lodash": "4.17.14",
     "@types/react": "18.3.12",
     "@types/uuid": "10.0.0",
-    "axios": "1.7.7",
+    "axios": "1.7.9",
     "dayjs": "1.11.13",
     "filesize": "10.1.6",
     "lodash": "4.17.21",
     "react": "18.3.1",
     "tsup": "8.3.5",
-    "typescript": "5.6.3",
+    "typescript": "5.7.3",
     "use-bus": "2.5.2"
   }
 }
