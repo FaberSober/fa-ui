@@ -11,7 +11,7 @@
   "license": "MIT",
   "scripts": {
     "postinstall": "rimraf /s/d dist && rimraf /s/d .turbo",
-    "ncu": "ncu -u --timeout 120000 -x react react-dom @types/react @types/react-dom",
+    "ncu": "ncu -u --timeout 120000 -x react -x react-dom -x @types/react -x @types/react-dom",
     "clean": "rimraf /s/d node_modules dist .turbo",
     "dev": "concurrently \"tsup --watch\" \"postcss ./src/styles.css -o ./dist/styles.css --watch\"",
     "build": "concurrently \"tsup\" \"postcss ./src/styles.css -o ./dist/styles.css\"",
