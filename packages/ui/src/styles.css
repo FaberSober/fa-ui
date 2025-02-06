@@ -210,6 +210,12 @@ ul {
     color: var(--fa-text-color);
 }
 
+.fa-text-s-b {
+    color: var(--fa-text-color);
+    font-size: 12px;
+    font-weight: bold;
+}
+
 .fa-text-light100 {
   color: var(--fa-text-color-light100);
 }
