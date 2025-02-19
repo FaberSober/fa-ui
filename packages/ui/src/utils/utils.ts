@@ -522,6 +522,10 @@ export function getDocumentTypeByName(fileName: string): FaEnums.DocumentType | 
   if (FA_TYPE_PPT.indexOf('.' + ext) > -1) return FaEnums.DocumentType.slide;
 }
 
+export function isPdf(fileName: string): boolean {
+  return fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase() === 'pdf';
+}
+
 /**
  * echarts toolbox 配置
  */
