@@ -43,7 +43,7 @@ export default function UploadFileLocalMultiple({ children, description, onChang
       const fs = res.data.map((i) => ({
         id: i.id,
         uid: i.id,
-        size: i.size,
+        size: Number(i.size),
         name: i.originalFilename,
         url: fileSaveApi.genLocalGetFile(i.id),
         previewUrl: fileSaveApi.genLocalGetFilePreview(i.id),

@@ -53,7 +53,7 @@ instance.interceptors.request.use(
     config.headers.set('timestamp', timestamp)
 
     // uri signature
-    console.log('config', axios.getUri(config), config)
+    // console.log('config', axios.getUri(config), config)
     const uri = axios.getUri(config)
     const signatureUri = md5WithSecret(uri, timestamp)
     config.headers.set('us', signatureUri) // us-uri signature
