@@ -74,6 +74,10 @@ export function isUrlImg(url: string) {
   return ['png', 'jpg', 'jpeg', 'ico', 'bmp', 'gif'].indexOf(suffix) > -1;
 }
 
+/**
+ * 判断文件类型是否为图片
+ * @param type 文件后缀名
+ */
 export function isImg(type: string) {
   return ['png', 'jpg', 'jpeg', 'ico', 'bmp', 'gif'].indexOf(type.toLowerCase()) > -1
 }
