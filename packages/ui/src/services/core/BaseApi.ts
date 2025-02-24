@@ -48,6 +48,9 @@ export default class BaseApi<T, KeyType, PageT = T> extends BaseZeroApi {
   /** 删除本用户数据 */
   removeMine = (): Promise<Fa.Ret> => this.delete('removeMine');
 
+  /** 限定当前用户通过查询条件删除 */
+  removeMineByQuery = (params: Fa.BaseQueryParams): Promise<Fa.Ret<boolean>> => this.post('removeMineByQuery', params);
+
   /** 获取所有List */
   all = (): Promise<Fa.Ret<T[]>> => this.get('all');
 
