@@ -74,6 +74,10 @@ export function isUrlImg(url: string) {
   return ['png', 'jpg', 'jpeg', 'ico', 'bmp', 'gif'].indexOf(suffix) > -1;
 }
 
+/**
+ * 判断文件类型是否为图片
+ * @param type 文件后缀名
+ */
 export function isImg(type: string) {
   return ['png', 'jpg', 'jpeg', 'ico', 'bmp', 'gif'].indexOf(type.toLowerCase()) > -1
 }
@@ -520,6 +524,10 @@ export function getDocumentTypeByName(fileName: string): FaEnums.DocumentType | 
   if (FA_TYPE_WORD.indexOf('.' + ext) > -1) return FaEnums.DocumentType.word;
   if (FA_TYPE_EXCEL.indexOf('.' + ext) > -1) return FaEnums.DocumentType.cell;
   if (FA_TYPE_PPT.indexOf('.' + ext) > -1) return FaEnums.DocumentType.slide;
+}
+
+export function isPdf(fileName: string): boolean {
+  return fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase() === 'pdf';
 }
 
 /**

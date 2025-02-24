@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Button, message, Upload, UploadProps } from 'antd';
+import { Button, message, Upload, type UploadProps } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import {fileSaveApi} from '@ui/services/base';
-import { genAuthHeaders, getToken } from '@ui/utils/cache';
-import { RcFile } from 'antd/es/upload';
-import { UploadChangeParam } from 'antd/es/upload/interface';
+import { genAuthHeaders } from '@ui/utils/cache';
+import type { RcFile } from 'antd/es/upload';
+import type { UploadChangeParam, UploadFile, UploadFileStatus } from 'antd/es/upload/interface';
+import { isNil } from "lodash";
 
 
 export interface UploadFileLocalProps extends Omit<UploadProps, 'onChange'> {
   children?: any;
   description?: string;
-  value?: string;
-  onChange?: (fileId: string | undefined) => void;
+  value?: string | string[];
+  onFileChange?: (info: UploadChangeParam) => void;
+  onChange?: (fileId: string | string[] | undefined) => void;
 }
 
 /**
@@ -19,19 +21,47 @@ export interface UploadFileLocalProps extends Omit<UploadProps, 'onChange'> {
  * @author xu.pengfei
  * @date 2021/4/2
  */
-export default function UploadFileLocal({ children, description, onChange, value, ...props }: UploadFileLocalProps) {
+export default function UploadFileLocal({ children, description, onFileChange, onChange, value, ...props }: UploadFileLocalProps) {
   const [loading, setLoading] = useState(false);
   const [array, setArray] = useState<any[]>([]);
+
+  const multiple = props.multiple || false;
 
   useEffect(() => {
     if (value === undefined || value == null) return;
 
     setLoading(true);
-    fileSaveApi.getById(value).then((res) => {
-      setLoading(false);
-      const fileData = res.data;
-      setArray([{ uid: fileData.id, size: fileData.size, name: fileData.originalFilename, url: fileSaveApi.genLocalGetFile(fileData.id) }]);
-    }).catch(() => setLoading(false));
+    if (multiple) {
+      const ids = value as string[];
+      if (!isNil(ids) && ids.length > 0) {
+
+        fileSaveApi.getByIds(value as string[]).then((res) => {
+          setLoading(false);
+          const fileList = res.data.map(i => ({
+            uid: i.id,
+            size: Number(i.size),
+            name: i.originalFilename,
+            url: fileSaveApi.genLocalGetFile(i.id),
+            thumbUrl: fileSaveApi.genLocalGetFilePreview(i.id),
+            previewUrl: fileSaveApi.genLocalGetFilePreview(i.id),
+            status: 'done' as UploadFileStatus, // 状态有：uploading done error removed，被 beforeUpload 拦截的文件没有 status 属性
+          }));
+          setArray(fileList);
+          if (onFileChange) {
+            onFileChange({ file: fileList[0], fileList });
+          }
+        }).catch(() => setLoading(false));
+      } else {
+        setArray([])
+        setLoading(false)
+      }
+    } else {
+      fileSaveApi.getById(value as string).then((res) => {
+        setLoading(false);
+        const fileData = res.data;
+        setArray([{ uid: fileData.id, size: fileData.size, name: fileData.originalFilename, url: fileSaveApi.genLocalGetFile(fileData.id) }]);
+      }).catch(() => setLoading(false));
+    }
   }, [value]);
 
   function beforeUpload(file: RcFile) {
@@ -49,6 +79,10 @@ export default function UploadFileLocal({ children, description, onChange, value
   }
 
   function handleOnChange(info: UploadChangeParam) {
+    // console.log('info', info, array)
+    if (onFileChange) {
+      onFileChange(info)
+    }
     const { fileList } = info;
     if (info.file.status === 'uploading') {
       // console.log('uploading', info.file, info.fileList);
@@ -58,10 +92,26 @@ export default function UploadFileLocal({ children, description, onChange, value
       message.success(`${info.file.name} 文件上传成功`);
       // console.log('info.file.status === \'done\'', info)
       if (info.file.response.status === 200) {
-        if (onChange) {
-          onChange(info.file.response.data.id);
+        const data = info.file.response.data;
+        if (multiple) {
+          const newArr = [ ...array, {
+            id: data.id,
+            uid: data.id,
+            size: data.size,
+            name: data.originalFilename,
+            url: fileSaveApi.genLocalGetFile(data.id),
+            previewUrl: fileSaveApi.genLocalGetFilePreview(data.id),
+            status: 'done', // 状态有：uploading done error removed，被 beforeUpload 拦截的文件没有 status 属性
+          } ]
+          setArray(newArr);
+          if (onChange) {
+            onChange([ ...((value||[]) as string[]), info.file.response.data.id ]);
+          }
+        } else {
+          if (onChange) {
+            onChange(info.file.response.data.id);
+          }
         }
-        setArray([info.file]);
       }
     } else if (info.file.status === 'error') {
       setLoading(false);
@@ -72,10 +122,17 @@ export default function UploadFileLocal({ children, description, onChange, value
     setArray(fileList);
   }
 
-  function handleRemove() {
-    // console.log('handleRemove', file)
-    if (onChange) {
-      onChange(undefined);
+  function handleRemove(file: UploadFile) {
+    console.log('handleRemove', file)
+    if (multiple) {
+      const newArr = array.filter(i => i.uid !== file.uid);
+      if (onChange) {
+        onChange(newArr.map(i => i.uid));
+      }
+    } else {
+      if (onChange) {
+        onChange(undefined);
+      }
     }
   }
 
@@ -88,7 +145,7 @@ export default function UploadFileLocal({ children, description, onChange, value
       onChange={handleOnChange}
       onRemove={handleRemove}
       fileList={array}
-      maxCount={1}
+      maxCount={multiple ? 9 : 1}
       {...props}
     >
       {children ? (
