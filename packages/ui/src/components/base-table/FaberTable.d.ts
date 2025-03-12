@@ -1,7 +1,7 @@
-import { ReactNode } from 'react';
-import ConditionQuery from '@ui/components/condition-query/interface';
-import { ColumnProps, TableProps } from 'antd/es/table';
-import { Fa } from '@fa/ui';
+import type { ReactNode } from 'react';
+import type ConditionQuery from '@ui/components/condition-query/interface';
+import type { ColumnProps, TableProps } from 'antd/es/table';
+import type { Fa } from '@fa/ui';
 
 /**
  * 通用业务表格配置

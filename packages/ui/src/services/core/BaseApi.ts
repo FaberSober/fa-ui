@@ -1,4 +1,4 @@
-import { Fa } from '@ui/types';
+import type { Fa } from '@ui/types';
 import { trimObj } from '@ui/utils/utils';
 import BaseZeroApi from './BaseZeroApi';
 
