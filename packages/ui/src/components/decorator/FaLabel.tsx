@@ -1,4 +1,6 @@
 import React, { CSSProperties } from 'react';
+import './FaLabel.css'
+
 
 export interface FaLabelProps {
   title: string;
@@ -14,16 +16,17 @@ export interface FaLabelProps {
  * @author xu.pengfei
  * @date 2021/6/16
  */
-export default function FaLabel({ title, barColor = '#00878b', className, style, textStyle, block, extra }: FaLabelProps) {
+export default function FaLabel({ title, barColor = 'var(--primary-color)', className, style, textStyle, block, extra }: FaLabelProps) {
   return (
     <div className={className ? ['fa-flex-row-center', className].join(' ') : 'fa-flex-row-center'}>
       <div
+        className="fa-label"
         style={{
-          display: block ? 'flex' : 'inline-flex',
-          alignItems: 'center',
-          padding: '4px 12px',
-          borderLeft: `4px solid ${barColor}`,
-          backgroundColor: 'var(--fa-bg-color)',
+          // display: block ? 'flex' : 'inline-flex',
+          // alignItems: 'center',
+          // padding: '4px 12px',
+          // borderLeft: `4px solid ${barColor}`,
+          // backgroundColor: 'var(--fa-bg-color)',
           ...style,
         }}
       >

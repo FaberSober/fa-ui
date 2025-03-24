@@ -80,7 +80,7 @@ export default function ThemeLayout({ children, colorPrimary, initThemeDark }: T
 
 
   useEffect(() => {
-    const rootDom = document.getElementsByTagName('body')[0].style;
+    const rootDom = document.getElementsByTagName('html')[0].style;
     rootDom.setProperty('--primary-color', colorPrimaryInner!);
 
     // calculate primary color variants - use chroma-js
@@ -114,7 +114,7 @@ export default function ThemeLayout({ children, colorPrimary, initThemeDark }: T
     const themeData:any = dark ? 'dark' : 'light';
     document.body.setAttribute('data-theme', themeData); // 设置tailwindcss主题
 
-    const rootDom = document.getElementsByTagName('body')[0].style;
+    const rootDom = document.getElementsByTagName('html')[0].style;
 
     //console.log('themeData', themeData)
     each(ThemeConfig.light, (_v, k) => {
