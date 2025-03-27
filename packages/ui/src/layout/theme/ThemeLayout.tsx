@@ -112,7 +112,9 @@ export default function ThemeLayout({ children, colorPrimary, initThemeDark }: T
 
   function changeTheme(dark: boolean|undefined) {
     const themeData:any = dark ? 'dark' : 'light';
+    const htmlDom = document.getElementsByTagName('html')[0]
     document.body.setAttribute('data-theme', themeData); // 设置tailwindcss主题
+    htmlDom.setAttribute('data-theme', themeData); // 设置tailwindcss主题
 
     const rootDom = document.getElementsByTagName('html')[0].style;
 
