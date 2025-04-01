@@ -719,6 +719,32 @@ ul {
     background-color: rgba(238, 238, 238, 0.4);
 }
 
+/*----------------------------------------- fa-tabs -----------------------------------------*/
+.fa-tabs {
+
+}
+
+.fa-tabs .ant-tabs-tab-active {
+  border-color: #FFF !important;
+}
+
+.fa-tabs .ant-tabs {
+  height: 100%;
+  position: relative;
+}
+
+.fa-tabs .ant-tabs-nav {
+  margin: 0;
+}
+
+.fa-tabs .ant-tabs-content {
+  height: 100%;
+}
+
+.fa-tabs .ant-tabs-tabpane {
+  height: 100%;
+}
+
 /*----------------------------------------- fa-iframe -----------------------------------------*/
 .fa-iframe {
   outline: hidden;
