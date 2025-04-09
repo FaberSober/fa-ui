@@ -21,6 +21,7 @@ export default function FaDragItem({ hold, style, ...props }: FaDragItem) {
         position: 'absolute',
         top: y,
         left: x,
+        zIndex: 999,
       }
     : {};
 
