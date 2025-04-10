@@ -57,7 +57,7 @@ export default function FaResizeHorizontal({ domId, position, minWidth, maxWidth
 
   return (
     <div
-      style={{position: 'absolute', top: '50%', left: -10, resize: 'horizontal', cursor: 'col-resize'}}
+      style={{position: 'absolute', top: '50%', left: -14, resize: 'horizontal', cursor: 'col-resize', width: '.75rem', height: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
       onMouseDown={(e) => {
         drag = true
         startX = e.clientX;
@@ -68,7 +68,7 @@ export default function FaResizeHorizontal({ domId, position, minWidth, maxWidth
         window.addEventListener('mouseup', mouseUpListener)
       }}
     >
-      {children}
+      {children ? children : (<div style={{ width: '.25rem', height: '1.5rem', borderRadius: '.125rem', background: '#10182814' }} />)}
     </div>
   )
 }
