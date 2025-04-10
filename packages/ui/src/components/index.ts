@@ -13,6 +13,7 @@ export * from './base-input';
 export * from './base-layout';
 export * from './base-modal';
 export * from './base-notice';
+export * from './base-resize';
 export * from './base-search-select';
 export * from './base-select';
 export * from './base-switch';

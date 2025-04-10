@@ -551,6 +551,15 @@ export const EchartsToolbox = {
  * 获取dom节点的rect大小矩阵
  * @param dom
  */
+export function getDomRectById(domId: string): DOMRect|null {
+  const dom = document.getElementById(domId) as HTMLElement;
+  return dom ? getDomRect(dom) : null;
+}
+
+/**
+ * 获取dom节点的rect大小矩阵
+ * @param dom
+ */
 export function getDomRect(dom: HTMLElement): DOMRect {
   return dom.getBoundingClientRect();
 }
