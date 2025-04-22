@@ -1,5 +1,94 @@
 # 滚动列表
-## 一个竖向轮博滚动的示例
+## 一个竖向轮博滚动的示例(使用封装的组件)
+1. 主要使用封装的`FaScrollList`组件；
+
+```typescript jsx
+import React, { useEffect, useState } from 'react';
+import { Beam } from "@features/fa-beam-pages/types";
+import { oprAuditApi } from "@features/fa-beam-pages/services";
+import { FaEnums } from "@/types";
+import { fileSaveApi } from "@fa/ui";
+import { Image } from "antd";
+import { FaScrollList } from "@features/fa-admin-pages/components";
+
+
+function Info({label, value}: {label: string, value: any}) {
+  return (
+    <div className="fa-flex-row-center" style={{ fontSize: '16px', marginBottom: 12 }}>
+      <div style={{width: 80}}>{label}:</div>
+      <div>{value}</div>
+    </div>
+  )
+}
+
+/**
+ * 实时检验信息
+ * @author xu.pengfei
+ * @date 2023/12/4 14:53
+ */
+export default function DataQualityAuditRealtimeList() {
+  const [array, setArray] = useState<Beam.OprAudit[]>([]);
+
+  useEffect(() => {
+    oprAuditApi.listN({ sorter: 'crt_time DESC', query: { auditState: FaEnums.AuditEnum.PASS } }, 15).then(res => {
+      const arr = res.data.map((item, index) => ({ ...item, index: index+1 }))
+      setArray(arr)
+    })
+  }, [])
+
+  return (
+    <div className="fa-full fa-flex-column">
+      <div
+        className="fa-beam-data-screen-h2 fa-beam-data-link-title fa-mb12"
+        onClick={() => {
+          window.open('/admin/beam/prod/opr/audit', '_blank');
+        }}
+      >
+        实时检验信息
+      </div>
+
+      <div className="fa-flex-1 fa-relative">
+        <FaScrollList
+          list={array}
+          num={5}
+          renderItem={v => {
+            return (
+              <div className="fa-relative fa-full fa-flex-row fa-border-b">
+                <div className="fa-flex-1 fa-p12">
+                  <Info label="发起人" value={v.crtName}/>
+                  <Info label="发起时间" value={v.crtTime}/>
+                  <Info label="梁片编号" value={v.beamNum}/>
+                  <Info label="工序" value={v.process}/>
+                  <Info label="审核状态" value={FaEnums.AuditEnumMap[v.auditState]}/>
+                </div>
+
+                <div className="fa-p12">
+                  {v.auditImgs && v.auditImgs[0] && (
+                    <Image
+                      // width={100}
+                      height={100}
+                      src={fileSaveApi.genLocalGetFilePreview(v.auditImgs[0])}
+                      preview={{src: fileSaveApi.genLocalGetFile(v.auditImgs[0])}}
+                    />
+                  )}
+                </div>
+
+                <div
+                  style={{position: "absolute", bottom: 12, right: 12, width: 30, height: 30, borderRadius: 15, background: '#0e3092', fontSize: '16px'}}
+                  className="fa-flex-center">
+                  {v.index}
+                </div>
+              </div>
+            )
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+```
+
+## 一个竖向轮博滚动的示例(单文件完整实现)
 ```typescript jsx
 import React, { useEffect, useRef, useState } from 'react';
 import { useInterval, useSize } from "ahooks";
