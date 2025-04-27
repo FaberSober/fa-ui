@@ -663,6 +663,13 @@ export const formNumberRule:any = {
   transform: (value:any) => Number(value),
 }
 
+export function preventEvent(e: any) {
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+}
+
 // ------------------------------------------ event bus ------------------------------------------
 export function refreshTree(refreshBusKey = Fa.Constant.TREE_REFRESH_BUS_KEY, payload = {}) {
   dispatch({ type: refreshBusKey, payload })
