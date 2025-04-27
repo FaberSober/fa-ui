@@ -57,7 +57,19 @@ export default function FaResizeHorizontal({ domId, position, minWidth, maxWidth
 
   return (
     <div
-      style={{position: 'absolute', top: '50%', left: -14, resize: 'horizontal', cursor: 'col-resize', width: '.75rem', height: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      style={{
+        position: 'absolute',
+        top: '50%',
+        left: position === 'left' ? -14 : undefined,
+        right: position === 'right' ? -14 : undefined,
+        resize: 'horizontal',
+        cursor: 'col-resize',
+        width: '.75rem',
+        height: '1.5rem',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    }}
       onMouseDown={(e) => {
         drag = true
         startX = e.clientX;
