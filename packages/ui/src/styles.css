@@ -629,6 +629,14 @@ ul {
     box-shadow: var(--fa-box-shadow);
 }
 
+.fa-hover .fa-hover-show {
+  display: none;
+}
+
+.fa-hover:hover .fa-hover-show {
+  display: block;
+}
+
 .fa-disabled {
     cursor: not-allowed;
 }
