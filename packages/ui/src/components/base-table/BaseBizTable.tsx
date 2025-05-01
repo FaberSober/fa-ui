@@ -36,7 +36,7 @@ export default function BaseBizTable<RecordType extends object = any>({
   rowClickSelected,
   rowClickSingleSelected = true,
   onSelectedRowsChange,
-  showBatchBelBtn = true,
+  showBatchDelBtn = true,
   keyName = 'id',
   batchDelBtn,
   showDeleteByQuery = false,
@@ -174,7 +174,7 @@ export default function BaseBizTable<RecordType extends object = any>({
                   已选中&nbsp;<a>{selectedRowKeys.length}</a>&nbsp;条数据
                 </div>
                 {renderCheckBtns && renderCheckBtns(selectedRowKeys)}
-                {showBatchBelBtn && (
+                {showBatchDelBtn && (
                   <Button loading={batchDeleting} onClick={handleBatchDelete} icon={<DeleteOutlined/>} danger>
                     {batchDelBtn || '删除'}
                   </Button>

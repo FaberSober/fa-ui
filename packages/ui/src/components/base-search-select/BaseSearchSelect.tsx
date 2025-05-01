@@ -42,13 +42,14 @@ export default function BaseSearchSelect<RecordType extends object = any, KeyTyp
 
   useEffect(() => {
     const listValueFlag = value instanceof Array;
+    console.log('listValueFlag', listValueFlag, value, extraParams)
     if (listValueFlag) {
       // 多选数据
       if (value === undefined || value === null || value.length === 0) {
         searchNow();
-        if (onChange) {
-          onChange([])
-        }
+        // if (onChange) {
+        //   onChange([])
+        // }
       } else {
         updateValue(value);
       }
@@ -135,10 +136,13 @@ export default function BaseSearchSelect<RecordType extends object = any, KeyTyp
   );
 
   function handleValueChange(v: any, item: any) {
+    console.log('handleValueChange', v, item)
     if (onChange) {
       onChange(v, item);
     }
-    setSearch('');
+    if (search !== '') {
+      setSearch('');
+    }
   }
 
   return (
