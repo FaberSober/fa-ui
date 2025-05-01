@@ -611,6 +611,18 @@ export function scrollToDomById(domId: string) {
 }
 
 /**
+ * delay
+ * @param time
+ */
+export function delay(time:number) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(true)
+    }, time)
+  })
+}
+
+/**
  * @returns 随机生产长size位的字母[a-z]
  */
 export function generateId(size = 8) {
