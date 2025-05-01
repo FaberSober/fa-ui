@@ -259,13 +259,15 @@ export function genBoolSorterColumn(
  * @param dataIndex
  * @param width
  * @param sorter
+ * @param userNameKey
  */
-export function genUserSorterColumn(title: string, dataIndex: string, width: number, sorter: Fa.Sorter): FaberTable.ColumnsProp<any> {
+export function genUserSorterColumn(title: string, dataIndex: string, width: number, sorter: Fa.Sorter, userNameKey): FaberTable.ColumnsProp<any> {
   return {
     ...genSimpleSorterColumn(title, dataIndex, width, sorter),
     tcCondComponent: ({ index, value, callback, mode, ...props }: FaberTable.TcCondProp) => (
       <UserSearchSelect value={value} onChange={(v: any, item: any) => callback(v, index, optionsToLabel(item))} {...props} />
     ),
+    render: (_, v) => v[userNameKey],
   };
 }
 
