@@ -60,7 +60,7 @@ namespace FaberTable {
     renderCheckBtns?: (rowKeys: any[]) => ReactNode; // 自定义追加的多选的按钮
     rowClickSelected?: boolean; // 点击row是否选中
     rowClickSingleSelected?: boolean; // 点击row是否单选
-    showBatchBelBtn?: boolean; // 是否展示多选删除按钮
+    showBatchDelBtn?: boolean; // 是否展示多选删除按钮
     showTopTips?: boolean; // 是否展示顶部选中文本信息
     showTopDiv?: boolean; // 是否展示顶部DIV
     onSelectedRowsChange?: (rows: any[]) => void; // 选中keys变更回调

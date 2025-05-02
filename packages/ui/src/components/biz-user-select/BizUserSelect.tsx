@@ -167,7 +167,7 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
                 refreshList={() => fetchPageList()}
                 batchDelete={(ids) => userApi.removeBatchByIds(ids)}
                 showComplexQuery={false}
-                showBatchBelBtn={false}
+                showBatchDelBtn={false}
                 showTableColConfigBtn={false}
                 showCheckbox={false}
                 showTopDiv={false}
