@@ -261,7 +261,7 @@ export function genBoolSorterColumn(
  * @param sorter
  * @param userNameKey
  */
-export function genUserSorterColumn(title: string, dataIndex: string, width: number, sorter: Fa.Sorter, userNameKey): FaberTable.ColumnsProp<any> {
+export function genUserSorterColumn(title: string, dataIndex: string, width: number, sorter: Fa.Sorter, userNameKey: string): FaberTable.ColumnsProp<any> {
   return {
     ...genSimpleSorterColumn(title, dataIndex, width, sorter),
     tcCondComponent: ({ index, value, callback, mode, ...props }: FaberTable.TcCondProp) => (
