@@ -36,6 +36,7 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
   const [innerUsers, setInnerUsers] = useState<SelectedUser[]>(selectedUsers || [])
 
   useEffect(() => {
+    // console.log('selectedUsers', selectedUsers)
     setInnerUsers(selectedUsers || [])
   }, [selectedUsers])
 
@@ -124,7 +125,7 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
         onOk={handleConfirm}
         confirmLoading={confirmLoading}
         onCancel={() => setOpen(false)}
-        width={1000}
+        width={1200}
         {...props}
       >
         <Row className="fa-flex-row" style={{height: 600}} gutter={12}>
