@@ -23,13 +23,18 @@ export interface UseTableQueryParamsProps<T> {
   list: T[];
   dicts: Fa.PageDict;
   fetchPageList: () => void;
-  // ------------------------------------------ 表格查询结果更新 ------------------------------------------、
+  // ------------------------------------------ 表格查询结果更新 ------------------------------------------
   setList: (list: T[]) => void;
   // ------------------------------------------ 表格展示分页数据 ------------------------------------------
   showPagination: Fa.Pagination;
   // setShowPagination: any;
   // ------------------------------------------ 表格展示 ------------------------------------------
   paginationProps: TablePaginationConfig;
+}
+
+export interface tableHooks<T> {
+  // ------------------------------------------ 表格方法钩子 ------------------------------------------
+  onAfterGetPage: (list: T[]) => void;
 }
 
 const defaultPagination: Fa.Pagination = {
@@ -47,6 +52,7 @@ export default function useTableQueryParams<T>(
   api: (params: any) => Promise<Fa.Ret<Fa.Page<T>>>,
   initParams: Fa.InitQueryParams = {},
   serviceName: string,
+  hooks?: tableHooks<T>
 ): UseTableQueryParamsProps<T> {
   const [loading, setLoading] = useState(false);
 
@@ -164,6 +170,9 @@ export default function useTableQueryParams<T>(
           hasNextPage: page.hasNextPage,
         };
         setRet({list: res.data.rows, dicts: res.data.dicts, showPagination: pagination});
+        if (hooks && hooks.onAfterGetPage) {
+          hooks.onAfterGetPage(res.data.rows)
+        }
       })
       .catch(() => setLoading(false));
   }
