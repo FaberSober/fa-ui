@@ -13,7 +13,7 @@ import {Empty} from "antd";
 export interface FaSortListProps<T> {
   list: T[];
   rowKey?: string; // T对象的ID属性，默认值：id
-  renderItem: (item: T) => ReactNode;
+  renderItem: (item: T, index: number) => ReactNode;
   onSortEnd?: (list: T[], oldIndex: number, newIndex: number) => void;
   handle?: boolean; // 是否使用拖动把手
   handleNode?: ReactNode;
@@ -71,17 +71,17 @@ export default function FaSortList<T>({
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <SortableContext items={list.map((i) => getRowKey(i))} strategy={verticalListSortingStrategy}>
-        {list.map((i) => (
+        {list.map((item, index) => (
           <FaSortItem
-            key={getRowKey(i)}
-            id={getRowKey(i)}
+            key={getRowKey(item)}
+            id={getRowKey(item)}
             handle={handle}
             handleNode={handleNode}
             vertical={vertical}
             style={itemStyle}
             handleStyle={handleStyle}
           >
-            {renderItem(i)}
+            {renderItem(item, index)}
           </FaSortItem>
         ))}
       </SortableContext>
