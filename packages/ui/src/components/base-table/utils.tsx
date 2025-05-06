@@ -492,7 +492,22 @@ export function useScrollY(id: string): [scrollY: number | undefined] {
   const [innerScrollY, setInnerScrollY] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    const y = size ? size.height - 87 : undefined;
+    let delta = 16;
+    try {
+      const headerDoms = document.getElementsByClassName('ant-table-header');
+      if (headerDoms && headerDoms[0]) {
+        const rect = headerDoms[0].getBoundingClientRect();
+        delta += rect.height;
+      }
+      const paginationDoms = document.getElementsByClassName('ant-table-pagination');
+      if (paginationDoms && paginationDoms[0]) {
+        const rect = paginationDoms[0].getBoundingClientRect();
+        delta += rect.height;
+      }
+    } catch (e) {
+      console.log(e)
+    }
+    const y = size ? size.height - delta : undefined;
     if (innerScrollY !== y) {
       setInnerScrollY(y);
     }
