@@ -3,6 +3,7 @@ import ConditionQuery from './ConditionQuery';
 import { Tag } from 'antd';
 import { remove } from 'lodash';
 import './SceneManageModal.css';
+import { needValue } from "@ui/components/condition-query/utils";
 
 export interface CondGroupShowProps {
   condGroup: ConditionQuery.CondGroup;
@@ -29,12 +30,19 @@ export default function CondGroupShow({ condGroup, onChange }: CondGroupShowProp
       {condGroup.condList.map((cond, index) => {
         const { id, key, opr, value, begin, end, name } = cond;
         let condStr;
+        // 是否展示右侧筛选值
+        const showValue = needValue(opr)
         if (opr === ConditionQuery.CondOpr.between) {
           if (key === undefined || begin === undefined || end === undefined) {
             return null;
           }
 
           condStr = `${begin} ~ ${end}`;
+        } else if (!showValue) {
+          if (key === undefined) {
+            return null;
+          }
+          condStr = '';
         } else {
           if (key === undefined || value === undefined) {
             return null;

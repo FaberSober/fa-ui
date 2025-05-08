@@ -14,6 +14,8 @@ namespace ConditionQuery {
     between = 'between', // '介于',
     in = 'in', // 'IN',
     notIn = 'notIn', // 'notIn',
+    isNotNull = 'isNotNull', // 'isNotNull',
+    isNull = 'isNull', // 'isNull',
   }
 
   /** 自定义筛选条件 */
@@ -53,6 +55,8 @@ namespace ConditionQuery {
     [ConditionQuery.CondOpr.start_contain]: '开始于',
     [ConditionQuery.CondOpr.end_contain]: '结束于',
     [ConditionQuery.CondOpr.between]: '介于',
+    [ConditionQuery.CondOpr.isNotNull]: '不为空',
+    [ConditionQuery.CondOpr.isNull]: '为空',
   };
 }
 

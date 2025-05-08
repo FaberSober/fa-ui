@@ -39,7 +39,7 @@
     "@types/react": "18.3.12",
     "@types/uuid": "10.0.0",
     "ahooks": "3.8.4",
-    "antd": "5.23.2",
+    "antd": "5.24.9",
     "autoprefixer": "10.4.20",
     "axios": "1.7.9",
     "concurrently": "9.1.2",

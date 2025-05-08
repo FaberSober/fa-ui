@@ -6,6 +6,7 @@ import { CloseCircleFilled, DeleteOutlined, PlusOutlined } from '@ant-design/ico
 import { BaseTableUtils, FaberTable } from '@ui/components/base-table';
 import { v4 as uuidv4 } from 'uuid';
 import {optionsToLabel} from "@ui/utils/utils";
+import { needValue } from "@ui/components/condition-query/utils";
 
 export interface CondGroupEditProps<T> {
   condGroup: ConditionQuery.CondGroup;
@@ -141,11 +142,13 @@ export default function CondGroupEdit<T>({ condGroup, columns, onChange, onDelet
           const tcCondBetweenComponent = colFind && colFind.tcCondBetweenComponent;
           const tcCondBetweenComponentElement = colFind && colFind.tcCondBetweenComponentElement;
 
+          // 是否展示右侧筛选值
+          const showValue = needValue(opr)
           return (
             <div key={id} style={{ marginBottom: 12, display: 'flex', flexDirection: 'row' }}>
               {/* 筛选字段 */}
               <Select
-                style={{ width: 150, marginRight: 12 }}
+                style={{ width: 150, marginRight: 12, flexShrink: 0 }}
                 value={key}
                 onChange={(v) => handleChangeKey(v, index)}
                 placeholder="请选择筛选字段"
@@ -164,13 +167,13 @@ export default function CondGroupEdit<T>({ condGroup, columns, onChange, onDelet
               {/* 筛选操作符 */}
               <Select
                 options={options}
-                style={{ width: 100, marginRight: 12 }}
+                style={{ width: 100, marginRight: 12, flexShrink: 0 }}
                 value={opr}
                 onChange={(v) => handleChangeOpt(v, index)}
               />
               {/* 筛选值 */}
               {/* 单值输入 */}
-              {opr !== ConditionQuery.CondOpr.between ? (
+              {(showValue && opr !== ConditionQuery.CondOpr.between) ? (
                 <>
                   {/* 动态创建组件 */}
                   {tcCondComponentElement && React.createElement(tcCondComponentElement, {
@@ -206,7 +209,7 @@ export default function CondGroupEdit<T>({ condGroup, columns, onChange, onDelet
                 </>
               ) : null}
               {/* 双值输入 */}
-              {opr === ConditionQuery.CondOpr.between ? (
+              {showValue && opr === ConditionQuery.CondOpr.between ? (
                 <>
                   {/* 动态创建组件 */}
                   {tcCondBetweenComponentElement && React.createElement(tcCondBetweenComponentElement, {

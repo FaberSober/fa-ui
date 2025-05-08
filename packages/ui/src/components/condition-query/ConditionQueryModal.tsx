@@ -11,6 +11,7 @@ import { FaberTable } from '@ui/components/base-table';
 import CondGroupShow from '@ui/components/condition-query/CondGroupShow';
 import CondGroupEdit from '@ui/components/condition-query/CondGroupEdit';
 import { PlusOutlined } from '@ant-design/icons';
+import { needValue } from "@ui/components/condition-query/utils";
 
 export interface ConditionQueryModalProps<T> {
   showSuffix?: boolean;
@@ -70,6 +71,8 @@ export default function ConditionQueryModal<T>({
       for (let i = 0; i < condList.length; i += 1) {
         const cond = condList[i];
         const { key, opr, value, begin, end } = cond;
+        // 是否需要右侧筛选值
+        const showValue = needValue(opr)
         if (key === undefined) {
           message.error('请选择筛选字段');
           return;
@@ -89,7 +92,7 @@ export default function ConditionQueryModal<T>({
           }
         } else {
           // eslint-disable-next-line no-lonely-if
-          if (value === undefined) {
+          if (showValue && value === undefined) {
             message.error('请输入筛选条件的值');
             return;
           }
