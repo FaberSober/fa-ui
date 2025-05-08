@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { CSSProperties, ReactNode, useEffect, useState } from 'react';
 import { get, remove, trim } from 'lodash';
 import { Button, Select, SelectProps, Space } from 'antd';
 import { useDebounce } from 'react-use';
@@ -22,6 +22,7 @@ export interface BaseSearchSelectProps<T, KeyType = number> extends SelectProps<
   onChange?: (v: any, option?: any) => void;
   // onItemChange?: (v: T) => void;
   extraParams?: any;
+  bodyStyle?: CSSProperties;
 }
 
 /**
@@ -36,6 +37,7 @@ export default function BaseSearchSelect<RecordType extends object = any, KeyTyp
   value,
   extraParams,
   onChange,
+  bodyStyle,
   ...props
 }: BaseSearchSelectProps<RecordType, KeyType>) {
   const [loading, setLoading] = useState(false);
@@ -165,7 +167,7 @@ export default function BaseSearchSelect<RecordType extends object = any, KeyTyp
   }
 
   return (
-    <Space.Compact block>
+    <Space.Compact block style={bodyStyle}>
       <Select
         showSearch
         allowClear
@@ -183,7 +185,7 @@ export default function BaseSearchSelect<RecordType extends object = any, KeyTyp
         options={array}
         value={value}
         loading={loading}
-        style={{ minWidth: 170 }}
+        style={{ minWidth: 138 }}
         onChange={handleValueChange}
         {...props}
       />
