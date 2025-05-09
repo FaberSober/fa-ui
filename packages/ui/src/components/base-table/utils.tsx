@@ -492,7 +492,7 @@ export function useScrollY(id: string): [scrollY: number | undefined] {
   const [innerScrollY, setInnerScrollY] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    let delta = 16;
+    let delta = 18;
     try {
       const headerDoms = document.getElementsByClassName('ant-table-header');
       if (headerDoms && headerDoms[0]) {
