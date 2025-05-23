@@ -690,3 +690,26 @@ export function refreshTree(refreshBusKey = Fa.Constant.TREE_REFRESH_BUS_KEY, pa
 export function busEmit(key: string, payload = {}) {
   dispatch({ type: key, payload })
 }
+
+// ------------------------------------------ image ------------------------------------------
+/**
+ * download image from url
+ * @param url
+ */
+export function downloadImage(url:string) {
+  const suffix = url.slice(url.lastIndexOf('.'));
+  const filename = Date.now() + suffix;
+
+  fetch(url)
+    .then((response) => response.blob())
+    .then((blob) => {
+      const blobUrl = URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      URL.revokeObjectURL(blobUrl);
+      link.remove();
+    });
+}
