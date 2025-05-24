@@ -52,7 +52,7 @@ export default function CondGroupShow({ condGroup, onChange }: CondGroupShowProp
         }
         return (
           <div key={cond.id} className="fa-flex-row-center">
-            <Tag key={id} closable onClose={() => handleRemoveCond(cond.id, true)}>
+            <Tag key={id} closable onClose={() => handleRemoveCond(cond.id, true)} className="fa-break-word" style={{}}>
               {cond.title} {ConditionQuery.OPR_MAP[opr]} {condStr}
             </Tag>
             {index < condGroup.condList.length - 1 && <span style={{ margin: '0 6px' }}>{condGroup.type}</span>}
