@@ -15,6 +15,7 @@ export interface FaResizeHorizontalProps {
   minWidth?: number;
   maxWidth?: number;
   children?: React.ReactNode;
+  onWidthChange?: (v:number) => void;
 }
 
 /**
@@ -26,7 +27,7 @@ export interface FaResizeHorizontalProps {
  * @param children
  * @constructor
  */
-export default function FaResizeHorizontal({ domId, position, minWidth, maxWidth, children }: FaResizeHorizontalProps) {
+export default function FaResizeHorizontal({ domId, position, minWidth, maxWidth, onWidthChange, children }: FaResizeHorizontalProps) {
 
   const mouseMoveListener:any = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (!drag) return;
@@ -46,6 +47,9 @@ export default function FaResizeHorizontal({ domId, position, minWidth, maxWidth
     }
     if (dom) {
       dom.style.width = width + 'px'
+    }
+    if (onWidthChange) {
+      onWidthChange(width)
     }
   }, [minWidth, maxWidth])
 
