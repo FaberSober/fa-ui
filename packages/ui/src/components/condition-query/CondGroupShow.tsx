@@ -26,7 +26,7 @@ export default function CondGroupShow({ condGroup, onChange }: CondGroupShowProp
   }
 
   return (
-    <div className="fa-cond-group-show">
+    <div className="fa-cond-group-show" style={{maxHeight: 100, overflow: 'auto'}}>
       {condGroup.condList.map((cond, index) => {
         const { id, key, opr, value, begin, end, name } = cond;
         let condStr;
