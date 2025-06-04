@@ -80,6 +80,7 @@ export default function FaResizeHorizontal({ domId, position, minWidth, maxWidth
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        zIndex: 999,
         ...style,
     }}
       onMouseDown={(e) => {
