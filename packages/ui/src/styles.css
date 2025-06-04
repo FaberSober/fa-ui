@@ -788,6 +788,14 @@ ul {
   background: var(--fa-bg-color-hover);
 }
 
+/*----------------------------------------- drag -----------------------------------------*/
+/* 拖动区域禁止文本选中事件 */
+.fa-drag-area-no-select {
+  -webkit-user-select: none; /* Safari/Chrome */
+  -moz-user-select: none;    /* Firefox */
+  -ms-user-select: none;     /* IE10+ */
+  user-select: none;          /* Standard */
+}
 
 /*----------------------------------------- fa-corn -----------------------------------------*/
 .fa-cron-react-editor-tab {
