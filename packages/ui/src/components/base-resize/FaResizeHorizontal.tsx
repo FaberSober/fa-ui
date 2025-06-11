@@ -99,7 +99,7 @@ export default function FaResizeHorizontal({ domId, position, minWidth, maxWidth
         window.addEventListener('mouseup', mouseUpListener)
       }}
     >
-      {children ? children : (<div style={{ width: '.25rem', height: '1.5rem', borderRadius: '.125rem', background: '#10182814' }} />)}
+      {children ? children : (<div className="fa-resize-indicator" />)}
     </div>
   )
 }
