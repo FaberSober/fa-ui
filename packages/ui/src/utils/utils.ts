@@ -308,6 +308,12 @@ export function tryToFixed(value: any, num = 6) {
   return value;
 }
 
+export function tryToFixedNum(value: any, num = 6) {
+  const strValue = tryToFixed(value, num);
+  if (strValue) return Number(strValue);
+  return value;
+}
+
 
 /** * 是否为mac系统（包含iphone手机） * */
 export function isMac() {
