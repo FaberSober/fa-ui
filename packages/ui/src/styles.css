@@ -727,6 +727,14 @@ ul {
     background-color: rgba(238, 238, 238, 0.4);
 }
 
+/* 等宽字体 */
+.fa-text-same-width {
+  font-family: 'Consolas', 'Monaco', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace; /* 优先使用系统内置等宽字体 */
+  text-align: justify;         /* 分散对齐 */
+  text-align-last: justify;    /* 最后一行也分散对齐 */
+  word-spacing: -0.25em;       /* 微调单词间距（西文适用） */
+}
+
 /*----------------------------------------- fa-form -----------------------------------------*/
 .fa-form-reverse .ant-form-item {
   margin-inline-end: 0;
