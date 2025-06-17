@@ -193,6 +193,14 @@ export function endOfToday():string {
   return dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss');
 }
 
+export function startOfTomorrow():string {
+  return dayjs().startOf('day').add(1, 'd').format('YYYY-MM-DD HH:mm:ss');
+}
+
+export function endOfTomorrow():string {
+  return dayjs().endOf('day').add(1, 'd').format('YYYY-MM-DD HH:mm:ss');
+}
+
 /**
  * date('YYYY-MM-DD')格式化str
  * @param {*} date
