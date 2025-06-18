@@ -15,7 +15,7 @@ export interface FaFullscreenBtnProps {
 export default function FaFullscreenBtn({target, style}: FaFullscreenBtnProps) {
   const [isFullscreen, {toggleFullscreen}] = useFullscreen(target);
   return (
-    <div className="fa-normal-btn" style={{height: 32, ...style}} onClick={toggleFullscreen}>
+    <div className="fa-normal-btn" style={{height: 32, padding: 0, ...style}} onClick={toggleFullscreen}>
       {isFullscreen ? <FullscreenOutlined/> : <FullscreenExitOutlined/>}
     </div>
   )
