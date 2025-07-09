@@ -237,11 +237,16 @@ const BaseTree = React.forwardRef<HTMLElement, BaseTreeProp<any, any>>(function 
     setExpandedKeys(newEks)
   }
 
-  function afterEditItem() {
-    setClickItem(undefined);
+  function afterEditItem(r?: any) {
+    // setClickItem(r);
     setAddItemModalVisible(false);
     setEditItemModalVisible(false);
     fetchTree();
+  }
+
+  function cancelEditItem() {
+    setAddItemModalVisible(false);
+    setEditItemModalVisible(false);
   }
 
   function onDrop(info: any) {
@@ -355,7 +360,7 @@ const BaseTree = React.forwardRef<HTMLElement, BaseTreeProp<any, any>>(function 
               title={`新增${serviceName}`}
               parentId={clickItem && get(clickItem, 'value')}
               open={addItemModalVisible}
-              onCancel={afterEditItem}
+              onCancel={cancelEditItem}
               fetchFinish={afterEditItem}
             />
 
@@ -363,7 +368,7 @@ const BaseTree = React.forwardRef<HTMLElement, BaseTreeProp<any, any>>(function 
               title={`编辑${serviceName}`}
               open={editItemModalVisible}
               record={clickItem ? clickItem.sourceData : undefined}
-              onCancel={afterEditItem}
+              onCancel={cancelEditItem}
               fetchFinish={afterEditItem}
               destroyOnClose
             />
