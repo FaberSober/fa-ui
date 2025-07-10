@@ -248,6 +248,10 @@ ul {
     text-align: center;
 }
 
+.fa-text-right {
+    text-align: right;
+}
+
 .fa-text:hover {
     color: var(--fa-text-color-hover);
 }
