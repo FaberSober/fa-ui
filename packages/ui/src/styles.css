@@ -3,7 +3,7 @@ html {
     --primary-color: #3b82f6;
     --primary-dark: #1e3a8a;
     --fa-bg-color: #fff; /* 适配主题-背景色 */
-    --fa-bg-color-hover: #eee; /* 适配主题-背景色 */
+    --fa-bg-color-hover: #F0F0F0; /* 适配主题-背景色 */
     --fa-bg-color2: #eee; /* 适配主题-背景色-2级 */
     --fa-bg-color-highlight: #1c5e88; /* 适配主题-背景色-高亮 */
     --fa-bg-color-highlight-hover: #1081c9; /* 适配主题-背景色-高亮-hover */
@@ -14,7 +14,7 @@ html {
     --fa-text-color-light100: #999; /* 适配主题-文字颜色-已读类型 */
     --fa-text-color-disable: rgba(0, 0, 0, 0.25); /* 适配主题-文字颜色 */
     --fa-subtitle-color: #666; /* 适配主题-文字颜色-副标题 */
-    --fa-border-color: #ddd; /* 适配主题-边框颜色 */
+    --fa-border-color: #F0F0F0; /* 适配主题-边框颜色 */
     --fa-border-dark-color: #66666666; /* 适配主题-边框颜色 */
     --fa-border-darker-color: #333; /* 适配主题-边框颜色 */
     --fa-bg-grey: #f7f7f7; /* 适配主题-背景色-灰色 */
@@ -549,6 +549,10 @@ ul {
     border-bottom: 1px solid var(--fa-border-color) !important;
 }
 
+.fa-form-m0 .ant-form-item {
+  margin: 0;
+}
+
 .fa-input-underline {
     border: none !important;
     border-radius: 0 !important;
@@ -641,6 +645,10 @@ ul {
 
 .fa-transition {
     transition: var(--fa-transition);
+}
+
+.fa-item:hover {
+  background: var(--fa-bg-color-hover);
 }
 
 .fa-hover {
