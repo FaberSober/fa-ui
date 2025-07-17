@@ -619,7 +619,11 @@ export function scrollToBottomById(domId: string, delay = 0) {
   setTimeout(() => {
     const dom = document.getElementById(domId);
     if (dom === undefined || dom === null) return;
-    dom.scrollTo(0, dom.scrollHeight)
+    dom.scrollTo({
+      left: 0,
+      top: dom.scrollHeight,
+      behavior: 'smooth',
+    })
   }, delay);
 }
 

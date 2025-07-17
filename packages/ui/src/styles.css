@@ -746,6 +746,10 @@ ul {
     background-color: rgba(238, 238, 238, 0.4);
 }
 
+.fa-text-same-width-only {
+  font-family: 'Consolas', 'Monaco', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace; /* 优先使用系统内置等宽字体 */
+}
+
 /* 等宽字体 */
 .fa-text-same-width {
   font-family: 'Consolas', 'Monaco', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace; /* 优先使用系统内置等宽字体 */
