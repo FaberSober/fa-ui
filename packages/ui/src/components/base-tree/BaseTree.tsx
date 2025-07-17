@@ -354,7 +354,7 @@ const BaseTree = React.forwardRef<HTMLElement, BaseTreeProp<any, any>>(function 
 
       {/* main tree */}
       <div className="fa-base-tree-div" style={{flex: 1, overflowY: 'auto'}}>
-        <div style={{paddingRight: 12, ...treeStyle}}>
+        <div style={{...treeStyle}}>
           <Spin spinning={loading}>
             <Tree
               blockNode
