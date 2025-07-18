@@ -29,7 +29,7 @@ export default function DictDataSelector({ dictLabel, transValue, treeShowType, 
       return <BaseTreeSelect<Admin.DictData>
         serviceApi={{
           ...dictDataApi,
-          allTree: () => dictDataApi.getTree({ query: { dictId: dict.id } }),
+          allTree: () => dictDataApi.getTree({ query: { dictId: dict.id, valid: true } }),
         }}
         style={{ minWidth: 170 }}
         allowClear
@@ -42,7 +42,7 @@ export default function DictDataSelector({ dictLabel, transValue, treeShowType, 
       <BaseCascader<Admin.DictData>
         serviceApi={{
           ...dictDataApi,
-          allTree: () => dictDataApi.getTree({ query: { dictId: dict.id } }),
+          allTree: () => dictDataApi.getTree({ query: { dictId: dict.id, valid: true } }),
         }}
         style={{ minWidth: 170 }}
         allowClear

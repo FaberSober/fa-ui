@@ -107,8 +107,10 @@ namespace Admin {
     label: string;
     /** 字典值 */
     value: string;
-    /** 是否默认值（0否 1是） */
+    /** 是否默认值：0否 1是 */
     isDefault: boolean;
+    /** 是否生效：0否 1是 */
+    valid: boolean;
     /** 描述 */
     description: string;
     // ----------------- show cols -----------------

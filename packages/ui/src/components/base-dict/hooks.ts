@@ -24,7 +24,7 @@ export function useDict(
         })))
       }
       if (data.type === FaEnums.DictTypeEnum.LINK_OPTIONS) {
-        dictDataApi.list({ query: {dictId: data.id}, sorter: 'sort_id ASC'}).then(res2 => {
+        dictDataApi.list({ query: {dictId: data.id, valid: true}, sorter: 'sort_id ASC'}).then(res2 => {
           setOptions(res2.data.map(v => ({
             value: transValue ? transValue(v.value) : v.value,
             label: v.label,
