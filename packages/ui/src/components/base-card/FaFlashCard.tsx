@@ -4,7 +4,7 @@ import './FaFlashCard.css'
 
 export interface FaFlashCardProps {
   hideTitle?: boolean;
-  title?: string;
+  title?: string|(() => ReactNode);
   extra?: string|ReactNode;
   style?: CSSProperties;
   titleStyle?: CSSProperties;
@@ -23,7 +23,8 @@ export default function FaFlashCard({hideTitle = false, title, extra, style, tit
         <div className="fa-flash-card-title-div" style={{ ...titleStyle }}>
           <div className="fa-flash-card-flash-bar" />
           <div className="fa-flash-card-title">
-            {title}
+            {title && typeof title === 'function' && title()}
+            {title && typeof title === 'string' && title}
           </div>
           <div className="fa-flash-card-title-extra">{extra}</div>
         </div>
