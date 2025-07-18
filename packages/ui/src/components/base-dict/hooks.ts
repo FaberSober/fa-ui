@@ -18,10 +18,14 @@ export function useDict(
       const { data } = res;
       setDict(data)
       if (data.type === FaEnums.DictTypeEnum.OPTIONS) {
-        setOptions(data.options.map((v) => ({
-          value: transValue ? transValue(v.value) : v.value,
-          label: v.label,
-        })))
+        setOptions(
+          data.options
+            .filter(v => !v.deleted)
+            .map((v) => ({
+              value: transValue ? transValue(v.value) : v.value,
+              label: v.label,
+            }))
+        )
       }
       if (data.type === FaEnums.DictTypeEnum.LINK_OPTIONS) {
         dictDataApi.list({ query: {dictId: data.id, valid: true}, sorter: 'sort_id ASC'}).then(res2 => {

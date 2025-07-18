@@ -26,8 +26,8 @@ html {
     --fa-hover-bg: #e1e1e1;
     --fa-transition: all ease-in-out 0.3s;
     --fa-border-radius: 2px;
-    --fa-box-shadow: 0px 3px 6px 4px var(--fa-bg-color-hover);
-    --fa-box-shadow-b: 0px 3px 6px 4px #eee;
+    --fa-box-shadow: 0 2px 8px var(--fa-bg-color-hover);
+    --fa-box-shadow-b: 0 2px 8px #eee;
     --focus-border: var(--primary-color) !important;
 
     --s-font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, SF Pro SC, SF Pro Display, SF Pro Icons, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif;;
