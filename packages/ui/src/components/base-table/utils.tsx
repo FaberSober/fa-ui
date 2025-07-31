@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {getDateStr, optionsToLabel, toLine, tryToFixed} from '@ui/utils/utils';
-import { Badge, TablePaginationConfig, Tooltip } from 'antd';
+import { Badge, Tooltip } from 'antd';
 import { find, isBoolean, isEmpty, isNil, trim } from 'lodash';
 import {
   renderDatePicker,
@@ -32,7 +32,10 @@ export function dataIndexToString(dataIndex: string | string[]) {
  * 2. order返回 'DESC' : 'ASC';
  * @param {*} sorter
  */
-export function getSorter(sorter: Fa.Sorter) {
+export function getSorter(sorter: boolean | Fa.Sorter) {
+  if (!sorter || isBoolean(sorter)) {
+    return null;
+  }
   if (isNil(sorter.field) || trim(sorter.field) === '') return null;
   const order = sorter.order === 'descend' ? 'DESC' : 'ASC';
   const column = toLine(sorter.field);
@@ -121,7 +124,7 @@ export function genIdColumn(
   title: string,
   dataIndex: string,
   width: number,
-  sorter: Fa.Sorter,
+  sorter: boolean | Fa.Sorter,
   tcChecked = true,
   fixLeft = true,
 ): FaberTable.ColumnsProp<any> {
@@ -177,7 +180,7 @@ export function genEllipsisSorterColumn(
   title: string,
   dataIndex: string,
   width: number | undefined,
-  sorter: Fa.Sorter,
+  sorter: boolean | Fa.Sorter,
   tcChecked = true,
 ): FaberTable.ColumnsProp<any> {
   return {
@@ -209,7 +212,7 @@ export function genNumSorterColumn(
   title: string,
   dataIndex: string,
   width: number | undefined,
-  sorter: Fa.Sorter,
+  sorter: boolean | Fa.Sorter,
   fixNum = 2,
   tcChecked = true,
 ): FaberTable.ColumnsProp<any> {
@@ -236,7 +239,7 @@ export function genBoolSorterColumn(
   title: string,
   dataIndex: string,
   width: number | undefined,
-  sorter: Fa.Sorter,
+  sorter: boolean | Fa.Sorter,
   tcChecked = true,
 ): FaberTable.ColumnsProp<any> {
   return {
@@ -261,7 +264,7 @@ export function genBoolSorterColumn(
  * @param sorter
  * @param userNameKey
  */
-export function genUserSorterColumn(title: string, dataIndex: string, width: number, sorter: Fa.Sorter, userNameKey: string): FaberTable.ColumnsProp<any> {
+export function genUserSorterColumn(title: string, dataIndex: string, width: number, sorter: boolean | Fa.Sorter, userNameKey: string): FaberTable.ColumnsProp<any> {
   return {
     ...genSimpleSorterColumn(title, dataIndex, width, sorter),
     tcCondComponent: ({ index, value, callback, mode, ...props }: FaberTable.TcCondProp) => (
@@ -285,7 +288,7 @@ export function genDictSorterColumn(
   title: string,
   dataIndex: string,
   width: number | undefined,
-  sorter: Fa.Sorter,
+  sorter: boolean | Fa.Sorter,
   dicts: Fa.PageDict,
   dictLabel: string,
   tcChecked = true,
@@ -317,7 +320,7 @@ export function genEnumSorterColumn(
   title: string,
   dataIndex: string,
   width: number | undefined,
-  sorter: Fa.Sorter,
+  sorter: boolean | Fa.Sorter,
   dicts: Fa.PageDict,
   tcChecked = true,
 ): FaberTable.ColumnsProp<any> {
@@ -348,7 +351,7 @@ export function genDateSorterColumn(
   title: string,
   dataIndex: string,
   width: number | undefined,
-  sorter: Fa.Sorter,
+  sorter: boolean | Fa.Sorter,
   format: string | undefined = undefined,
   tcChecked = true,
 ): FaberTable.ColumnsProp<any> {
@@ -378,7 +381,7 @@ export function genTimeSorterColumn(
   title: string,
   dataIndex: string,
   width: number | undefined,
-  sorter: Fa.Sorter,
+  sorter: boolean | Fa.Sorter,
   format = 'YYYY-MM-DD HH:mm:ss',
   tcChecked = true,
 ): FaberTable.ColumnsProp<any> {
@@ -401,7 +404,7 @@ export function genTimeSorterColumn(
  * @param tcChecked
  * @param crtNameTcChecked
  */
-export function genCtrColumns(sorter: Fa.Sorter, tcChecked = true, crtNameTcChecked = false): FaberTable.ColumnsProp<any>[] {
+export function genCtrColumns(sorter: boolean | Fa.Sorter, tcChecked = true, crtNameTcChecked = false): FaberTable.ColumnsProp<any>[] {
   return [
     {
       title: '创建时间',
@@ -445,7 +448,7 @@ export function genCtrColumns(sorter: Fa.Sorter, tcChecked = true, crtNameTcChec
  * 生成更新时间、更新用户列
  * @param sorter
  */
-export function genUpdateColumns(sorter: Fa.Sorter): FaberTable.ColumnsProp<any>[] {
+export function genUpdateColumns(sorter: boolean | Fa.Sorter): FaberTable.ColumnsProp<any>[] {
   return [
     {
       title: '更新时间',
