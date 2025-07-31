@@ -131,7 +131,7 @@ export function genIdColumn(
   return {
     title,
     dataIndex,
-    sorter: true,
+    sorter: !sorter ? sorter : true,
     sortOrder: getSortOrder(sorter, dataIndex),
     tcRequired: false,
     width,
@@ -186,7 +186,7 @@ export function genEllipsisSorterColumn(
   return {
     title,
     dataIndex,
-    sorter: true,
+    sorter: !sorter ? sorter : true,
     sortOrder: getSortOrder(sorter, dataIndex),
     tcChecked,
     width,
@@ -219,7 +219,7 @@ export function genNumSorterColumn(
   return {
     title,
     dataIndex,
-    sorter: true,
+    sorter: !sorter ? sorter : true,
     sortOrder: getSortOrder(sorter, dataIndex),
     tcChecked,
     width,
@@ -246,7 +246,7 @@ export function genBoolSorterColumn(
     title,
     dataIndex,
     render: (val: any) => (val ? <Badge status="success" text="是" /> : <Badge status="default" text="否" />),
-    sorter: true,
+    sorter: !sorter ? sorter : true,
     sortOrder: getSortOrder(sorter, dataIndex),
     tcChecked,
     tcCondComponent: ({ index, value, callback, mode, ...props }: FaberTable.TcCondProp) => (
@@ -297,7 +297,7 @@ export function genDictSorterColumn(
     title,
     dataIndex,
     render: (val: string) => <span>{getValueFromDicts(val, dicts, dataIndex)}</span>,
-    sorter: true,
+    sorter: !sorter ? sorter : true,
     sortOrder: getSortOrder(sorter, dataIndex),
     tcChecked,
     tcCondComponent: ({ index, value, callback, mode, ...props }: FaberTable.TcCondProp) => (
@@ -328,7 +328,7 @@ export function genEnumSorterColumn(
     title,
     dataIndex,
     render: (val: string) => <span>{getValueFromDicts(val, dicts, dataIndex)}</span>,
-    sorter: true,
+    sorter: !sorter ? sorter : true,
     sortOrder: getSortOrder(sorter, dataIndex),
     tcChecked,
     tcCondComponent: ({ index, value, callback, mode, ...props }: FaberTable.TcCondProp) => (
@@ -359,7 +359,7 @@ export function genDateSorterColumn(
     title,
     dataIndex,
     render: (val: string) => getDateStr(val, format),
-    sorter: true,
+    sorter: !sorter ? sorter : true,
     sortOrder: getSortOrder(sorter, dataIndex),
     tcChecked,
     width,
@@ -389,7 +389,7 @@ export function genTimeSorterColumn(
     title,
     dataIndex,
     render: (val: string) => getDateStr(val, format),
-    sorter: true,
+    sorter: !sorter ? sorter : true,
     sortOrder: getSortOrder(sorter, dataIndex),
     tcChecked,
     width,
@@ -409,7 +409,7 @@ export function genCtrColumns(sorter: boolean | Fa.Sorter, tcChecked = true, crt
     {
       title: '创建时间',
       dataIndex: 'crtTime',
-      sorter: true,
+      sorter: !sorter ? sorter : true,
       sortOrder: getSortOrder(sorter, 'crtTime'),
       tcChecked,
       width: 165,
@@ -419,7 +419,7 @@ export function genCtrColumns(sorter: boolean | Fa.Sorter, tcChecked = true, crt
     {
       title: '创建用户',
       dataIndex: 'crtName',
-      sorter: true,
+      sorter: !sorter ? sorter : true,
       sortOrder: getSortOrder(sorter, 'crtName'),
       tcChecked: crtNameTcChecked,
       width: 100,
@@ -427,7 +427,7 @@ export function genCtrColumns(sorter: boolean | Fa.Sorter, tcChecked = true, crt
     {
       title: '创建用户ID',
       dataIndex: 'crtUser',
-      sorter: true,
+      sorter: !sorter ? sorter : true,
       sortOrder: getSortOrder(sorter, 'crtUser'),
       width: 120,
       // tcCondComponent: ({ index, value, callback, ...props }: FaberTable.TcCondProp) => (
@@ -453,7 +453,7 @@ export function genUpdateColumns(sorter: boolean | Fa.Sorter): FaberTable.Column
     {
       title: '更新时间',
       dataIndex: 'updTime',
-      sorter: true,
+      sorter: !sorter ? sorter : true,
       sortOrder: getSortOrder(sorter, 'updTime'),
       width: 165,
       tcCondComponent: renderTimePicker,
@@ -462,14 +462,14 @@ export function genUpdateColumns(sorter: boolean | Fa.Sorter): FaberTable.Column
     {
       title: '更新用户',
       dataIndex: 'updName',
-      sorter: true,
+      sorter: !sorter ? sorter : true,
       sortOrder: getSortOrder(sorter, 'updName'),
       width: 100,
     },
     {
       title: '更新用户ID',
       dataIndex: 'updUser',
-      sorter: true,
+      sorter: !sorter ? sorter : true,
       sortOrder: getSortOrder(sorter, 'updUser'),
       width: 120,
       // tcCondComponent: ({ index, value, callback, ...props }: FaberTable.TcCondProp) => (
