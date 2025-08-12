@@ -741,3 +741,17 @@ export function downloadImage(url:string) {
       link.remove();
     });
 }
+
+/**
+ * check if image url is valid
+ * @param url
+ */
+export async function checkImageUrlValid(url: string) {
+  try {
+    const res = await fetch(url, { method: "HEAD" });
+    return res.ok; // true: 2xx 响应
+  } catch (err) {
+    return false;  // 网络错误或跨域失败
+  }
+}
+
