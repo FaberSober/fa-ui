@@ -755,3 +755,55 @@ export async function checkImageUrlValid(url: string) {
   }
 }
 
+// ------------------------------------------ object ------------------------------------------
+
+/**
+ * 检查对象是否包含某个属性
+ * // 示例：
+ * const cv = { termAuto: 123 };
+ *
+ * console.log(hasProp(cv, "termAuto"));        // true
+ * console.log(hasProp(cv, "toString"));        // false (因为 ownOnly 默认 true)
+ * console.log(hasProp(cv, "toString", false)); // true (原型链上的属性)
+ *
+ * @param {Object} obj - 要检查的对象
+ * @param {string} key - 属性名
+ * @param {boolean} ownOnly - 是否仅检查自身属性（默认 true）
+ * @returns {boolean}
+ */
+export function hasProp<T extends object>(
+  obj: T | null | undefined,
+  key: PropertyKey,
+  ownOnly = true
+): boolean {
+  if (obj == null) return false;
+
+  return ownOnly
+    ? Object.prototype.hasOwnProperty.call(obj, key)
+    : key in obj;
+}
+
+/**
+ * 检查对象是否包含多个属性中的任意一个
+ * // 示例：
+ * const cv = { termAuto: 123, foo: "bar" };
+ *
+ * console.log(hasAnyProp(cv, ["termAuto", "xxx"]));        // true
+ * console.log(hasAnyProp(cv, ["toString", "xxx"]));        // false (ownOnly 默认 true)
+ * console.log(hasAnyProp(cv, ["toString", "xxx"], false)); // true (原型链上有 toString)
+ *
+ * @param {Object} obj - 要检查的对象
+ * @param {string[]} keys - 属性名数组
+ * @param {boolean} ownOnly - 是否仅检查自身属性（默认 true）
+ * @returns {boolean}
+ */
+export function hasAnyProp<T extends object>(
+  obj: T | null | undefined,
+  keys: PropertyKey[],
+  ownOnly = true
+): boolean {
+  if (obj == null || keys.length === 0) return false;
+
+  return keys.some(key => hasProp(obj, key, ownOnly));
+}
+
