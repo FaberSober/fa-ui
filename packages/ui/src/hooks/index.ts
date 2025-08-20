@@ -9,6 +9,7 @@ export { default as useExport } from './useExport';
 export { default as useExportBase } from './useExportBase';
 export { default as useViewItem } from './useViewItem';
 export { default as useQs } from './useQs';
+export { default as useOpen } from './useOpen';
 
 export { useTableQueryParams }
 

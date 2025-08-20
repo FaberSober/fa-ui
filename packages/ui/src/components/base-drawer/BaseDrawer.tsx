@@ -57,7 +57,7 @@ export default function BaseDrawer({children, hideResize = false, triggerDom, bo
           className="fa-ant-drawer-body0"
           {...props}
         >
-          {(open || props.forceRender) && (
+          {(open || props.open || props.forceRender) && (
             <>
               <div className="fa-full">
                 <div className="fa-full-content fa-scroll fa-p12" style={{ ...bodyStyle }}>
