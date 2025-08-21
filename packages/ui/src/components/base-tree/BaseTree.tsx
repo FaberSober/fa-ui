@@ -389,7 +389,7 @@ const BaseTree = React.forwardRef<HTMLElement, BaseTreeProp<any, any>>(function 
               record={clickItem ? clickItem.sourceData : undefined}
               onCancel={cancelAddOrEditItem}
               fetchFinish={afterEditItem}
-              destroyOnClose
+              destroyOnHidden
             />
           </Spin>
         </div>

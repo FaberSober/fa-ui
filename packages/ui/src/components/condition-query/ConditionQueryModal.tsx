@@ -176,7 +176,7 @@ export default function ConditionQueryModal<T>({
         confirmLoading={loading}
         onCancel={() => setOpen(false)}
         width={750}
-        destroyOnClose
+        destroyOnHidden
       >
         <div>
           {condGroupList.map((condGroup) => {

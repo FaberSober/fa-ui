@@ -40,7 +40,7 @@ export default function DragModal(props: DragModalProps) {
           {modal}
         </FaDragItem>
       )}
-      destroyOnClose
+      destroyOnHidden
       maskClosable={false}
       {...restProps}
     />

@@ -136,7 +136,7 @@ function TableColConfigModal<T>({columns = [], biz, onConfigChange, children, ..
         open={open}
         onClose={() => setOpen(false)}
         width={500}
-        destroyOnClose
+        destroyOnHidden
         extra={
           <Space>
             <Button size="small" onClick={handleReset} loading={loading}>
