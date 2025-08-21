@@ -25,7 +25,7 @@ export default function BaseDrawer({children, hideResize = false, triggerDom, bo
 
   useEffect(() => {
     setParentId()
-  }, [open])
+  }, [open, props.open])
 
   function setParentId(delay = 500) {
     setTimeout(() => {
