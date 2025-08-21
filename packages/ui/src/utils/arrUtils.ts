@@ -20,3 +20,21 @@ export function findClosestIndex<T>(arr: T[], distanceFunc: (i: T) => number) {
   }
   return index;
 }
+
+/**
+ * 只修改原数组并返回它自身
+ * @param arr
+ * @param start
+ * @param deleteCount
+ * @param items
+ */
+export function spliceAndReturnSelf<T>(
+  arr: T[],
+  start: number,
+  deleteCount: number = 1, // 默认删除 1 个
+...items: T[]
+): T[] {
+  arr.splice(start, deleteCount, ...items);
+  return arr;
+}
+
