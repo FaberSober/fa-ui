@@ -32,6 +32,7 @@ export interface BaseTreeProp<T, KeyType = number> extends TreeProps {
   showOprBtn?: boolean; // 是否展示操作按钮
   showOprBtnAdd?: boolean; // 是否展示操作按钮
   showOprBtnEdit?: boolean; // 是否展示操作按钮
+  showOprBtnDel?: boolean; // 是否展示操作按钮
   showTips?: boolean; // 是否展示操作按钮
   tips?: string; // 是否展示操作按钮
   serviceName?: string; // 业务模块名称
@@ -77,6 +78,7 @@ const BaseTree = React.forwardRef<HTMLElement, BaseTreeProp<any, any>>(function 
   showOprBtn = false,
   showOprBtnAdd = true,
   showOprBtnEdit = true,
+  showOprBtnDel = true,
   serviceName = '',
   className,
   bodyStyle,
@@ -413,7 +415,7 @@ const BaseTree = React.forwardRef<HTMLElement, BaseTreeProp<any, any>>(function 
             {em.title}
           </Item>
         ))}
-        {showOprBtnEdit && (
+        {showOprBtnDel && (
           <Item id="del" onClick={handleItemClick}>
             <span style={{color: '#F00'}}>
               <DeleteOutlined style={{width: 16}}/> 删除
