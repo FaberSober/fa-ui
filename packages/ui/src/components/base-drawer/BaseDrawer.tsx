@@ -1,5 +1,5 @@
-import React, { createContext, ReactNode, useEffect, useState } from 'react';
-import {Drawer, DrawerProps} from "antd";
+import React, { createContext, ReactNode, useEffect, useImperativeHandle, useState } from 'react';
+import { Drawer, DrawerProps } from "antd";
 import { FaResizeHorizontal } from "@ui/components";
 import { FaUtils } from "@ui/utils";
 
@@ -7,7 +7,7 @@ export interface BaseDrawerContextProps {
   closeDrawer: () => void;
 }
 
-export const BaseDrawerContext = createContext<BaseDrawerContextProps>({ closeDrawer: () => {} });
+export const BaseDrawerContext = createContext<BaseDrawerContextProps>({ closeDrawer: () => { } });
 
 export interface BaseDrawerProps extends DrawerProps {
   hideResize?: boolean;
@@ -18,10 +18,15 @@ export interface BaseDrawerProps extends DrawerProps {
  * @author xu.pengfei
  * @date 2022/12/28 10:41
  */
-export default function BaseDrawer({children, hideResize = false, triggerDom, bodyStyle, onClose, ...props }: BaseDrawerProps) {
+const BaseDrawer = React.forwardRef<HTMLElement, BaseDrawerProps>(function BaseDrawer({ children, hideResize = false, triggerDom, bodyStyle, onClose, ...props }: BaseDrawerProps, ref: any) {
   const [open, setOpen] = useState(false);
   const [id] = useState(FaUtils.uuid())
   const [id1] = useState(FaUtils.uuid())
+
+  useImperativeHandle(ref, () => ({
+    open: () => setOpen(true),
+    close: () => setOpen(false),
+  }));
 
   useEffect(() => {
     setParentId()
@@ -37,7 +42,7 @@ export default function BaseDrawer({children, hideResize = false, triggerDom, bo
   }
 
   return (
-    <BaseDrawerContext.Provider value={{closeDrawer: () => setOpen(false)}}>
+    <BaseDrawerContext.Provider value={{ closeDrawer: () => setOpen(false) }}>
       <span>
         <span
           onClick={() => {
@@ -64,11 +69,13 @@ export default function BaseDrawer({children, hideResize = false, triggerDom, bo
                   {children}
                 </div>
               </div>
-              {!hideResize && <FaResizeHorizontal domId={id} position="left" style={{left: 0}} minWidth={200} />}
+              {!hideResize && <FaResizeHorizontal domId={id} position="left" style={{ left: 0 }} minWidth={200} />}
             </>
           )}
         </Drawer>
       </span>
     </BaseDrawerContext.Provider>
   )
-}
+})
+
+export default BaseDrawer
