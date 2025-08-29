@@ -41,6 +41,7 @@ const ThemeConfig = {
     'fa-text-color-disable': 'rgba(0, 0, 0, 0.25)',
     'fa-subtitle-color': '#666',
     'fa-border-color': '#F0F0F0',
+    'fa-box-shadow': '0 1px 2px -2px rgba(0, 0, 0, .08), 0 3px 6px 0 rgba(0, 0, 0, .06), 0 5px 12px 4px rgba(0, 0, 0, .04)',
     'separator-border': '#eee',
   },
   dark: {
@@ -61,6 +62,7 @@ const ThemeConfig = {
     'fa-text-color-disable': 'rgba(255, 255, 255, 0.25)',
     'fa-subtitle-color': '#A5C9E6',
     'fa-border-color': '#2f3a4b',
+    'fa-box-shadow': '0 1px 2px -2px rgba(255, 255, 255, 0.2), 0 3px 6px 0 rgba(255, 255, 255, 0.3), 0 5px 12px 4px rgba(255, 255, 255, 0.2)',
     'separator-border': '#0A3046',
   },
 }
