@@ -559,6 +559,14 @@ ul {
   margin: 0;
 }
 
+.fa-form-mb6 .ant-form-item {
+  margin-bottom: 6px;
+}
+
+.fa-form-mb12 .ant-form-item {
+  margin-bottom: 12px;
+}
+
 .fa-input-underline {
     border: none !important;
     border-radius: 0 !important;
