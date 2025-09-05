@@ -784,6 +784,17 @@ ul {
   word-spacing: -0.25em;       /* 微调单词间距（西文适用） */
 }
 
+/*----------------------------------------- antd-spin -----------------------------------------*/
+.fa-spin-full .ant-spin-nested-loading {
+  width: 100%;
+  height: 100%;
+}
+
+.fa-spin-full .ant-spin-nested-loading .ant-spin-container {
+  width: 100%;
+  height: 100%;
+}
+
 /*----------------------------------------- fa-form -----------------------------------------*/
 .fa-form-reverse .ant-form-item {
   margin-inline-end: 0;
