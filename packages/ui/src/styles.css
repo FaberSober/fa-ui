@@ -711,6 +711,15 @@ ul {
     background-color: var(--fa-bg-color-hover);
 }
 
+.fa-link-primary {
+    cursor: pointer;
+    transition: var(--fa-transition);
+}
+
+.fa-link-primary:hover {
+    background-color: var(--primary-color-dark300);
+}
+
 .fa-box-shadow {
     box-shadow: var(--fa-box-shadow);
 }
