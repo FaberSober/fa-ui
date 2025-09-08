@@ -3,7 +3,7 @@ html {
     --primary-color: #3b82f6;
     --primary-dark: #1e3a8a;
     --fa-bg-color: #fff; /* 适配主题-背景色 */
-    --fa-bg-color-hover: #F0F0F0; /* 适配主题-背景色 */
+    --fa-bg-color-hover: #e1e1e1; /* 适配主题-背景色 */
     --fa-bg-color2: #eee; /* 适配主题-背景色-2级 */
     --fa-bg-color-highlight: #1c5e88; /* 适配主题-背景色-高亮 */
     --fa-bg-color-highlight-hover: #1081c9; /* 适配主题-背景色-高亮-hover */
