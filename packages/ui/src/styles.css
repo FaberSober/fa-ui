@@ -3,7 +3,7 @@ html {
     --primary-color: #3b82f6;
     --primary-dark: #1e3a8a;
     --fa-bg-color: #fff; /* 适配主题-背景色 */
-    --fa-bg-color-hover: #F0F0F0; /* 适配主题-背景色 */
+    --fa-bg-color-hover: #e1e1e1; /* 适配主题-背景色 */
     --fa-bg-color2: #eee; /* 适配主题-背景色-2级 */
     --fa-bg-color-highlight: #1c5e88; /* 适配主题-背景色-高亮 */
     --fa-bg-color-highlight-hover: #1081c9; /* 适配主题-背景色-高亮-hover */
@@ -407,8 +407,20 @@ ul {
     margin-left: 8px;
 }
 
+.fa-ml6 {
+    margin-left: 6px;
+}
+
 .fa-pl12 {
     padding-left: 12px;
+}
+
+.fa-pl6 {
+    padding-left: 6px;
+}
+
+.fa-pl0 {
+    padding-left: 0px;
 }
 
 .fa-pr12 {
@@ -657,6 +669,10 @@ ul {
     cursor: pointer;
 }
 
+.fa-cursor-move {
+    cursor: move;
+}
+
 .fa-transition {
     transition: var(--fa-transition);
 }
@@ -693,6 +709,15 @@ ul {
 
 .fa-link-grey:hover {
     background-color: var(--fa-bg-color-hover);
+}
+
+.fa-link-primary {
+    cursor: pointer;
+    transition: var(--fa-transition);
+}
+
+.fa-link-primary:hover {
+    background-color: var(--primary-color-dark300);
 }
 
 .fa-box-shadow {

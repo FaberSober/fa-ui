@@ -55,38 +55,6 @@ export function hasPermission(permissions?: string[], permissionCode?: string | 
 }
 
 /**
- * get file extension
- * @param name
- */
-export function getExtension(name: string): string {
-  return name?.slice(name.lastIndexOf('.') + 1).toLowerCase() ?? '';
-}
-/**
- * 判断连接是否为图片
- * @param url
- */
-export function isUrlImg(url: string) {
-  if (url === undefined || url === null) return false;
-  if (url.indexOf('.') === -1) return false;
-
-  const suffix = url.substr(url.lastIndexOf('.') + 1).toLowerCase();
-
-  return ['png', 'jpg', 'jpeg', 'ico', 'bmp', 'gif'].indexOf(suffix) > -1;
-}
-
-/**
- * 判断文件类型是否为图片
- * @param type 文件后缀名
- */
-export function isImg(type: string) {
-  return ['png', 'jpg', 'jpeg', 'ico', 'bmp', 'gif'].indexOf(type.toLowerCase()) > -1
-}
-
-export function isVideo(type: string) {
-  return ['mp4', 'webm', 'ogg'].indexOf(type.toLowerCase()) > -1
-}
-
-/**
  * 将obj/list中undefined的值，设置为null。解决undefined值丢失的情况
  * @param obj
  */
@@ -512,6 +480,7 @@ export const FormRules = {
   PATTERN_TEL: {pattern: REGEX_TEL_NO, message: '请输入正确格式的手机号'},
 };
 
+// --------------------------------------- file ---------------------------------------
 /**
  * file的accept属性（文件上传的类型）
  * https://blog.csdn.net/weixin_44599143/article/details/107932099
@@ -537,6 +506,9 @@ export const FA_TYPE_PPT = [".pps", ".ppsx", ".ppsm",
   ".pot", ".potx", ".potm",
   ".odp", ".fodp", ".otp"];
 
+export const FA_TYPE_IMAGE = ['.png', '.jpg', '.jpeg', '.ico', '.bmp', '.gif']
+export const FA_TYPE_VIDEO = ['.mp4', '.webm', '.ogg']
+
 export function getDocumentTypeByExt(ext: string): FaEnums.DocumentType | undefined {
   if (FA_TYPE_WORD.indexOf('.' + ext) > -1) return FaEnums.DocumentType.word;
   if (FA_TYPE_EXCEL.indexOf('.' + ext) > -1) return FaEnums.DocumentType.cell;
@@ -544,7 +516,7 @@ export function getDocumentTypeByExt(ext: string): FaEnums.DocumentType | undefi
 }
 
 export function getDocumentTypeByName(fileName: string): FaEnums.DocumentType | undefined {
-  const ext = fileName.substring(fileName.lastIndexOf('.') + 1)
+  const ext = fileName.substring(fileName.lastIndexOf('.') + 1).toLocaleLowerCase();
   if (FA_TYPE_WORD.indexOf('.' + ext) > -1) return FaEnums.DocumentType.word;
   if (FA_TYPE_EXCEL.indexOf('.' + ext) > -1) return FaEnums.DocumentType.cell;
   if (FA_TYPE_PPT.indexOf('.' + ext) > -1) return FaEnums.DocumentType.slide;
@@ -554,6 +526,60 @@ export function isPdf(fileName: string): boolean {
   return fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase() === 'pdf';
 }
 
+/**
+ * judeg file is image
+ * @param fileName file name
+ * @returns
+ */
+export function isImageByFileName(fileName: string): boolean {
+  const ext = fileName.substring(fileName.lastIndexOf('.') + 1).toLocaleLowerCase();
+  return FA_TYPE_IMAGE.indexOf('.' + ext) > -1
+}
+
+/**
+ * judeg file is image
+ * @param fileName file name
+ * @returns
+ */
+export function isVideoByFileName(fileName: string): boolean {
+  const ext = fileName.substring(fileName.lastIndexOf('.') + 1).toLocaleLowerCase();
+  return FA_TYPE_VIDEO.indexOf('.' + ext) > -1
+}
+
+
+/**
+ * get file extension
+ * @param name
+ */
+export function getExtension(name: string): string {
+  return name?.slice(name.lastIndexOf('.') + 1).toLowerCase() ?? '';
+}
+/**
+ * 判断连接是否为图片
+ * @param url
+ */
+export function isUrlImg(url: string) {
+  if (url === undefined || url === null) return false;
+  if (url.indexOf('.') === -1) return false;
+
+  const suffix = url.substr(url.lastIndexOf('.') + 1).toLowerCase();
+
+  return ['png', 'jpg', 'jpeg', 'ico', 'bmp', 'gif'].indexOf(suffix) > -1;
+}
+
+/**
+ * 判断文件类型是否为图片
+ * @param type 文件后缀名
+ */
+export function isImg(type: string) {
+  return ['png', 'jpg', 'jpeg', 'ico', 'bmp', 'gif'].indexOf(type.toLowerCase()) > -1
+}
+
+export function isVideo(type: string) {
+  return ['mp4', 'webm', 'ogg'].indexOf(type.toLowerCase()) > -1
+}
+
+// --------------------------------------- echarts ---------------------------------------
 /**
  * echarts toolbox 配置
  */
