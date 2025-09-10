@@ -127,6 +127,10 @@ ul {
     /*display: flex;*/
 }
 
+.ant-splitter-panel {
+  padding: 0 !important;
+}
+
 /*----------------------------------------- 全局通用自定义样式 -----------------------------------------*/
 .fa-full-content {
     position: absolute;
