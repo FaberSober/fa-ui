@@ -931,9 +931,3 @@ code[class*=language-], pre[class*=language-] {
     background: var(--fa-bg-color2);
 }
 
-/*----------------------------------------- allotment -----------------------------------------*/
-[data-testid=split-view-view]:not(:first-child)::before {
-  height: 20px !important;
-  top: calc(50% - 10px) !important;
-}
-
