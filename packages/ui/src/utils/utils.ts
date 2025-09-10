@@ -833,3 +833,20 @@ export function hasAnyProp<T extends object>(
   return keys.some(key => hasProp(obj, key, ownOnly));
 }
 
+// ------------------------------------------ cookie ------------------------------------------
+/**
+ * get cookie value
+ * @param name name
+ * @returns
+ */
+export function getCookie(name: string) {
+  const cookies = document.cookie.split("; ");
+  for (let i = 0; i < cookies.length; i++) {
+    const [key, value] = cookies[i].split("=");
+    if (key === name) {
+      return decodeURIComponent(value); // 防止有 URL 编码
+    }
+  }
+  return null;
+}
+
