@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {find, get, isNumber, sumBy} from 'lodash';
 import { ClearOutlined, DeleteOutlined, SettingOutlined } from '@ant-design/icons';
-import { Button, Modal, Space, Table } from 'antd';
+import { Button, Modal, Table } from 'antd';
 import type FaberTable from './FaberTable';
 import { showResponse } from '@ui/utils/utils';
 import { dataIndexToString, useScrollY } from './utils';
@@ -170,7 +170,7 @@ export default function BaseBizTable<RecordType extends object = any>({
           <div>
             {/* 多选删除 */}
             {selectedRowKeys.length > 0 && (
-              <Space style={{padding: 8, display: 'flex', lineHeight: '32px'}}>
+              <div className='fa-flex-row-center' style={{height: 42, padding: '0 8px', gap: 8, lineHeight: '32px'}}>
                 <div className="fa-text fa-mr12">
                   已选中&nbsp;<a>{selectedRowKeys.length}</a>&nbsp;条数据
                 </div>
@@ -183,11 +183,11 @@ export default function BaseBizTable<RecordType extends object = any>({
                 <Button onClick={() => updateRowKeys([])} icon={<ClearOutlined/>}>
                   取消选中
                 </Button>
-              </Space>
+              </div>
             )}
             {/* 高级组合查询 */}
             {selectedRowKeys.length === 0 && (
-              <div style={{padding: 8, display: 'flex', alignItems: 'center'}}>
+              <div className='fa-flex-row-center' style={{height: 42, padding: '0 8px', gap: 8}}>
                 {showComplexQuery && (
                   <ComplexQuery
                     columns={columns}
@@ -200,14 +200,14 @@ export default function BaseBizTable<RecordType extends object = any>({
                   {renderQuerySuffix &&  renderQuerySuffix()}
                   {querySuffix}
                 </div>
-                <Space style={{marginRight: 8, display: 'flex', lineHeight: '32px'}}>
+                <div className='fa-flex-row-center' style={{marginRight: 8, lineHeight: '32px', gap: 8}}>
                   {renderQueryAll && renderQueryAll()}
                   {showDeleteByQuery && (
                     <Button danger onClick={() => handleDeleteQueryAll()} icon={<DeleteOutlined />}>
                       全部删除
                     </Button>
                   )}
-                </Space>
+                </div>
                 <div className="fa-text" style={{lineHeight: '32px'}}>
                   共<a style={{fontWeight: 600, margin: '0 4px'}}>{props.pagination ? get(props, 'pagination.total') : props.dataSource?.length}</a>条数据
                 </div>
