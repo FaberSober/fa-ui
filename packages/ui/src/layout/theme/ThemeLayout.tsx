@@ -40,7 +40,7 @@ const ThemeConfig = {
     'fa-text-color-light100': '#999',
     'fa-text-color-disable': 'rgba(0, 0, 0, 0.25)',
     'fa-subtitle-color': '#666',
-    'fa-border-color': '#F0F0F0',
+    'fa-border-color': '#E4E4E4',
     'fa-box-shadow': '0 1px 2px -2px rgba(0, 0, 0, .08), 0 3px 6px 0 rgba(0, 0, 0, .06), 0 5px 12px 4px rgba(0, 0, 0, .04)',
     'separator-border': '#eee',
   },

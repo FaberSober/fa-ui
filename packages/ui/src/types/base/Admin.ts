@@ -204,6 +204,11 @@ namespace Admin {
     img: string;
     /** api token  */
     apiToken: string;
+    // ------------- show cols -------------
+    /** 部门名称  */
+    departmentName: string;
+    /** 职位名称  */
+    postName: string;
   }
 
   export interface UserWeb extends User {

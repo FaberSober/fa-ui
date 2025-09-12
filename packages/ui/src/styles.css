@@ -127,6 +127,10 @@ ul {
     /*display: flex;*/
 }
 
+.ant-splitter-panel {
+  padding: 0 !important;
+}
+
 /*----------------------------------------- 全局通用自定义样式 -----------------------------------------*/
 .fa-full-content {
     position: absolute;
@@ -577,6 +581,14 @@ ul {
 
 .fa-form-mb12 .ant-form-item {
   margin-bottom: 12px;
+}
+
+.fa-gap12 {
+  gap: 12px;
+}
+
+.fa-gap6 {
+  gap: 6px;
 }
 
 .fa-input-underline {
