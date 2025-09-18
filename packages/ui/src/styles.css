@@ -943,3 +943,48 @@ code[class*=language-], pre[class*=language-] {
     background: var(--fa-bg-color2);
 }
 
+/*----------------------------------------- scrollbar -----------------------------------------*/
+/* ---------- WebKit 系列（Chrome、Edge、Safari） ---------- */
+::-webkit-scrollbar {
+  width: 8px;          /* 纵向滚动条宽度 */
+  height: 8px;         /* 横向滚动条高度 */
+  background: transparent; /* 彻底隐藏轨道背景 */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* 轨道保持透明 */
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, .25); /* 滑块颜色：50% 黑，可自行换色 */
+  border-radius: 4px;
+  border: none;        /* 去掉白边 */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, .45); /* 悬停高亮 */
+}
+
+/* ---------- Firefox ---------- */
+* {
+  scrollbar-width: thin;      /* 细滚动条 */
+  scrollbar-color: rgba(0, 0, 0, .25) transparent; /* 滑块色 + 轨道透明 */
+  /* 关键：滚动条 overlay */
+  scrollbar-gutter: stable overlay; /* 标准写法，Chrome/Edge/Firefox 新版支持 */
+}
+
+[data-theme=dark] ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, .25); /* 滑块颜色：50% 白，可自行换色 */
+}
+
+[data-theme=dark] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, .45); /* 悬停高亮 */
+}
+
+[data-theme=dark] * {
+  scrollbar-color: rgba(255, 255, 255, .25) transparent; /* 滑块色 + 轨道透明 */
+}
+
+.fa-scroll-bar-stable {
+  scrollbar-gutter: stable; /* 保持滚动条位置稳定 */
+}
