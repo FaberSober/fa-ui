@@ -246,6 +246,10 @@ ul {
     font-weight: bold;
 }
 
+.fa-text-small {
+    font-size: 12px;
+}
+
 .fa-text-light100 {
   color: var(--fa-text-color-light100);
 }
