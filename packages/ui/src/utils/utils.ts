@@ -850,3 +850,13 @@ export function getCookie(name: string) {
   return null;
 }
 
+// ------------------------------------------ env ------------------------------------------
+/**
+ * check if current env is development
+ * @returns
+ */
+export function isDev() {
+  // @ts-ignore
+  return process.env.NODE_ENV === 'development' || import.meta.env.DEV;
+}
+
