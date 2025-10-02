@@ -150,14 +150,18 @@ export default function UploadFileLocal({ children, description, onFileChange, o
     >
       {children ? (
         <span>{children}</span>
-      ) : (
+      //在上传不可用时不展示选择文件按钮
+      // ) : (
+      ) : !props.disabled ? (
         <>
-          <Button loading={loading} disabled={props.disabled}>
+          {/*<Button loading={loading} disabled={props.disabled}>*/}
+          <Button loading={loading}>
             <UploadOutlined /> 选择文件
           </Button>
           {description && <span>{description}</span>}
         </>
-      )}
+      // )}
+      ) :null }
     </Upload>
   );
 }
