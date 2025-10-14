@@ -1,10 +1,12 @@
-import { Fa } from '@ui/types';
-import { Select, SelectProps } from 'antd';
+import React, { CSSProperties, ReactNode, useEffect, useState } from 'react';
 import { get, remove, trim } from 'lodash';
-import { CSSProperties, ReactNode, useEffect, useState } from 'react';
+import { Button, Select, SelectProps, Space } from 'antd';
 import { useDebounce } from 'react-use';
+import { Fa } from '@ui/types';
+import { SearchOutlined } from "@ant-design/icons";
+import { BizUserSelect, SelectedUser } from '../biz-user-select';
 
-export interface BaseSearchSelectProps<T, KeyType = number> extends SelectProps<T> {
+export interface BaseUserSearchSelectProps<T, KeyType = number> extends SelectProps<T> {
   labelKey?: string | ((record: T) => string | ReactNode);
   valueKey?: string | ((record: T) => any);
   /** [外部定义]Tree节点标准API接口 */
@@ -28,7 +30,7 @@ export interface BaseSearchSelectProps<T, KeyType = number> extends SelectProps<
  * @author xu.pengfei
  * @date 2020/12/28
  */
-export default function BaseSearchSelect<RecordType extends object = any, KeyType = number>({
+export default function BaseUserSearchSelect<RecordType extends object = any, KeyType = number>({
   labelKey = 'name',
   valueKey = 'id',
   serviceApi,
@@ -37,10 +39,11 @@ export default function BaseSearchSelect<RecordType extends object = any, KeyTyp
   onChange,
   bodyStyle,
   ...props
-}: BaseSearchSelectProps<RecordType, KeyType>) {
+}: BaseUserSearchSelectProps<RecordType, KeyType>) {
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState<string>('');
   const [array, setArray] = useState<any>([]);
+  const [innerUsers, setInnerUsers] = useState<SelectedUser[]>([])
 
   const multiple = props.mode === 'multiple';
 
@@ -55,6 +58,7 @@ export default function BaseSearchSelect<RecordType extends object = any, KeyTyp
         // }
       } else {
         updateValue(value);
+        setInnerUsers(value.map((i:any) => ({ id: i, allowRemove: true })))
       }
     } else {
       if (value === undefined || value === null) {
@@ -64,6 +68,7 @@ export default function BaseSearchSelect<RecordType extends object = any, KeyTyp
         }
       } else {
         updateValue(value);
+        setInnerUsers([{ id: value, allowRemove: true }])
       }
     }
   }, [value, extraParams]);
@@ -148,27 +153,48 @@ export default function BaseSearchSelect<RecordType extends object = any, KeyTyp
     }
   }
 
+  function handleAddUsers(users: SelectedUser[], callback: any, error: any) {
+    if (multiple) {
+      onChange && onChange(users.map(i => i.id), users)
+    } else {
+      if (users && users[0]) {
+        onChange && onChange(users[0].id, users[0])
+      } else {
+        onChange && onChange(undefined, undefined)
+      }
+    }
+    callback()
+  }
+
   return (
-    <Select
-      showSearch
-      allowClear
-      // value={this.state.value}
-      defaultActiveFirstOption={false}
-      // showArrow={false}
-      filterOption={false}
-      searchValue={search}
-      onSearch={(v) => {
-        setLoading(true);
-        setSearch(v);
-      }}
-      notFoundContent={null}
-      placeholder="搜索..."
-      options={array}
-      value={value}
-      loading={loading}
-      style={{ minWidth: 138 }}
-      onChange={handleValueChange}
-      {...props}
-    />
+    <Space.Compact block style={bodyStyle}>
+      <Select
+        showSearch
+        allowClear
+        // value={this.state.value}
+        defaultActiveFirstOption={false}
+        // showArrow={false}
+        filterOption={false}
+        searchValue={search}
+        onSearch={(v) => {
+          setLoading(true);
+          setSearch(v);
+        }}
+        notFoundContent={null}
+        placeholder="搜索..."
+        options={array}
+        value={value}
+        loading={loading}
+        style={{ minWidth: 138 }}
+        onChange={handleValueChange}
+        {...props}
+      />
+      <BizUserSelect
+        onChange={handleAddUsers}
+        selectedUsers={innerUsers}
+      >
+        <Button icon={<SearchOutlined />} />
+      </BizUserSelect>
+    </Space.Compact>
   );
 }
