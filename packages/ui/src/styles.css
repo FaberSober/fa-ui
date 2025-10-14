@@ -612,6 +612,10 @@ ul {
     color: var(--fa-subtitle-color);
 }
 
+.fa-bg-selected {
+    background: var(--fa-bg-selected);
+}
+
 .fa-base-btn-selected {
     background: var(--fa-bg-selected);
 }
