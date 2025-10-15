@@ -18,7 +18,7 @@ export interface BaseSearchSelectProps<T, KeyType = number> extends SelectProps<
   };
   value?: any;
   onChange?: (v: any, option?: any) => void;
-  // onItemChange?: (v: T) => void;
+  onChangeWithItem?: (v: any, option?: T) => void;
   extraParams?: any;
   bodyStyle?: CSSProperties;
 }
@@ -35,6 +35,7 @@ export default function BaseSearchSelect<RecordType extends object = any, KeyTyp
   value,
   extraParams,
   onChange,
+  onChangeWithItem,
   bodyStyle,
   ...props
 }: BaseSearchSelectProps<RecordType, KeyType>) {
@@ -61,6 +62,7 @@ export default function BaseSearchSelect<RecordType extends object = any, KeyTyp
         searchNow();
         if (onChange) {
           onChange(undefined)
+          onChangeWithItem?.(undefined, undefined)
         }
       } else {
         updateValue(value);
@@ -97,6 +99,7 @@ export default function BaseSearchSelect<RecordType extends object = any, KeyTyp
       serviceApi?.getById(outValue).then((res) => {
         const newList = [{ label: parseLabel(res.data), value: parseValue(res.data) }];
         setArray(newList);
+        onChangeWithItem?.(outValue, res.data)
       });
     }
   }
@@ -139,9 +142,10 @@ export default function BaseSearchSelect<RecordType extends object = any, KeyTyp
   );
 
   function handleValueChange(v: any, item: any) {
-    // console.log('handleValueChange', v, item)
+    console.log('handleValueChange', v, item)
     if (onChange) {
       onChange(v, item);
+      // onChangeWithItem?.(v, item);
     }
     if (search !== '') {
       setSearch('');
