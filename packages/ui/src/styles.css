@@ -868,6 +868,11 @@ ul {
   height: 100%;
 }
 
+/*----------------------------------------- antd-descriptions -----------------------------------------*/
+.fa-antd-desc .ant-descriptions-header {
+  margin-bottom: 12px;
+}
+
 /*----------------------------------------- fa-iframe -----------------------------------------*/
 .fa-iframe {
   outline: hidden;
