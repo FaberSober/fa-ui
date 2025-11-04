@@ -1001,3 +1001,15 @@ code[class*=language-], pre[class*=language-] {
 .fa-scroll-bar-stable {
   scrollbar-gutter: stable; /* 保持滚动条位置稳定 */
 }
+
+.fa-scroll-bar-dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, .25); /* 滑块颜色：50% 白，可自行换色 */
+}
+
+.fa-scroll-bar-dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, .45); /* 悬停高亮 */
+}
+
+.fa-scroll-bar-dark * {
+  scrollbar-color: rgba(255, 255, 255, .25) transparent; /* 滑块色 + 轨道透明 */
+}
