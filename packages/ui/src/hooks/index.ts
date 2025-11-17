@@ -12,6 +12,7 @@ export { default as useViewItem } from './useViewItem';
 export { default as useQs } from './useQs';
 export { default as useOpen } from './useOpen';
 export { default as useLoadScript } from './useLoadScript';
+export { default as useLoadStyle } from './useLoadStyle';
 
 export { useTableQueryParams }
 
