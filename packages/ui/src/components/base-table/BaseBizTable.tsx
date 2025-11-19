@@ -42,6 +42,8 @@ export default function BaseBizTable<RecordType extends object = any>({
   showDeleteByQuery = false,
   onDeleteByQuery = () => {},
   scrollY,
+  topBtns,
+  topSecondBtns,
   ...props
 }: FaberTable.BaseTableProps<RecordType>) {
   const [id] = useState(v4());
@@ -167,7 +169,8 @@ export default function BaseBizTable<RecordType extends object = any>({
     <div style={{ flex: 1, position:'relative' }}>
       <div className="fa-flex-column fa-full-content">
         {showTopDiv && (
-          <div>
+          <div className='fa-flex-row-center'>
+            {topBtns}
             {/* 多选删除 */}
             {selectedRowKeys.length > 0 && (
               <div className='fa-flex-row-center' style={{height: 42, padding: '0 8px', gap: 8, lineHeight: '32px'}}>
@@ -187,7 +190,7 @@ export default function BaseBizTable<RecordType extends object = any>({
             )}
             {/* 高级组合查询 */}
             {selectedRowKeys.length === 0 && (
-              <div className='fa-flex-row-center' style={{height: 42, padding: '0 8px', gap: 8}}>
+              <div className='fa-flex-row-center fa-flex-1' style={{height: 42, padding: '0 8px', gap: 8}}>
                 {showComplexQuery && (
                   <ComplexQuery
                     columns={columns}
@@ -197,6 +200,7 @@ export default function BaseBizTable<RecordType extends object = any>({
                   />
                 )}
                 <div className="fa-text" style={{flex: 1}}>
+                  {topSecondBtns}
                   {renderQuerySuffix &&  renderQuerySuffix()}
                   {querySuffix}
                 </div>

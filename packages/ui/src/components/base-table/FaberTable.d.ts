@@ -83,6 +83,8 @@ namespace FaberTable {
     onConditionChange?: (conditionList: ConditionQuery.CondGroup[]) => void; // 组合查询条件变更
     showDeleteByQuery?: boolean; // 是否展示-根据当前查询条件全量删除
     onDeleteByQuery?: () => void; // 根据当前查询条件全量删除
+    topBtns?: ReactNode; // 顶部按钮区域
+    topSecondBtns?: ReactNode; // 顶部次级按钮区域
   }
 }
 
