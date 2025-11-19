@@ -20,12 +20,10 @@ export default function AuthDelBtn({ handleDelete, permission, showIcon = true, 
   return (
     <ShiroPermissionContainer permission={permission}>
       <Popconfirm title="确认删除?" onConfirm={() => handleDelete()} placement="topRight">
-        <Tooltip title={tooltip}>
-          <a className="fa-link-btn" style={{ color: 'red' }}>
-            {showIcon && <DeleteOutlined /> }
-            {text}
-          </a>
-        </Tooltip>
+        <a className="fa-link-btn" style={{ color: 'red' }}>
+          {showIcon && <DeleteOutlined /> }
+          {text}
+        </a>
       </Popconfirm>
     </ShiroPermissionContainer>
   );
