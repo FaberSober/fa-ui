@@ -830,6 +830,27 @@ ul {
 }
 
 /*----------------------------------------- antd-spin -----------------------------------------*/
+.fa-grid2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 每行4列，均分 */
+}
+
+.fa-grid3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 每行4列，均分 */
+}
+
+.fa-grid4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 每行4列，均分 */
+}
+
+.fa-grid5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 每行4列，均分 */
+}
+
+/*----------------------------------------- antd-spin -----------------------------------------*/
 .fa-spin-full .ant-spin-nested-loading {
   width: 100%;
   height: 100%;
