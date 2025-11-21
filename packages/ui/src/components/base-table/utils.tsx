@@ -104,7 +104,7 @@ export function genIndexColumn(paginationProps: { current?: number; pageSize?: n
     title: '序号',
     dataIndex: 'index',
     width: 70,
-    fixed: 'left',
+    // fixed: 'left',
     render: (_, r, i) => startIndex + i,
     tcChecked: true,
     tcConditionHide: true,
