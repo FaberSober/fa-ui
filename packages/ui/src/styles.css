@@ -1034,3 +1034,33 @@ code[class*=language-], pre[class*=language-] {
 .fa-scroll-bar-dark * {
   scrollbar-color: rgba(255, 255, 255, .25) transparent; /* 滑块色 + 轨道透明 */
 }
+
+/*----------------------------------------- modal fullscreen -----------------------------------------*/
+/* 这个类名对应于 Modal 组件中的 wrapClassName={...} */
+.fa-full-screen-modal-wrap .ant-modal-wrap {
+    /* 确保 z-index 够高，以覆盖所有其他元素 */
+    z-index: 10000;
+}
+
+/* 覆盖 Modal 本体的样式 */
+.fa-full-screen-modal-wrap .ant-modal {
+    max-width: 100vw;
+    top: 0 !important; /* 强制定位到顶部 */
+    padding-bottom: 0 !important;
+    margin: 0; /* 移除居中外边距 */
+    height: 100vh;
+}
+
+/* 覆盖 Modal 内容区（包含header/body/footer）的样式 */
+.fa-full-screen-modal-wrap .ant-modal-content {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* 使内容区铺满整个屏幕 */
+    border-radius: 0; /* 全屏模式下通常移除圆角 */
+}
+
+/* 覆盖 Modal Body 的样式，使其占据剩余空间并可滚动 */
+.fa-full-screen-modal-wrap .ant-modal-body {
+    flex: 1; /* 占据剩余垂直空间 */
+    overflow-y: auto; /* 允许内容区垂直滚动 */
+}
