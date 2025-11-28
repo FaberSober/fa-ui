@@ -1,7 +1,7 @@
 import {message} from 'antd';
 import {Fa, FaEnums} from '@ui/types';
 import {findIndex, isNil, isUndefined, map, trim} from 'lodash';
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import {filesize} from "filesize";
 import { v4 as uuidv4 } from 'uuid';
 import {dispatch} from 'use-bus'
@@ -150,8 +150,22 @@ export function getCurDate(format = 'YYYY-MM-DD') {
 /**
  * get start of today: YYYY-MM-DD HH:mm:ss
  */
+export function startOf(date: Dayjs):string {
+  return date.startOf('day').format('YYYY-MM-DD HH:mm:ss');
+}
+
+/**
+ * get start of today: YYYY-MM-DD HH:mm:ss
+ */
 export function startOfToday():string {
   return dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss');
+}
+
+/**
+ * get end of today: YYYY-MM-DD HH:mm:ss
+ */
+export function endOf(date: Dayjs):string {
+  return date.endOf('day').format('YYYY-MM-DD HH:mm:ss');
 }
 
 /**
