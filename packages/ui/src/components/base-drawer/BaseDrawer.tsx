@@ -20,36 +20,17 @@ export interface BaseDrawerProps extends DrawerProps {
  */
 const BaseDrawer = React.forwardRef<HTMLElement, BaseDrawerProps>(function BaseDrawer({ children, hideResize = false, triggerDom, bodyStyle, onClose, ...props }: BaseDrawerProps, ref: any) {
   const [open, setOpen] = useState(false);
-  const [id] = useState(FaUtils.uuid())
-  const [id1] = useState(FaUtils.uuid())
+  const [size, setSize] = useState(props.size || 700);
 
   useImperativeHandle(ref, () => ({
     open: () => setOpen(true),
     close: () => setOpen(false),
   }));
 
-  useEffect(() => {
-    setParentId()
-  }, [open, props.open])
-
-  function setParentId(delay = 500) {
-    setTimeout(() => {
-      const dom = document.getElementById(id1)
-      if (dom) {
-        dom.parentElement?.setAttribute("id", id)
-      }
-    }, delay)
-  }
-
   return (
     <BaseDrawerContext.Provider value={{ closeDrawer: () => setOpen(false) }}>
       <span>
-        <span
-          onClick={() => {
-            setOpen(true)
-            setParentId()
-          }}
-        >{triggerDom}</span>
+        <span onClick={() => setOpen(true)}>{triggerDom}</span>
         <Drawer
           title="查看详情"
           open={open}
@@ -57,8 +38,10 @@ const BaseDrawer = React.forwardRef<HTMLElement, BaseDrawerProps>(function BaseD
             setOpen(false)
             if (onClose) onClose(e)
           }}
-          width={700}
-          id={id1}
+          size={size}
+          resizable={{
+            onResize: (newSize) => setSize(newSize),
+          }}
           className="fa-ant-drawer-body0"
           {...props}
         >
@@ -69,7 +52,6 @@ const BaseDrawer = React.forwardRef<HTMLElement, BaseDrawerProps>(function BaseD
                   {children}
                 </div>
               </div>
-              {!hideResize && <FaResizeHorizontal domId={id} position="left" style={{ left: 0 }} minWidth={200} />}
             </>
           )}
         </Drawer>
