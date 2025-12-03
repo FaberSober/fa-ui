@@ -18,9 +18,9 @@ export interface BaseDrawerProps extends DrawerProps {
  * @author xu.pengfei
  * @date 2022/12/28 10:41
  */
-const BaseDrawer = React.forwardRef<HTMLElement, BaseDrawerProps>(function BaseDrawer({ children, hideResize = false, triggerDom, bodyStyle, onClose, ...props }: BaseDrawerProps, ref: any) {
+const BaseDrawer = React.forwardRef<HTMLElement, BaseDrawerProps>(function BaseDrawer({ children, hideResize = false, triggerDom, bodyStyle, onClose, size: outSize, ...props }: BaseDrawerProps, ref: any) {
   const [open, setOpen] = useState(false);
-  const [size, setSize] = useState(props.size || 700);
+  const [size, setSize] = useState(outSize || 700);
 
   useImperativeHandle(ref, () => ({
     open: () => setOpen(true),
