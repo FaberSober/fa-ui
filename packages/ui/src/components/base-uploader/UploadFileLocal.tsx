@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, message, Upload, type UploadProps } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import {fileSaveApi} from '@ui/services/base';
+import { default as fileSaveApi } from "@ui/services/base/admin/fileSave";
 import { genAuthHeaders } from '@ui/utils/cache';
 import type { RcFile } from 'antd/es/upload';
 import type { UploadChangeParam, UploadFile, UploadFileStatus } from 'antd/es/upload/interface';
