@@ -14,7 +14,6 @@
       "import": "./dist/index.es.js",
       "require": "./dist/index.cjs.js"
     },
-    "./styles.css": "./dist/index.css",
     "./index.css": "./dist/index.css"
   },
   "sideEffects": [
@@ -24,7 +23,7 @@
   "scripts": {
     "postinstall": "rimraf dist && rimraf .turbo",
     "ncu": "ncu -u --timeout 120000 -x react -x react-dom -x @types/react -x @types/react-dom",
-    "dev": "vite",
+    "dev": "vite build --watch",
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rimraf dist .turbo"
