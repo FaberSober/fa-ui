@@ -133,7 +133,7 @@ function TableColConfigModal<T>({columns = [], biz, onConfigChange, children, ..
         title="自定义表格字段"
         open={open}
         onClose={() => setOpen(false)}
-        width={500}
+        size={500}
         destroyOnHidden
         extra={
           <Space>
