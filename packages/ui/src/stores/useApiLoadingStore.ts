@@ -14,7 +14,7 @@ interface LoadingState {
 }
 
 export const useApiLoadingStore = create<LoadingState>()(
-  devtools((set, get) => ({
+  devtools<LoadingState>((set, get) => ({
     loadings: new Map(),
 
     isLoading: (key) => (get().loadings.get(key) ?? 0) > 0,
