@@ -2,12 +2,7 @@ import React, { createContext, ReactNode, useEffect, useImperativeHandle, useSta
 import { Drawer, DrawerProps } from "antd";
 import { FaResizeHorizontal } from "@ui/components";
 import { FaUtils } from "@ui/utils";
-
-export interface BaseDrawerContextProps {
-  closeDrawer: () => void;
-}
-
-export const BaseDrawerContext = createContext<BaseDrawerContextProps>({ closeDrawer: () => { } });
+import { BaseDrawerContext } from './BaseDrawerContext';
 
 export interface BaseDrawerProps extends DrawerProps {
   hideResize?: boolean;
@@ -43,6 +38,7 @@ const BaseDrawer = React.forwardRef<HTMLElement, BaseDrawerProps>(function BaseD
             onResize: (newSize) => setSize(newSize),
           }}
           className="fa-ant-drawer-body0"
+          mask={{ enabled: true, blur: false }}
           {...props}
         >
           {(open || props.open || props.forceRender) && (
