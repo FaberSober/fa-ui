@@ -1,7 +1,7 @@
-import type { FunctionComponent, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import type { ColumnProps, TableProps } from 'antd/es/table';
-import type { Fa } from '@fa/ui';
 import ConditionQuery from '../condition-query/ConditionQuery';
+import Fa from '@ui/types/core/Fa';
 
 /**
  * 通用业务表格配置
@@ -40,9 +40,10 @@ namespace FaberTable {
     tcRequired?: boolean; // 必须
     tcChecked?: boolean; // 默认勾选
     tcCondComponent?: (props: TcCondProp) => JSX.Element; // 自定义条件查询筛选值自定义录入组件-单值录入组件-方法定义
-    tcCondComponentElement?: FunctionComponent; // 自定义条件查询筛选值自定义录入组件-单值录入组件-组件定义
+    // tcCondComponentElement?: FunctionComponent; // 使用FunctionComponent类型dev保存，build打包无法运行
+    tcCondComponentElement?: any; // 自定义条件查询筛选值自定义录入组件-单值录入组件-组件定义
     tcCondBetweenComponent?: (props: TcCondBetweenProps) => JSX.Element; // 自定义条件查询筛选值自定义录入组件-双值录入组件-方法定义
-    tcCondBetweenComponentElement?: FunctionComponent; // 自定义条件查询筛选值自定义录入组件-双值录入组件-组件定义
+    tcCondBetweenComponentElement?: any; // 自定义条件查询筛选值自定义录入组件-双值录入组件-组件定义
     tcType?: string | undefined; // 自定义类型:menu操作菜单/
     tcConditionHide?: boolean; // 自定义条件查询-是否隐藏
     tcLabel?: string; // 自定义条件查询-标签
