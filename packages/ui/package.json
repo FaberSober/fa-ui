@@ -64,7 +64,7 @@
     "@types/uuid": "10.0.0",
     "@vitejs/plugin-react-swc": "3.11.0",
     "ahooks": "3.9.0",
-    "antd": "6.0.1",
+    "antd": "6.1.0",
     "axios": "1.11.0",
     "dayjs": "1.11.13",
     "fa-cron-react-editor": "0.0.13",
