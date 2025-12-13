@@ -11,7 +11,10 @@ export interface FaSortItemProps {
   className?: string | undefined;
   handleStyle?: CSSProperties;
   children?: ReactNode;
+  /** true-只变更x坐标，固定y坐标 */
   vertical?: boolean;
+  /** true-只变更y坐标，固定x坐标 */
+  horizontal?: boolean;
   dragging?: boolean;
 }
 
@@ -28,6 +31,7 @@ export default function FaSortItem({
   handleStyle,
   children,
   vertical,
+  horizontal,
   dragging,
 }: FaSortItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: id });
@@ -48,6 +52,11 @@ export default function FaSortItem({
   if (vertical) {
     styleTrans.transform = transform
       ? `translate3d(${vertical ? 0 : transform.x}px, ${vertical ? transform.y : 0}px, 0)`
+      : '';
+  }
+  if (horizontal) {
+    styleTrans.transform = transform
+      ? `translate3d(${horizontal ? transform.x : 0}px, ${horizontal ? 0 : transform.y}px, 0)`
       : '';
   }
 
