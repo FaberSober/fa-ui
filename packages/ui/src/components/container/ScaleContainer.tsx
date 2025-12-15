@@ -81,14 +81,24 @@ export default function ScaleContainer({
   // 计算最终比例
   const ratio = equalRatio
     ? Math.min(ratioRef.current.ratioX, ratioRef.current.ratioY)
-    : Math.max(ratioRef.current.ratioX, ratioRef.current.ratioY);
+    : Math.min(ratioRef.current.ratioX, ratioRef.current.ratioY);
 
-  const scaleStyles: CSSProperties = {
+  const innerContainerStyle: CSSProperties = {
+    position: 'absolute',
+    left: '50%',
+    top: '50%',
     width: `${width}px`,
     height: `${height}px`,
+    transform: 'translate(-50%, -50%)',
+    pointerEvents: 'none', // 重要：让鼠标事件穿透到内部 canvas
+  };
+
+  const contentStyle: CSSProperties = {
+    width: '100%',
+    height: '100%',
     transform: ratio !== 1 ? `scale(${ratio})` : undefined,
-    transformOrigin: 'left top',
-    position: 'relative',
+    transformOrigin: 'center center',
+    pointerEvents: 'auto', // 内容层恢复事件
   };
 
   const containerStyles: CSSProperties = fullscreen
@@ -107,17 +117,19 @@ export default function ScaleContainer({
       }}
     >
       <div style={{ ...containerStyles, ...containerStyle }}>
-        <div style={scaleStyles} {...bodyProps}>
-          {showFullscreenBtn && (
-            <div style={{ position: 'absolute', top: 12, right: 12, zIndex: 999, color: '#fff' }}>
-              <Tooltip title={fullscreen ? '退出全屏' : '全屏'}>
-                <a onClick={handleToggleFullscreen} style={{ fontSize: 24 }}>
-                  {fullscreen ? <FullscreenOutlined /> : <FullscreenExitOutlined />}
-                </a>
-              </Tooltip>
-            </div>
-          )}
-          {children}
+        <div style={innerContainerStyle}>
+          <div style={contentStyle} {...bodyProps}>
+            {showFullscreenBtn && (
+              <div style={{ position: 'absolute', top: 12, right: 12, zIndex: 999, color: '#fff' }}>
+                <Tooltip title={fullscreen ? '退出全屏' : '全屏'}>
+                  <a onClick={handleToggleFullscreen} style={{ fontSize: 24 }}>
+                    {fullscreen ? <FullscreenOutlined /> : <FullscreenExitOutlined />}
+                  </a>
+                </Tooltip>
+              </div>
+            )}
+            {children}
+          </div>
         </div>
       </div>
     </div>
