@@ -14,6 +14,16 @@ formItems: # 表单项列表
     children: # 容器的子元素
 ```
 
+## DataConfig
+```yaml
+main: # 主表
+  tableName:
+  comment:
+  columns:
+    - field: # field name
+    - sort: # sort
+```
+
 ## 低代码平台
 1. 表格拖拽编辑器✅
 2. 表格json解析展示
