@@ -4,7 +4,7 @@ import { FilterOutlined } from '@ant-design/icons';
 import ConditionQueryModal from './ConditionQueryModal';
 import SceneDropMenu from './SceneDropMenu';
 import { FaberTable } from '@ui/components/base-table';
-import ConditionQuery from './ConditionQuery';
+import ConditionQuery from '@ui/types/core/ConditionQuery';
 
 export interface ComplexQueryProps<T> {
   biz: string;

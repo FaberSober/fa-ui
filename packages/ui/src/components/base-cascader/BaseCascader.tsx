@@ -6,7 +6,7 @@ import { Cascader } from 'antd';
 import * as BaseTreeUtils from '@ui/components/base-tree/utils';
 import { filterNode, setTreeDisabled } from '@ui/components/base-tree/utils';
 
-export interface BaseCascaderProps<T extends BaseOptionType, KeyType = number> extends Omit<CascaderProps<Fa.TreeNode<T>>, 'options' | 'onChange'> {
+export interface BaseCascaderProps<T extends Record<any, any>, KeyType = number> extends Omit<CascaderProps<Fa.TreeNode<T>>, 'options' | 'onChange'> {
   showRoot?: boolean;
   /** [外部定义]Tree节点标准API接口 */
   serviceApi: {

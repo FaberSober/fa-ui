@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import type { ColumnProps, TableProps } from 'antd/es/table';
-import ConditionQuery from '../condition-query/ConditionQuery';
 import Fa from '@ui/types/core/Fa';
+import ConditionQuery from '@ui/types/core/ConditionQuery';
 
 /**
  * 通用业务表格配置
