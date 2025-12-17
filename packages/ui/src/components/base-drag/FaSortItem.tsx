@@ -16,6 +16,7 @@ export interface FaSortItemProps {
   /** true-只变更y坐标，固定x坐标 */
   horizontal?: boolean;
   dragging?: boolean;
+  onClick?: (e: React.MouseEvent) => void;
 }
 
 /**
@@ -33,6 +34,7 @@ export default function FaSortItem({
   vertical,
   horizontal,
   dragging,
+  onClick,
 }: FaSortItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: id });
 
@@ -61,7 +63,7 @@ export default function FaSortItem({
   }
 
   return (
-    <div ref={setNodeRef} className={className} style={{ ...styleTrans, ...style }} {...(handle ? {} : listeners)} {...attributes}>
+    <div ref={setNodeRef} className={className} style={{ ...styleTrans, ...style }} onClick={onClick} {...(handle ? {} : listeners)} {...attributes}>
       {children}
       {handle && (
         <div className="fa-drag-handle" style={handleStyle} {...listeners}>
