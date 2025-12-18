@@ -24,6 +24,20 @@ main: # 主表
     - sort: # sort
 ```
 
+## TableConfig
+```yaml
+query: # 查询字段
+  columns: # query columns
+    - field:
+    - sort:
+    - name: # column name
+    - type: # data type
+    - default: # default value
+    - multiple: true/false # multiple select
+column: # 列表字段
+tableProps: # 列表属性
+```
+
 ## 低代码平台
 1. 表格拖拽编辑器✅
 2. 表格json解析展示✅
