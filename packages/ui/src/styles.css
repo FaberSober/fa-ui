@@ -25,7 +25,7 @@ html {
     --fa-bg-grey-darker: #e1e1e1;
     --fa-hover-bg: #e1e1e1;
     --fa-transition: all ease-in-out 0.3s;
-    --fa-border-radius: 2px;
+    --fa-border-radius: 4px;
     /* --fa-box-shadow: 0 2px 8px var(--fa-bg-color-hover); */
     /* --fa-box-shadow-b: 0 2px 8px #eee; */
     --fa-box-shadow: 0 1px 2px -2px rgba(0, 0, 0, .08), 0 3px 6px 0 rgba(0, 0, 0, .06), 0 5px 12px 4px rgba(0, 0, 0, .04);
@@ -891,6 +891,26 @@ ul {
 
 .fa-tabs .ant-tabs-tabpane {
   height: 100%;
+}
+
+/* Antd 6 Tabs 标签栏拉伸到 100%，每个 tab 等宽分布 */
+.fa-tabs-block .ant-tabs-nav-list {
+  width: 100% !important; /* 强制占满导航栏 */
+  display: flex;
+  justify-content: space-between; /* 或 space-around / space-evenly */
+}
+
+.fa-tabs-block .ant-tabs-tab {
+  flex: 1; /* 每个 tab 等宽拉伸 */
+  text-align: center; /* 文字居中 */
+  margin-right: 0 !important; /* 去除默认间距 */
+  display: flex;
+  justify-content: center;
+}
+
+/* 可选：去除 tab 间隙（gutter） */
+.fa-tabs-block {
+  --ant-tabs-tab-margin-right: 0; /* Antd 6 支持 CSS 变量控制间距 */
 }
 
 /*----------------------------------------- antd-descriptions -----------------------------------------*/
