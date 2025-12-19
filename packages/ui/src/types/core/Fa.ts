@@ -203,6 +203,8 @@ namespace Fa {
     sceneId?: string | undefined;
     /** 组合查询 */
     conditionList?: ConditionQuery.CondGroup[];
+    /** 自定义表单ID */
+    flowFormId?: string | number | undefined;
   }
 
   /**
@@ -223,6 +225,8 @@ namespace Fa {
     sceneId?: string | undefined;
     /** 组合查询 */
     conditionList?: ConditionQuery.CondGroup[];
+    /** 自定义表单ID */
+    flowFormId?: string | number | undefined;
   }
 
   export interface BasePageQuery<T> {
