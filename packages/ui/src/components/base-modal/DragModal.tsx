@@ -78,7 +78,7 @@ export default function DragModal({ defaultFullScreen, width, ...props }: DragMo
       style={fullScreen ? { top: 0, padding: 0 } : {}}
       // 移除 Modal 自身的 body 内边距，让内容完全铺满
       styles={{
-        body: fullScreen ? { height: 'calc(100vh - 55px - 53px)', overflow: 'auto' } : {}
+        body: fullScreen ? { height: 'calc(100vh - 116px)', overflow: 'auto' } : {}
       }}
       {...restProps}
     />
