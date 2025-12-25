@@ -269,6 +269,22 @@ export function parseRangeDateSuffix(rangeDate: any, index: number, suffix: stri
 }
 
 /**
+ * 批量处理表单中的dayjs对象，转换为字符串格式
+ * @param values
+ * @returns
+ */
+export function formatDateValues(values: any) {
+  const newValues = { ...values };
+  Object.keys(newValues).forEach((key) => {
+    // 判断如果是 dayjs 对象则进行格式化
+    if (dayjs.isDayjs(newValues[key])) {
+      newValues[key] = newValues[key].format('YYYY-MM-DD HH:mm:ss');
+    }
+  });
+  return newValues;
+};
+
+/**
  * 将Select选中的options解析为字符串，用于前段展示
  * @param option
  */
