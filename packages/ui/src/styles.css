@@ -220,11 +220,15 @@ ul {
     background-color: var(--fa-bg-color2);
 }
 
-.fa-card {
+.fa-card, .fa-card-p0 {
     padding: 12px;
     background-color: var(--fa-bg-color);
     border-radius: var(--fa-border-radius);
     border: 1px solid var(--fa-border-color);
+}
+
+.fa-card-p0 {
+    padding: 0;
 }
 
 .fa-radius {
