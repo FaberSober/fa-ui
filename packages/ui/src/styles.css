@@ -19,6 +19,7 @@ html {
     --fa-border-darker-color: #333; /* 适配主题-边框颜色 */
     --fa-bg-grey: #f7f7f7; /* 适配主题-背景色-灰色 */
     --fa-bg-grey2: #e7e7e7; /* 适配主题-背景色-灰色 */
+    --fa-bg-grey3: #ebeef5; /* 适配主题-背景色-灰色 */
     --fa-bg-selected: #ddd; /* 适配主题-背景色-灰色 */
     --separator-border: #eee; /* 适配主题-allocate-分割面板的分割线颜色 */
 
