@@ -103,6 +103,8 @@ namespace FaEnums {
   export enum RbacLinkTypeEnum {
     INNER = 1,
     OUT = 2,
+    PATH = 3,
+    FA_FORM = 4,
   }
 
   export enum JobLogStatusEnum {

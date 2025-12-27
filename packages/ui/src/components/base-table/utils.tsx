@@ -28,7 +28,7 @@ export function dataIndexToString(dataIndex: string | string[]) {
 
 /**
  * antd Table 排序
- * 1. filed驼峰转下划线；
+ * 1. field驼峰转下划线；
  * 2. order返回 'DESC' : 'ASC';
  * @param {*} sorter
  */
