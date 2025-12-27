@@ -94,21 +94,29 @@ export default function ThemeLayout({ children, colorPrimary, initThemeDark }: T
       rootDom.setProperty('--primary-color-dark200', colorPrimary.brighten(1.0).hex());
       rootDom.setProperty('--primary-color-dark300', colorPrimary.brighten(1.5).hex());
       rootDom.setProperty('--primary-color-dark400', colorPrimary.brighten(2.0).hex());
+      rootDom.setProperty('--primary-color-dark500', colorPrimary.brighten(2.5).hex());
+      rootDom.setProperty('--primary-color-dark600', colorPrimary.brighten(3).hex());
 
       rootDom.setProperty('--primary-color-light100', colorPrimary.darken(0.5).hex());
       rootDom.setProperty('--primary-color-light200', colorPrimary.darken(1.0).hex());
       rootDom.setProperty('--primary-color-light300', colorPrimary.darken(1.5).hex());
       rootDom.setProperty('--primary-color-light400', colorPrimary.darken(2.0).hex());
+      rootDom.setProperty('--primary-color-light500', colorPrimary.darken(2.5).hex());
+      rootDom.setProperty('--primary-color-light600', colorPrimary.darken(3).hex());
     } else {
       rootDom.setProperty('--primary-color-dark100', colorPrimary.darken(0.5).hex());
       rootDom.setProperty('--primary-color-dark200', colorPrimary.darken(1.0).hex());
       rootDom.setProperty('--primary-color-dark300', colorPrimary.darken(1.5).hex());
       rootDom.setProperty('--primary-color-dark400', colorPrimary.darken(2.0).hex());
+      rootDom.setProperty('--primary-color-dark500', colorPrimary.darken(2.5).hex());
+      rootDom.setProperty('--primary-color-dark600', colorPrimary.darken(3).hex());
 
       rootDom.setProperty('--primary-color-light100', colorPrimary.brighten(0.5).hex());
       rootDom.setProperty('--primary-color-light200', colorPrimary.brighten(1.0).hex());
       rootDom.setProperty('--primary-color-light300', colorPrimary.brighten(1.5).hex());
       rootDom.setProperty('--primary-color-light400', colorPrimary.brighten(2.0).hex());
+      rootDom.setProperty('--primary-color-light500', colorPrimary.brighten(2.5).hex());
+      rootDom.setProperty('--primary-color-light600', colorPrimary.brighten(3).hex());
     }
 
     changeTheme(themeDark);
