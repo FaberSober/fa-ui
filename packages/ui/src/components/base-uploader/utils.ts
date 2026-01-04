@@ -23,20 +23,22 @@ export async function fetchUploadImgQiniu(
 ) {
   await new ApiQiniuLoader().load();
   const response = await fileSaveApi.getQiniuUploadToken();
+  const res2 = await fileSaveApi.getWorkerId();
+  const id = res2.data;
   // if (!response || response.status !== Fa.RES_CODE.OK) {
   //   message.error('上传文件失败，获取上传token失败，请联系管理员！');
   //   return;
   // }
   const { token, host } = response.data;
-  const day = dayjs().format('YYYY-MM-DD');
+  const day = dayjs().format('YYYY/MM/DD');
   const time = dayjs().format('YYYYMMDDHHmmss');
 
   let fName = fileName;
   if (fileName.indexOf('.') > -1) {
     const dotIndex = fileName.lastIndexOf('.');
-    fName = fileName.substr(0, dotIndex) + '_' + time + fileName.substr(dotIndex);
+    fName = fileName.substr(0, dotIndex) + '_' + time + '_' + id + fileName.substr(dotIndex);
   } else {
-    fName = fileName + '_' + time;
+    fName = fileName + '_' + time + '_' + id;
   }
 
   const key = `${prefix}/${day}/${fName}`;
