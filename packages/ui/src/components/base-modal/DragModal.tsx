@@ -58,7 +58,7 @@ export default function DragModal({ defaultFullScreen, width, ...props }: DragMo
             icon={fullScreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
             onClick={toggleFullScreen}
             type="text"
-            style={{ marginRight: 0, position: 'absolute', top: 11, right: 50, color: 'rgba(0,0,0,0.45)' }} // 调整样式
+            style={{ marginRight: 0, position: 'absolute', top: 12, right: 50, color: 'rgba(0,0,0,0.45)' }} // 调整样式
             title={fullScreen ? '退出全屏' : '全屏'}
           />
         </div>

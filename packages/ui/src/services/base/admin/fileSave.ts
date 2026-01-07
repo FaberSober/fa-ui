@@ -5,7 +5,9 @@ import {Admin, Fa} from '@ui/types';
 
 interface UploadToken {
   token: string;
-  host: string;
+  domain: string;
+  bucketName: string;
+  basePath: string;
 }
 
 const serviceModule = 'fileSave';
@@ -21,6 +23,8 @@ class FileSaveApi extends BaseApi<Admin.FileSave, string> {
     this.postFile('upload', file, { onUploadProgress: callback });
 
   uploadFromUrl = (params: {url: string}): Promise<Fa.Ret<Admin.FileSave>> => this.post('uploadFromUrl', params);
+
+  syncUrlQiniu = (params: {url: string}): Promise<Fa.Ret<Admin.FileSave>> => this.post('syncUrlQiniu', params);
 
   uploadFileForm = (formData: any, callback?: (progressEvent: any) => void): Promise<Fa.Ret<Admin.FileSave>> =>
     this.postForm('upload', formData, { onUploadProgress: callback });
