@@ -7,6 +7,7 @@ import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
 export interface DragModalProps extends ModalProps {
   children?: JSX.Element;
   defaultFullScreen?: boolean;
+  bodyStyle?: React.CSSProperties;
 }
 
 /**
@@ -14,7 +15,7 @@ export interface DragModalProps extends ModalProps {
  * 1. 本例修改基于dnd-kit实现。减少包的引入
  * 2. 官网基于react-draggable实现。
  */
-export default function DragModal({ defaultFullScreen, width, ...props }: DragModalProps) {
+export default function DragModal({ defaultFullScreen, width, bodyStyle, ...props }: DragModalProps) {
   const [disabled, setDisabled] = useState(true);
   const [fullScreen, setFullScreen] = useState(defaultFullScreen || false);
   const { title, ...restProps } = props;
@@ -78,7 +79,7 @@ export default function DragModal({ defaultFullScreen, width, ...props }: DragMo
       style={fullScreen ? { top: 0, padding: 0 } : {}}
       // 移除 Modal 自身的 body 内边距，让内容完全铺满
       styles={{
-        body: fullScreen ? { height: 'calc(100vh - 116px)', overflow: 'auto' } : {}
+        body: fullScreen ? { ...bodyStyle, height: 'calc(100vh - 116px)', overflow: 'auto' } : { ...bodyStyle }
       }}
       {...restProps}
     />
