@@ -4,8 +4,8 @@ import { get } from 'lodash';
 import { Fa } from '@ui/types';
 
 export interface BaseSelectProps<T> extends SelectProps<T> {
-  labelKey?: string | ((data: T) => any);
-  valueKey?: string | ((data: T) => any);
+  labelKey?: keyof T | string | ((data: T) => any);
+  valueKey?: keyof T | string | ((data: T) => any);
   /** [外部定义]Tree节点标准API接口 */
   serviceApi: {
     /** [外部定义]获取所有List节点 */
