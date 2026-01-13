@@ -54,6 +54,8 @@ export default function BaseBizTable<RecordType extends object = any>({
   const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([]);
   const [batchDeleting, setBatchDeleting] = useState(false);
 
+  const rowKey = props.rowKey as string || keyName || 'id';
+
   useEffect(() => {
     setSelectedRowKeys([]);
   }, [get(props, 'pagination.total'), get(props, 'pagination.current'), get(props, 'pagination.pageSize')]);
@@ -152,7 +154,7 @@ export default function BaseBizTable<RecordType extends object = any>({
   function updateRowKeys(rowKeys: any[]) {
     setSelectedRowKeys(rowKeys);
     if (onSelectedRowsChange) {
-      onSelectedRowsChange(rowKeys);
+      onSelectedRowsChange(rowKeys, (props.dataSource || []).filter((item) => rowKeys.indexOf(get(item, rowKey)) > -1));
     }
   }
 
@@ -230,7 +232,7 @@ export default function BaseBizTable<RecordType extends object = any>({
               onClick: () => {
                 // 点击row选中功能实现
                 if (!rowClickSelected) return;
-                const clickId = get(record, 'id');
+                const clickId = get(record, rowKey);
                 let newRowKey = [];
                 if (rowClickSingleSelected) {
                   newRowKey = [clickId];
@@ -238,12 +240,12 @@ export default function BaseBizTable<RecordType extends object = any>({
                   if (selectedRowKeys.indexOf(clickId) > -1) {
                     newRowKey = selectedRowKeys.filter((i) => i === clickId);
                   } else {
-                    newRowKey = [...selectedRowKeys, get(record, keyName!)];
+                    newRowKey = [...selectedRowKeys, get(record, rowKey)];
                   }
                 }
                 setSelectedRowKeys(newRowKey);
                 if (onSelectedRowsChange) {
-                  onSelectedRowsChange(newRowKey);
+                  onSelectedRowsChange(newRowKey, (props.dataSource || []).filter((item) => newRowKey.indexOf(get(item, rowKey)) > -1));
                 }
               },
             })}

@@ -64,7 +64,7 @@ namespace FaberTable {
     showBatchDelBtn?: boolean; // 是否展示多选删除按钮
     showTopTips?: boolean; // 是否展示顶部选中文本信息
     showTopDiv?: boolean; // 是否展示顶部DIV
-    onSelectedRowsChange?: (rows: any[]) => void; // 选中keys变更回调
+    onSelectedRowsChange?: (rowKeys: any[], rows: any[]) => void; // 选中keys变更回调
     scrollY?: number;
     keyName?: string; // Key字段名称
     batchDelBtn?: ReactNode|string; // 批量删除Button
