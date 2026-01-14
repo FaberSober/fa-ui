@@ -233,7 +233,7 @@ ul {
 
 .fa-radius {
     border-radius: var(--fa-border-radius);
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .fa-text {
