@@ -3,6 +3,7 @@ import { Drawer, DrawerProps } from "antd";
 import { FaResizeHorizontal } from "@ui/components";
 import { FaUtils } from "@ui/utils";
 import { BaseDrawerContext } from './BaseDrawerContext';
+import useBus from "use-bus";
 
 export interface BaseDrawerProps extends DrawerProps {
   hideResize?: boolean;
@@ -21,6 +22,14 @@ const BaseDrawer = React.forwardRef<HTMLElement, BaseDrawerProps>(function BaseD
     open: () => setOpen(true),
     close: () => setOpen(false),
   }));
+
+  useBus(
+    ['@@action/CLOSE_DRAWER'],
+    ({ type, payload }) => {
+      setOpen(false)
+    },
+    [],
+  )
 
   return (
     <BaseDrawerContext.Provider value={{ closeDrawer: () => setOpen(false) }}>
