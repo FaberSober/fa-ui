@@ -9,7 +9,7 @@ export interface FormInputProps extends Omit<InputProps, 'addonBefore' | 'addonA
 }
 
 const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
-  ({ addonAfter, addonBefore, compact = true, style, ...rest }, ref) => {
+  ({ addonAfter, addonBefore, compact = true, style, ...rest }, ref:any) => {
     const input = <Input ref={ref} style={{ width: '100%', ...style }} {...rest} />;
 
     if (!addonAfter && !addonBefore) {

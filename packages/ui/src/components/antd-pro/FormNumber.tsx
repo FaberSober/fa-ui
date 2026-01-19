@@ -9,7 +9,7 @@ export interface FormNumberProps extends Omit<InputNumberProps, 'addonBefore' | 
 }
 
 const FormNumber = forwardRef<HTMLInputElement, FormNumberProps>(
-  ({ addonAfter, addonBefore, compact = true, style, ...rest }, ref) => {
+  ({ addonAfter, addonBefore, compact = true, style, ...rest }, ref:any) => {
     const input = <InputNumber ref={ref} style={{ width: '100%', ...style }} {...rest} />;
 
     if (!addonAfter && !addonBefore) {
