@@ -759,6 +759,12 @@ export const formNumberRule:any = {
   transform: (value:any) => Number(value),
 }
 
+/**
+ * 阻止事件冒泡：
+ * e.preventDefault();
+ * e.stopPropagation();
+ * @param e 
+ */
 export function preventEvent(e: any) {
   if (e) {
     e.preventDefault();
