@@ -872,6 +872,57 @@ ul {
   margin-inline-start: 12px;
 }
 
+.fa-form-view {
+  /* 提升 disabled 状态下表单控件的文字可读性 */
+}
+
+/* Input 输入框 - 使用主题变量 */
+.fa-form-view .ant-input[disabled],
+.fa-form-view .ant-input-disabled {
+  color: var(--fa-text-color) !important;
+  background-color: var(--fa-bg-grey);
+}
+
+/* TextArea 文本域 - 使用主题变量 */
+.fa-form-view .ant-input[disabled].ant-input-textarea,
+.fa-form-view .ant-input-disabled.ant-input-textarea {
+  color: var(--fa-text-color) !important;
+}
+
+/* Select 下拉选择 - 使用主题变量 */
+.fa-form-view .ant-select-disabled .ant-select-selector {
+  color: var(--fa-text-color) !important;
+  background-color: var(--fa-bg-grey);
+}
+
+/* DatePicker 日期选择 - 使用主题变量 */
+.fa-form-view .ant-picker-disabled {
+  background-color: var(--fa-bg-grey);
+}
+
+.fa-form-view .ant-picker-disabled .ant-picker-input > input[disabled] {
+  color: var(--fa-text-color) !important;
+}
+
+/* InputNumber 数字输入框 - 使用主题变量 */
+.fa-form-view .ant-input-number-disabled {
+  background-color: var(--fa-bg-grey);
+}
+
+.fa-form-view .ant-input-number-disabled .ant-input-number-input {
+  color: var(--fa-text-color) !important;
+}
+
+/* Radio 单选框（已禁用的选项文字） - 使用主题变量 */
+.fa-form-view .ant-radio-disabled + span {
+  color: var(--fa-subtitle-color) !important;
+}
+
+/* Checkbox 复选框（已禁用的选项文字） - 使用主题变量 */
+.fa-form-view .ant-checkbox-disabled + span {
+  color: var(--fa-subtitle-color) !important;
+}
+
 /*----------------------------------------- fa-tabs -----------------------------------------*/
 .fa-tabs {
 
