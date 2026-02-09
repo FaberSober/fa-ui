@@ -864,11 +864,15 @@ ul {
 .fa-spin-full .ant-spin-nested-loading, .fa-spin-full .ant-spin-container {
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .fa-spin-full .ant-spin-nested-loading .ant-spin-container {
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 /*----------------------------------------- fa-form -----------------------------------------*/
