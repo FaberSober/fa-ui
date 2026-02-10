@@ -899,7 +899,7 @@ ul {
 }
 
 /* Select 下拉选择 - 使用主题变量 */
-.fa-form-view .ant-select-disabled .ant-select-selector {
+.fa-form-view .ant-select-disabled {
   color: var(--fa-text-color) !important;
   background-color: var(--fa-bg-grey);
 }
@@ -930,6 +930,10 @@ ul {
 /* Checkbox 复选框（已禁用的选项文字） - 使用主题变量 */
 .fa-form-view .ant-checkbox-disabled + span {
   color: var(--fa-subtitle-color) !important;
+}
+
+.fa-form-view .ant-checkbox-disabled .ant-checkbox-inner:after {
+  border-color: var(--fa-text-color);
 }
 
 /*----------------------------------------- fa-tabs -----------------------------------------*/
