@@ -982,6 +982,51 @@ ul {
   --ant-tabs-tab-margin-right: 0; /* Antd 6 支持 CSS 变量控制间距 */
 }
 
+/*----------------------------------------- fa-animation -----------------------------------------*/
+/* 推荐写法：使用 animation + keyframes */
+.fa-hover-anim-shrink {
+  transition-duration: .15s;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+}
+
+.fa-hover-anim-shrink:hover {
+  animation: shrink 0.3s ease-in-out;
+  /* animation-fill-mode: forwards;  */   /* 通常不需要，因为 100% 回到 scale(1) */
+}
+
+@keyframes shrink {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes bell-ring {
+  0%, 100% {
+    transform-origin: top;
+  }
+  15% {
+    transform: rotate(10deg);
+  }
+  30% {
+    transform: rotate(-10deg);
+  }
+  45% {
+    transform: rotate(5deg);
+  }
+  60% {
+    transform: rotate(-5deg);
+  }
+  75% {
+    transform: rotate(2deg);
+  }
+}
 /*----------------------------------------- antd-descriptions -----------------------------------------*/
 .fa-antd-desc .ant-descriptions-header {
   margin-bottom: 12px;
