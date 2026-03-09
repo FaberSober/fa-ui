@@ -541,12 +541,27 @@ ul {
 }
 
 .fa-main {
-    padding: 8px;
+    padding: 12px;
     margin: 0;
     overflow-x: hidden;
     overflow-y: auto;
     position: relative;
     height: 100%;
+    background-color: var(--fa-bg-grey);
+}
+
+.fa-content {
+    border: 1px solid var(--fa-border-color);
+    border-radius: 6px;
+    background-color: var(--fa-bg-color);
+    /* display: flex;
+    flex-direction: column; */
+    /* position: absolute;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    overflow: auto; */
 }
 
 .fa-border {
@@ -1170,6 +1185,10 @@ code[class*=language-], pre[class*=language-] {
 }
 
 /*----------------------------------------- modal fullscreen -----------------------------------------*/
+.fa-full-screen-modal-wrap {
+  overflow: hidden;
+}
+
 /* 这个类名对应于 Modal 组件中的 wrapClassName={...} */
 .fa-full-screen-modal-wrap .ant-modal-wrap {
     /* 确保 z-index 够高，以覆盖所有其他元素 */
