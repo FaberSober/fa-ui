@@ -214,7 +214,7 @@ export default function BaseBizTable<RecordType extends object = any>({
                     </Button>
                   )}
                 </div>
-                <div className="fa-text" style={{lineHeight: '32px'}}>
+                <div className="fa-text" style={{lineHeight: '32px', fontSize: '0.85rem'}}>
                   共<a style={{fontWeight: 600, margin: '0 4px'}}>{props.pagination ? get(props, 'pagination.total') : props.dataSource?.length}</a>条数据
                 </div>
               </div>
