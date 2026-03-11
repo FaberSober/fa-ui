@@ -5,9 +5,10 @@ import { FaUtils } from "@ui/utils";
 import { BaseDrawerContext } from './BaseDrawerContext';
 import useBus from "use-bus";
 
-export interface BaseDrawerProps extends DrawerProps {
+export interface BaseDrawerProps extends Omit<DrawerProps, 'bodyStyle'> {
   hideResize?: boolean;
   triggerDom?: ReactNode;
+  bodyStyle?: React.CSSProperties;
 }
 
 /**

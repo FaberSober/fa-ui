@@ -81,6 +81,7 @@ export default function DragModal({ defaultFullScreen, width, bodyStyle, ...prop
       styles={{
         body: fullScreen ? { ...bodyStyle, height: 'calc(100vh - 116px)', overflow: 'auto' } : { ...bodyStyle }
       }}
+      mask={false}
       {...restProps}
     />
   );

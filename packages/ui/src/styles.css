@@ -541,12 +541,27 @@ ul {
 }
 
 .fa-main {
-    padding: 8px;
+    padding: 12px;
     margin: 0;
     overflow-x: hidden;
     overflow-y: auto;
     position: relative;
     height: 100%;
+    background-color: var(--fa-bg-grey);
+}
+
+.fa-content {
+    border: 1px solid var(--fa-border-color);
+    border-radius: 6px;
+    background-color: var(--fa-bg-color);
+    /* display: flex;
+    flex-direction: column; */
+    /* position: absolute;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    overflow: auto; */
 }
 
 .fa-border {
@@ -856,20 +871,84 @@ ul {
 }
 
 /*----------------------------------------- antd-spin -----------------------------------------*/
-.fa-spin-full .ant-spin-nested-loading {
+.fa-spin-full {
   width: 100%;
   height: 100%;
+}
+
+.fa-spin-full .ant-spin-nested-loading, .fa-spin-full .ant-spin-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .fa-spin-full .ant-spin-nested-loading .ant-spin-container {
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 /*----------------------------------------- fa-form -----------------------------------------*/
 .fa-form-reverse .ant-form-item {
   margin-inline-end: 0;
   margin-inline-start: 12px;
+}
+
+.fa-form-view {
+  /* 提升 disabled 状态下表单控件的文字可读性 */
+}
+
+/* Input 输入框 - 使用主题变量 */
+.fa-form-view .ant-input[disabled],
+.fa-form-view .ant-input-disabled {
+  color: var(--fa-text-color) !important;
+  background-color: var(--fa-bg-grey);
+}
+
+/* TextArea 文本域 - 使用主题变量 */
+.fa-form-view .ant-input[disabled].ant-input-textarea,
+.fa-form-view .ant-input-disabled.ant-input-textarea {
+  color: var(--fa-text-color) !important;
+}
+
+/* Select 下拉选择 - 使用主题变量 */
+.fa-form-view .ant-select-disabled {
+  color: var(--fa-text-color) !important;
+  background-color: var(--fa-bg-grey);
+}
+
+/* DatePicker 日期选择 - 使用主题变量 */
+.fa-form-view .ant-picker-disabled {
+  background-color: var(--fa-bg-grey);
+}
+
+.fa-form-view .ant-picker-disabled .ant-picker-input > input[disabled] {
+  color: var(--fa-text-color) !important;
+}
+
+/* InputNumber 数字输入框 - 使用主题变量 */
+.fa-form-view .ant-input-number-disabled {
+  background-color: var(--fa-bg-grey);
+}
+
+.fa-form-view .ant-input-number-disabled .ant-input-number-input {
+  color: var(--fa-text-color) !important;
+}
+
+/* Radio 单选框（已禁用的选项文字） - 使用主题变量 */
+.fa-form-view .ant-radio-disabled + span {
+  color: var(--fa-subtitle-color) !important;
+}
+
+/* Checkbox 复选框（已禁用的选项文字） - 使用主题变量 */
+.fa-form-view .ant-checkbox-disabled + span {
+  color: var(--fa-subtitle-color) !important;
+}
+
+.fa-form-view .ant-checkbox-disabled .ant-checkbox-inner:after {
+  border-color: var(--fa-text-color);
 }
 
 /*----------------------------------------- fa-tabs -----------------------------------------*/
@@ -918,6 +997,51 @@ ul {
   --ant-tabs-tab-margin-right: 0; /* Antd 6 支持 CSS 变量控制间距 */
 }
 
+/*----------------------------------------- fa-animation -----------------------------------------*/
+/* 推荐写法：使用 animation + keyframes */
+.fa-hover-anim-shrink {
+  transition-duration: .15s;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+}
+
+.fa-hover-anim-shrink:hover {
+  animation: shrink 0.3s ease-in-out;
+  /* animation-fill-mode: forwards;  */   /* 通常不需要，因为 100% 回到 scale(1) */
+}
+
+@keyframes shrink {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes bell-ring {
+  0%, 100% {
+    transform-origin: top;
+  }
+  15% {
+    transform: rotate(10deg);
+  }
+  30% {
+    transform: rotate(-10deg);
+  }
+  45% {
+    transform: rotate(5deg);
+  }
+  60% {
+    transform: rotate(-5deg);
+  }
+  75% {
+    transform: rotate(2deg);
+  }
+}
 /*----------------------------------------- antd-descriptions -----------------------------------------*/
 .fa-antd-desc .ant-descriptions-header {
   margin-bottom: 12px;
@@ -1061,6 +1185,10 @@ code[class*=language-], pre[class*=language-] {
 }
 
 /*----------------------------------------- modal fullscreen -----------------------------------------*/
+.fa-full-screen-modal-wrap {
+  overflow: hidden;
+}
+
 /* 这个类名对应于 Modal 组件中的 wrapClassName={...} */
 .fa-full-screen-modal-wrap .ant-modal-wrap {
     /* 确保 z-index 够高，以覆盖所有其他元素 */
