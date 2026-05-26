@@ -158,6 +158,31 @@ ul {
     position: relative;
 }
 
+.fa-flex-2 {
+    flex: 2;
+    position: relative;
+}
+
+.fa-flex-3 {
+    flex: 3;
+    position: relative;
+}
+
+.fa-flex-4 {
+    flex: 4;
+    position: relative;
+}
+
+.fa-flex-5 {
+    flex: 5;
+    position: relative;
+}
+
+.fa-flex-6 {
+    flex: 6;
+    position: relative;
+}
+
 .fa-relative {
     position: relative;
 }
