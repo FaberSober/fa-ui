@@ -189,7 +189,7 @@ export default function useTableQueryParams<T>(
   const paginationProps: TablePaginationConfig = {
     showSizeChanger: true,
     showQuickJumper: true,
-    size: 'default',
+    size: 'middle',
     showTotal: (total) => (
       <span>
         共<a style={{fontWeight: 600}}>{total}</a>个{serviceName}信息
