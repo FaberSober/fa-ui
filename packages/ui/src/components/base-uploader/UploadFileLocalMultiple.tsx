@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { find } from 'lodash';
-import { Button, Image, Upload, UploadProps } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { fileSaveApi } from '@ui/services/base';
 import { genAuthHeaders } from '@ui/utils/cache';
+import { Button, Image, Upload, type UploadProps } from 'antd';
 import { UploadChangeParam } from 'antd/es/upload/interface';
-
+import { find } from 'lodash';
+import { useEffect, useState } from 'react';
 
 export interface UploadFileLocalMultipleProps extends Omit<UploadProps, 'onChange'> {
   children?: any;
@@ -33,24 +32,27 @@ export default function UploadFileLocalMultiple({ children, description, onChang
     if (value === undefined || value === null) {
       return;
     }
-    if (value instanceof Array && value.length === 0) {
+    if (Array.isArray(value) && value.length === 0) {
       return;
     }
 
     setLoading(true);
-    fileSaveApi.getByIds(value).then((res) => {
-      setLoading(false);
-      const fs = res.data.map((i) => ({
-        id: i.id,
-        uid: i.id,
-        size: Number(i.size),
-        name: i.originalFilename,
-        url: fileSaveApi.genLocalGetFile(i.id),
-        previewUrl: fileSaveApi.genLocalGetFilePreview(i.id),
-        status: 'done', // 状态有：uploading done error removed，被 beforeUpload 拦截的文件没有 status 属性
-      }));
-      setArray(fs);
-    }).catch(() => setLoading(false));
+    fileSaveApi
+      .getByIds(value)
+      .then((res) => {
+        setLoading(false);
+        const fs = res.data.map((i) => ({
+          id: i.id,
+          uid: i.id,
+          size: Number(i.size),
+          name: i.originalFilename,
+          url: fileSaveApi.genLocalGetFile(i.id),
+          previewUrl: fileSaveApi.genLocalGetFilePreview(i.id),
+          status: 'done', // 状态有：uploading done error removed，被 beforeUpload 拦截的文件没有 status 属性
+        }));
+        setArray(fs);
+      })
+      .catch(() => setLoading(false));
   }, [value]);
 
   function handleOnChange({ file, fileList }: UploadChangeParam) {
@@ -81,16 +83,16 @@ export default function UploadFileLocalMultiple({ children, description, onChang
     }
   }
 
-  const uploadImg = props.listType === 'picture-card' ? true : false;
+  const uploadImg = props.listType === 'picture-card';
 
   const handlePreview = async (file: any) => {
-    console.log('handlePreview', file)
+    console.log('handlePreview', file);
     if (uploadImg) {
       setPreviewImage(file.previewUrl);
       setSrcImage(file.url);
       setPreviewOpen(true);
     } else {
-      window.open(file.url)
+      window.open(file.url);
     }
   };
 
@@ -116,7 +118,7 @@ export default function UploadFileLocalMultiple({ children, description, onChang
           <UploadOutlined />
           <div>选择图片</div>
         </div>
-        )}
+      )}
       {children === undefined && !uploadImg && (
         <>
           <Button loading={loading}>
@@ -132,9 +134,9 @@ export default function UploadFileLocalMultiple({ children, description, onChang
           style={{ display: 'none' }}
           src={previewImage}
           preview={{
-            visible: previewOpen,
+            open: previewOpen,
             src: srcImage,
-            onVisibleChange: (value) => {
+            onOpenChange: (value) => {
               setPreviewOpen(value);
             },
             getContainer: () => document.body,
