@@ -86,7 +86,7 @@ const BaseTinyMCE = React.forwardRef<HTMLElement, BaseTinyMCEProps>(function Bas
         apiKey="xxx"
         style={{ margin: -10, padding: 10 }}
         tinymceScriptSrc="/plugins/tinymce/v6.2.0/tinymce.min.js"
-        onInit={(_, editor) => {
+        onInit={(_: any, editor: any) => {
           console.log('BaseTinyMCE#onInit')
           editorRef.current = editor;
           setReady(true)
@@ -156,7 +156,7 @@ const BaseTinyMCE = React.forwardRef<HTMLElement, BaseTinyMCEProps>(function Bas
            * 返回数据json格式为：{ location : '/your/uploaded/image/file'}
            */
           // images_upload_url: SITE_INFO.TINYMCE_FILE_UPLOAD_API,
-          images_upload_handler: (blobInfo, progress) =>
+          images_upload_handler: (blobInfo: any, progress: any) =>
             new Promise((resolve) => {
               const formData = new FormData();
               formData.append('file', blobInfo.blob(), blobInfo.filename());
@@ -172,7 +172,7 @@ const BaseTinyMCE = React.forwardRef<HTMLElement, BaseTinyMCEProps>(function Bas
           automatic_uploads: true,
           paste_data_images: true,
           // 粘贴图片后，自动上传
-          urlconverter_callback: function(url, node, on_save, name) {
+          urlconverter_callback: function(url: any, node: any, on_save: any, name: any) {
             if (node === 'img' && name === 'src') {
               // 判断是否是本服务器的图片
               const isInner = url.indexOf("data:image/gif;base64") > -1 || url.indexOf("blob:") > -1 || url.indexOf("/api/base/admin/fileSave/getFile/") > -1;
@@ -202,7 +202,7 @@ const BaseTinyMCE = React.forwardRef<HTMLElement, BaseTinyMCEProps>(function Bas
           file_picker_types: 'file image media',
           relative_urls: false,
           /* and here's our custom image picker*/
-          file_picker_callback: (cb, value, meta) => {
+          file_picker_callback: (cb: any, value: any, meta: any) => {
             console.log('value', value, 'meta', meta)
             //限制文件的上传类型
             let filetype = ".pdf, .txt, .zip, .rar, .7z, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .mp3, .mp4,.mkv, .avi, .wmv, .rmvb, .mov, .mpg, .mpeg, .webm, .jpg, .jpeg, .png, .gif, .ico, .bmp, .webp";
