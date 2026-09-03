@@ -1237,16 +1237,38 @@ code[class*=language-], pre[class*=language-] {
     height: 100vh;
 }
 
+/* antd v6 在 .ant-modal 与 .ant-modal-content 之间新增了 .ant-modal-render / .ant-modal-container
+   两层包裹（modalRender 存在时多一层 render）。若这两层不撑满视口，内容区只会是内容高度，
+   无法真正全屏（表现为 .ant-modal-container 只有约 1374×960、底部/四周留缝隙）。 */
+.fa-full-screen-modal-wrap .ant-modal-render {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-width: 100vw;
+}
+
+.fa-full-screen-modal-wrap .ant-modal-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    padding: 16px;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
 /* 覆盖 Modal 内容区（包含header/body/footer）的样式 */
 .fa-full-screen-modal-wrap .ant-modal-content {
     display: flex;
     flex-direction: column;
-    height: 100vh; /* 使内容区铺满整个屏幕 */
+    flex: 1;
+    min-height: 0;
     border-radius: 0; /* 全屏模式下通常移除圆角 */
 }
 
 /* 覆盖 Modal Body 的样式，使其占据剩余空间并可滚动 */
 .fa-full-screen-modal-wrap .ant-modal-body {
     flex: 1; /* 占据剩余垂直空间 */
+    min-height: 0;
     overflow-y: auto; /* 允许内容区垂直滚动 */
 }

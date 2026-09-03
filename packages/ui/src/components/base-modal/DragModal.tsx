@@ -1,8 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
+import FaDragItem from '@ui/components/base-drag/FaDragItem';
 import { Button, Modal } from 'antd';
 import { ModalProps } from 'antd/es/modal';
-import FaDragItem from '@ui/components/base-drag/FaDragItem';
-import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
+import React, { useCallback, useState } from 'react';
 
 export interface DragModalProps extends ModalProps {
   children?: JSX.Element;
@@ -22,7 +22,7 @@ export default function DragModal({ defaultFullScreen, width, bodyStyle, ...prop
 
   // 切换全屏状态的函数 <--- 关键逻辑
   const toggleFullScreen = useCallback(() => {
-    setFullScreen(prev => !prev);
+    setFullScreen((prev) => !prev);
   }, []);
 
   if (!props.open) return null;
@@ -64,14 +64,17 @@ export default function DragModal({ defaultFullScreen, width, bodyStyle, ...prop
           />
         </div>
       }
-      modalRender={(modal) => fullScreen ? modal : (
-        <FaDragItem disabled={disabled} hold>
-          {modal}
-        </FaDragItem>
-      )}
+      modalRender={(modal) =>
+        fullScreen ? (
+          modal
+        ) : (
+          <FaDragItem disabled={disabled} hold>
+            {modal}
+          </FaDragItem>
+        )
+      }
       destroyOnHidden
-      maskClosable={!fullScreen} // 全屏时通常不希望点击蒙层关闭
-      keyboard={!fullScreen}     // 全屏时通常不希望按 Esc 键关闭
+      keyboard={!fullScreen} // 全屏时通常不希望按 Esc 键关闭
       wrapClassName={fullScreen ? 'fa-full-screen-modal-wrap' : ''}
       // 全屏时可以把宽度设为 100vw，高度设为 100vh
       width={fullScreen ? '100vw' : width || 600}
@@ -79,9 +82,13 @@ export default function DragModal({ defaultFullScreen, width, bodyStyle, ...prop
       style={fullScreen ? { top: 0, padding: 0 } : {}}
       // 移除 Modal 自身的 body 内边距，让内容完全铺满
       styles={{
-        body: fullScreen ? { ...bodyStyle, height: 'calc(100vh - 116px)', overflow: 'auto' } : { ...bodyStyle }
+        // 全屏时用 flex 撑满剩余空间（配合 styles.css 中 .fa-full-screen-modal-wrap 的 flex 纵向布局），
+        // 避免依赖固定 calc 高度导致 antd v6 结构下容器未撑满视口
+        body: fullScreen ? { ...bodyStyle, flex: 1, height: 'auto', overflow: 'auto' } : { ...bodyStyle },
       }}
-      mask={false}
+      mask={{
+        closable: !fullScreen, // 全屏时通常不希望点击蒙层关闭
+      }}
       {...restProps}
     />
   );
