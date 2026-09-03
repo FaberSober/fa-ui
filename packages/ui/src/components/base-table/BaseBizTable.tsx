@@ -15,6 +15,8 @@ import { FaFlexRestLayout } from "@ui/components/base-layout";
 /**
  * 基础业务表格组件
  * 1. 带字段自定义配置展示功能
+ * 2. 带高级组合查询功能
+ * 3. 带column配置功能，参考 {@link ./utils.tsx}
  */
 export default function BaseBizTable<RecordType extends object = any>({
   showTableColConfigBtn = true,
@@ -78,7 +80,7 @@ export default function BaseBizTable<RecordType extends object = any>({
         if (c.width && isNumber(c.width) && c.width > 0) {
           width = Number(c.width)
         }
-        return { ...col, ...c, width };
+        return { tcChecked: true, ...col, ...c, width };
       });
     } else {
       // 取默认值
