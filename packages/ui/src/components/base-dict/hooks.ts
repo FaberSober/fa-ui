@@ -16,6 +16,12 @@ export function useDict(
   useEffect(() => {
     dictApi.getByCode(code).then((res) => {
       const { data } = res;
+      if (!data) {
+        setDict(undefined);
+        setOptions([]);
+        return;
+      }
+
       setDict(data)
       if (data.type === FaEnums.DictTypeEnum.OPTIONS) {
         setOptions(
