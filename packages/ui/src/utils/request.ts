@@ -82,65 +82,47 @@ instance.interceptors.response.use(
   },
   (error) => {
     // 通知全局api加载状态
-    // dispatch({ type: '@@api/CHANGE_URL_LOADING', payload: { url: error.config.url, loading: false } });
-    useApiLoadingStore.getState().end(error.config?.url || '');
+    useApiLoadingStore.getState().end(get(error, 'config.url', '') || '');
 
-    // 对响应错误做点什么
-    console.log('error', error);
-    const status: number = get(error, 'response.status', error.name);
-    const msgText = codeMessage[status] || '未知错误，请联系管理员';
+    const httpStatus: number | undefined = get(error, 'response.status');
+    const bizCode: number | undefined = get(error, 'response.data.status') ?? get(error, 'response.data.code');
+    const bizMsg: string | undefined = get(error, 'response.data.message');
+    // 是否在请求 headers 中配置了 hideErrorMsg: '1'，配置后不弹业务错误提示
+    const hideErrorMsg = get(error, 'config.headers.hideErrorMsg') === '1';
+    const needLogin = isNeedLogin(httpStatus, bizCode);
 
-    const needLogin = isNeedLogin(status);
-
-    let defaultErrorMsg = `${status}: ${msgText}`;
-    if (error.response?.data?.message) {
-      defaultErrorMsg = status + error.response.data.message;
-      if (error.config.headers.hideErrorMsg !== '1' && !needLogin) {
-        message.error(defaultErrorMsg);
-      }
-    } else if (error.response.data instanceof Blob) {
-      // 判断返回的是文件流，如果是文件流，则下载文件到本地。这种为了处理POST类型的文件下载接口。
+    // 文件流错误（POST 下载类接口失败时后端返回 json 文件流）
+    if (error.response?.data instanceof Blob) {
       const blob = new Blob([error.response.data], {
         type: 'application/json;charset=utf-8',
       });
-      // console.log('blob', blob);
-      //将Blob 对象转换成字符串
-      const reader: any = new FileReader();
+      const reader = new FileReader();
       reader.readAsText(blob, 'utf-8');
       reader.onload = () => {
-        console.info('reader.result', reader.result);
-        const json = JSON.parse(reader.result);
-        if (error.config.headers.hideErrorMsg !== '1') {
-          message.error(json.message);
+        try {
+          const json = JSON.parse(reader.result as string);
+          if (!hideErrorMsg) message.error(json.message);
+        } catch (e) {
+          if (!hideErrorMsg) message.error('文件下载失败，请稍后重试');
         }
       };
-    } else if (error.config.headers.hideErrorMsg !== '1') {
-      message.error(defaultErrorMsg);
-    } else if (!needLogin) {
-      message.error(defaultErrorMsg);
+      return Promise.reject(error);
     }
 
-    if (error.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
-      // console.log(error.response.data);
-      // console.log(error.response.status);
-      // console.log(error.response.headers);
-    } else if (error.request) {
-      // The request was made but no response was received
-      // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-      // http.ClientRequest in node.js
-      // console.log(error.request);
-    } else {
-      // Something happened in setting up the request that triggered an Error
-    }
-
+    // 登录失效：去重后统一提示并跳转登录页（不再弹具体业务错误）
     if (needLogin) {
-      message.error(`${status}登录失效，跳转登录`).then(() => {
-        // 跳转登录页面
-        window.location.href = `/login?redirect=${window.location.pathname}`;
-      });
+      redirectToLogin(httpStatus);
+      return Promise.reject(error);
     }
+
+    // 普通业务错误：未配置隐藏时统一弹错
+    if (!hideErrorMsg) {
+      const msgText = codeMessage[httpStatus] || '未知错误，请联系管理员';
+      const prefix = httpStatus != null ? `${httpStatus} ` : '';
+      const errMsg = bizMsg ? `${prefix}${bizMsg}` : `${prefix}${msgText}`;
+      message.error(errMsg);
+    }
+
     return Promise.reject(error);
   },
 );
@@ -188,6 +170,27 @@ export function requestDownload(api: string, body: object, config?: AxiosRequest
   });
 }
 
-function isNeedLogin(status: any) {
-  return status === 401 || status === 40101;
+function isNeedLogin(httpStatus?: number, bizCode?: number) {
+  // HTTP 401 或业务码 40101 均视为登录失效；40001（用户名/密码错误、账户冻结）不触发跳转
+  return httpStatus === 401 || bizCode === 40101;
+}
+
+// 登录失效跳转去重：并发多个 401 时只弹一次提示、跳转一次
+let needLoginRedirecting = false;
+
+function redirectToLogin(httpStatus?: number) {
+  if (needLoginRedirecting) return;
+  needLoginRedirecting = true;
+
+  message.error(`${httpStatus ?? ''} 登录失效，跳转登录`);
+
+  const redirect = encodeURIComponent(window.location.pathname + window.location.search);
+  setTimeout(() => {
+    // 已在登录页时不再跳转，避免死循环
+    const pathname = window.location.pathname;
+    if (pathname !== '/login' && !pathname.startsWith('/login/')) {
+      window.location.href = `/login?redirect=${redirect}`;
+    }
+    needLoginRedirecting = false;
+  }, 500);
 }
