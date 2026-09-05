@@ -25,6 +25,8 @@ export default function Demo() {
 | data | any | 必填 | 待展示数据：string 按 JSON 字符串解析；object / array 直接展示；null / undefined / 空串展示空状态 |
 | defaultExpandDepth | number \| 'all' | 'all' | 默认展开层级：'all' 全部展开；0 全折叠；N 展开到第 N 层（根为第 1 层） |
 | showToolbar | boolean | true | 是否展示工具栏（展开全部 / 折叠全部 / 复制 JSON） |
+| maxHeight | number | 300 | 内容区最大高度（px），超出后内部滚动 |
+| defaultWrap | boolean | true | 默认是否自动换行：开启时超宽内容换行展示；关闭时单行 + 内部横向滚动。工具栏可随时切换 |
 | maxRenderNodes | number | 5000 | 渲染节点上限，超过后截断并提示，防止超大 JSON 卡死 |
 | errorRender | (error: Error) => ReactNode | - | 自定义异常渲染，默认使用 antd Alert 展示错误信息 |
 | className | string | - | 透传样式类 |

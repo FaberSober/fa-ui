@@ -2,24 +2,66 @@
 
 .fa-json-view {
   width: 100%;
+  min-width: 0; /* 允许在 flex/grid 父容器中收缩，保证横向滚动在组件内部 */
+  position: relative;
+  display: flex;
+  flex-direction: column;
   background-color: var(--fa-bg-color);
   border: 1px solid var(--fa-border-color);
   border-radius: var(--fa-border-radius);
   overflow: hidden;
 }
 
+/* 工具栏：右上角绝对定位的图标按钮组，悬浮于内容之上 */
 .fa-json-view-toolbar {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 1;
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 6px 12px;
-  border-bottom: 1px solid var(--fa-border-color);
+  gap: 4px;
+  padding: 2px 4px;
   background-color: var(--fa-bg-grey);
+  border: 1px solid var(--fa-border-color);
+  border-radius: var(--fa-border-radius);
+}
+
+.fa-json-toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  color: var(--fa-text-color2);
+  cursor: pointer;
+}
+
+.fa-json-toolbar-btn:hover {
+  background-color: var(--fa-hover-bg);
+  color: var(--fa-text-color);
+}
+
+/* 工具栏按钮激活态（自动换行开启时高亮） */
+.fa-json-toolbar-btn-active,
+.fa-json-toolbar-btn-active:hover {
+  background-color: var(--fa-bg-color-highlight);
+  color: var(--fa-text-color-highlight);
+}
+
+/* 自动换行模式：行内内容超宽时换行展示；关闭时保持单行 + 横向滚动 */
+.fa-json-view-wrap .fa-json-row {
+  flex-wrap: wrap;
+  white-space: normal;
 }
 
 .fa-json-view-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0; /* 收缩到组件宽度，长行（nowrap）在内部产生横向滚动 */
   overflow: auto;
-  padding: 6px 0;
+  padding: 10px 0 6px;
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
   font-size: 13px;
   line-height: 1.7;

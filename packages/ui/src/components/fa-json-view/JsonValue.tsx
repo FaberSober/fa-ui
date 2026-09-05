@@ -9,21 +9,23 @@ export interface JsonValueProps {
   label?: string | number;
   /** 层级（决定缩进） */
   level: number;
+  /** 是否自动换行：开启时展示完整内容并换行；关闭时超长省略 + Tooltip */
+  wrap?: boolean;
 }
 
 /** 单行内边距（与 JsonNode 保持一致） */
 export const JSON_INDENT = 16;
-/** 超长文本省略阈值 */
+/** 超长文本省略阈值（非自动换行时生效） */
 const MAX_TEXT_LENGTH = 200;
 
 /**
- * 标量叶子节点渲染：按类型着色，超长字符串省略 + Tooltip 全文
+ * 标量叶子节点渲染：按类型着色；非自动换行时超长字符串省略 + Tooltip 全文
  */
-export default function JsonValue({ value, label, level }: JsonValueProps) {
+export default function JsonValue({ value, label, level, wrap = true }: JsonValueProps) {
   const { text, type } = getScalarDisplay(value);
 
   let content: React.ReactNode;
-  if (text.length > MAX_TEXT_LENGTH) {
+  if (!wrap && text.length > MAX_TEXT_LENGTH) {
     content = (
       <Tooltip title={text} mouseEnterDelay={0.3}>
         <span className={`fa-json-value fa-json-${type}`}>{`${text.slice(0, MAX_TEXT_LENGTH)}…`}</span>

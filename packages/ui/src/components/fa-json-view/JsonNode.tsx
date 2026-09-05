@@ -23,6 +23,8 @@ export interface JsonNodeProps {
   expanded: Set<string>;
   /** 点击容器行切换展开状态 */
   onToggle: (path: string) => void;
+  /** 是否自动换行（关闭时超长标量省略 + 横向滚动） */
+  wrap: boolean;
   /** 递归渲染共享上下文（容量计数 + 循环引用检测） */
   ctx: RenderContext;
 }
@@ -34,7 +36,7 @@ export interface JsonNodeProps {
  * - 循环引用：渲染 [Circular] 标记，不再递归
  * - 超出 maxRenderNodes：渲染截断提示并停止递归
  */
-export default function JsonNode({ value, label, segments, level, expanded, onToggle, ctx }: JsonNodeProps) {
+export default function JsonNode({ value, label, segments, level, expanded, onToggle, wrap, ctx }: JsonNodeProps) {
   // 已达上限：后续节点一律不渲染
   if (ctx.truncated) return null;
 
@@ -50,7 +52,7 @@ export default function JsonNode({ value, label, segments, level, expanded, onTo
 
   // 标量叶子
   if (!isContainer(value)) {
-    return <JsonValue value={value} label={label} level={level} />;
+    return <JsonValue value={value} label={label} level={level} wrap={wrap} />;
   }
 
   // 循环引用：出现在自身祖先链上，渲染标记不再递归
@@ -88,6 +90,7 @@ export default function JsonNode({ value, label, segments, level, expanded, onTo
             level={level + 1}
             expanded={expanded}
             onToggle={onToggle}
+            wrap={wrap}
             ctx={ctx}
           />,
         );
