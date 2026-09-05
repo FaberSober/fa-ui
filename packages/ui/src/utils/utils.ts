@@ -217,8 +217,15 @@ export function getDateStrEndOfDay(date: string | any | null | undefined) {
  * @param {*} date
  * @param {*} format
  */
-export function getDateStr(date: string | any | null | undefined, format?: string) {
-  return date === null || date === undefined ? '' : dayjs(date).format(format || 'YYYY-MM-DD');
+export function getDateStr(
+  date: string | number | Date | Dayjs | null | undefined,
+  format = 'YYYY-MM-DD'
+): string {
+  if (date == null || date === '') {
+    return '';
+  }
+  const value = dayjs(date);
+  return value.isValid() ? value.format(format) : '';
 }
 
 /**
@@ -763,7 +770,7 @@ export const formNumberRule:any = {
  * 阻止事件冒泡：
  * e.preventDefault();
  * e.stopPropagation();
- * @param e 
+ * @param e
  */
 export function preventEvent(e: any) {
   if (e) {
