@@ -15,6 +15,8 @@ const instance = axios.create({
 // 现在，在超时前，所有请求都会等待 2.5 秒
 instance.defaults.timeout = 60000;
 
+const LICENSE_INVALID_CODE = 40303;
+
 const codeMessage: any = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -90,6 +92,12 @@ instance.interceptors.response.use(
     // 是否在请求 headers 中配置了 hideErrorMsg: '1'，配置后不弹业务错误提示
     const hideErrorMsg = get(error, 'config.headers.hideErrorMsg') === '1';
     const needLogin = isNeedLogin(httpStatus, bizCode);
+
+    // 授权失效：跳转独立页面，避免业务页面因初始化接口失败而一直 Loading
+    if (bizCode === LICENSE_INVALID_CODE) {
+      redirectToLicenseError();
+      return Promise.reject(error);
+    }
 
     // 文件流错误（POST 下载类接口失败时后端返回 json 文件流）
     if (error.response?.data instanceof Blob) {
@@ -177,6 +185,19 @@ function isNeedLogin(httpStatus?: number, bizCode?: number) {
 
 // 登录失效跳转去重：并发多个 401 时只弹一次提示、跳转一次
 let needLoginRedirecting = false;
+
+// 授权失效跳转去重：并发多个 40303 时只跳转一次
+let licenseRedirecting = false;
+
+function redirectToLicenseError() {
+  const pathname = window.location.pathname;
+  if (pathname === '/license-error' || pathname.startsWith('/license-error/')) return;
+  if (licenseRedirecting) return;
+  licenseRedirecting = true;
+
+  const redirect = encodeURIComponent(window.location.pathname + window.location.search);
+  window.location.replace(`/license-error?redirect=${redirect}`);
+}
 
 function redirectToLogin(httpStatus?: number) {
   if (needLoginRedirecting) return;
