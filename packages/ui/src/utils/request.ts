@@ -165,17 +165,48 @@ export function requestPost<R>(api: string, body: object, config?: AxiosRequestC
 export function requestDownload(api: string, body: object, config?: AxiosRequestConfig): Promise<undefined> {
   return instance.post(api, body, { responseType: 'blob', timeout: 60 * 60000, ...config }).then((res) => {
     const blob = new Blob([res.data], {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8',
+      type: res.headers['content-type'] || 'application/octet-stream',
     });
     const a = document.createElement('a');
     const url1 = window.URL.createObjectURL(blob);
-    const filename = res.headers['fa-filename'];
+    const filename = getDownloadFilename(res.headers);
     a.href = url1;
-    a.download = decodeURIComponent(filename!);
+    a.download = filename;
     a.click();
     window.URL.revokeObjectURL(url1);
     return undefined;
   });
+}
+
+function getDownloadFilename(headers: AxiosResponse['headers']): string {
+  const customFilename = headers['fa-filename'];
+  if (customFilename) {
+    return decodeDownloadFilename(String(customFilename));
+  }
+
+  const contentDisposition = headers['content-disposition'];
+  if (contentDisposition) {
+    const encodedFilename = String(contentDisposition).match(/filename\*\s*=\s*(?:UTF-8'')?([^;]+)/i)?.[1];
+    if (encodedFilename) {
+      return decodeDownloadFilename(encodedFilename);
+    }
+
+    const filename = String(contentDisposition).match(/filename\s*=\s*([^;]+)/i)?.[1];
+    if (filename) {
+      return decodeDownloadFilename(filename);
+    }
+  }
+
+  return 'download';
+}
+
+function decodeDownloadFilename(value: string): string {
+  const filename = value.trim().replace(/^"(.*)"$/, '$1');
+  try {
+    return decodeURIComponent(filename);
+  } catch {
+    return filename;
+  }
 }
 
 function isNeedLogin(httpStatus?: number, bizCode?: number) {
