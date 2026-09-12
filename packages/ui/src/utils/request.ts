@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { get } from 'lodash';
 import { message } from 'antd';
-import { addAuthHeaders } from './cache';
+import { addAuthHeaders, clearToken } from './cache';
 import { Fa } from '@ui/types';
 import { md5WithSecret } from "@ui/utils/cipher";
 import { useApiLoadingStore } from '@ui/stores';
@@ -189,27 +189,62 @@ let needLoginRedirecting = false;
 // 授权失效跳转去重：并发多个 40303 时只跳转一次
 let licenseRedirecting = false;
 
+function isLoginPath(pathname: string) {
+  return pathname === '/login' || pathname.startsWith('/login/');
+}
+
+function isLicenseErrorPath(pathname: string) {
+  return pathname === '/license-error' || pathname.startsWith('/license-error/');
+}
+
+function isInternalPath(value: string | null): value is string {
+  return Boolean(value && value.startsWith('/') && !value.startsWith('//'));
+}
+
+/**
+ * 登录页和授权错误页之间发生跳转时，只保留最初的业务地址，避免 redirect 参数递归嵌套。
+ */
+function getRedirectTarget() {
+  let target = window.location.pathname + window.location.search;
+
+  for (let i = 0; i < 8; i += 1) {
+    const url = new URL(target, window.location.origin);
+    if (!isLoginPath(url.pathname) && !isLicenseErrorPath(url.pathname)) return target;
+
+    const redirect = url.searchParams.get('redirect');
+    if (!isInternalPath(redirect)) return target;
+    target = redirect;
+  }
+
+  return '/';
+}
+
 function redirectToLicenseError() {
   const pathname = window.location.pathname;
-  if (pathname === '/license-error' || pathname.startsWith('/license-error/')) return;
+  if (isLicenseErrorPath(pathname)) return;
   if (licenseRedirecting) return;
   licenseRedirecting = true;
 
-  const redirect = encodeURIComponent(window.location.pathname + window.location.search);
+  const redirect = encodeURIComponent(getRedirectTarget());
   window.location.replace(`/license-error?redirect=${redirect}`);
 }
 
 function redirectToLogin(httpStatus?: number) {
+  // 清除失效登录态，避免授权错误页再次携带旧 Token 请求诊断接口。
+  clearToken();
+
+  // 授权错误页是终止页；其诊断接口 401 时不能再回到登录页形成环路。
+  if (isLicenseErrorPath(window.location.pathname)) return;
   if (needLoginRedirecting) return;
   needLoginRedirecting = true;
 
   message.error(`${httpStatus ?? ''} 登录失效，跳转登录`);
 
-  const redirect = encodeURIComponent(window.location.pathname + window.location.search);
+  const redirect = encodeURIComponent(getRedirectTarget());
   setTimeout(() => {
     // 已在登录页时不再跳转，避免死循环
     const pathname = window.location.pathname;
-    if (pathname !== '/login' && !pathname.startsWith('/login/')) {
+    if (!isLoginPath(pathname) && !isLicenseErrorPath(pathname)) {
       window.location.href = `/login?redirect=${redirect}`;
     }
     needLoginRedirecting = false;
