@@ -1,6 +1,6 @@
 
 import {TablePaginationConfig} from "antd";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {get, hasIn, isEqual} from "lodash";
 import {BaseTableUtils} from "@ui/components/base-table";
 import {ConditionQuery, Fa} from "@ui/types";
@@ -56,6 +56,7 @@ export default function useTableQueryParams<T>(
   hooks?: tableHooks<T>
 ): UseTableQueryParamsProps<T> {
   const [loading, setLoading] = useState(false);
+  const requestIdRef = useRef(0);
 
   const [queryParams, setQueryParams] = useState<Fa.QueryParams>({
     pagination: defaultPagination, // 表格分页
@@ -146,6 +147,7 @@ export default function useTableQueryParams<T>(
   // ------------------------------------------ 表格查询结果更新 ------------------------------------------
   /** 获取分页数据 */
   function fetchPageList() {
+    const requestId = ++requestIdRef.current;
     setLoading(true);
     // 表单中拆出_search关键字，用作搜索
     const { _search, ...restFormValues } = queryParams.formValues;
@@ -165,6 +167,7 @@ export default function useTableQueryParams<T>(
     };
     api(params)
       .then((res) => {
+        if (requestId !== requestIdRef.current) return;
         setLoading(false);
         const {pagination: page} = res.data;
         const pagination: Fa.Pagination = {
@@ -182,7 +185,11 @@ export default function useTableQueryParams<T>(
           hooks.onAfterGetPage(res.data.rows)
         }
       })
-      .catch(() => setLoading(false));
+      .catch(() => {
+        if (requestId === requestIdRef.current) {
+          setLoading(false);
+        }
+      });
   }
 
   // ------------------------------------------ 表格展示 ------------------------------------------
