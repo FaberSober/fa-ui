@@ -1,6 +1,7 @@
 import { FaSortList } from "@ui/components/base-drag";
 import { FaFlexRestLayout } from "@ui/components/base-layout";
 import { FaberTable } from '@ui/components/base-table';
+import { dataIndexToString } from '@ui/components/base-table/utils';
 import { useApiLoading } from '@ui/hooks';
 import { configApi as api } from '@ui/services/base';
 import { Admin, Fa, FaEnums } from '@ui/types';
@@ -28,6 +29,19 @@ function TableColConfigModal<T>({columns = [], biz, onConfigChange, children, ..
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState<FaberTable.ColumnsProp<T>[]>(columns);
 
+  /** 过滤已删除、重复或格式异常的历史列配置。 */
+  function filterValidConfigColumns(configColumns: FaberTable.ColumnsProp<T>[]): FaberTable.ColumnsProp<T>[] {
+    const currentColumnKeys = new Set(columns.map((column) => dataIndexToString(column.dataIndex)));
+    const seenKeys = new Set<string>();
+    return configColumns.filter((column) => {
+      if (!column || column.dataIndex == null) return false;
+      const key = dataIndexToString(column.dataIndex);
+      if (!currentColumnKeys.has(key) || seenKeys.has(key)) return false;
+      seenKeys.add(key);
+      return true;
+    });
+  }
+
   /**
    * 解析columns与远端配置，并排序
    */
@@ -35,22 +49,24 @@ function TableColConfigModal<T>({columns = [], biz, onConfigChange, children, ..
     columnsArgs: FaberTable.ColumnsProp<T>[],
     configColumns: FaberTable.ColumnsProp<T>[],
   ): FaberTable.ColumnsProp<T>[] {
-    const itemList = columnsArgs.map((item) => {
-      const remoteItem = find(configColumns, (col) => {
-        const dIndex = col.dataIndex instanceof Array ? col.dataIndex.join() : col.dataIndex;
-        const cIndex = item.dataIndex instanceof Array ? item.dataIndex.join() : item.dataIndex;
-        return dIndex === cIndex;
-      });
-      return {...item, ...remoteItem};
-    });
-    return sortBy(itemList, (i) => i.sort);
+    const configuredItems = configColumns
+      .map((remoteItem): FaberTable.ColumnsProp<T> | undefined => {
+        const item = find(columnsArgs, (column) => dataIndexToString(column.dataIndex) === dataIndexToString(remoteItem.dataIndex));
+        return item ? {...item, ...remoteItem, tcChecked: remoteItem.tcChecked === true} : undefined;
+      })
+      .filter((item): item is FaberTable.ColumnsProp<T> => item !== undefined);
+    const configuredKeys = new Set(configuredItems.map((item) => dataIndexToString(item.dataIndex)));
+    const newItems = columnsArgs.filter((item) => !configuredKeys.has(dataIndexToString(item.dataIndex)));
+
+    // 保留历史配置顺序，新列按当前列定义顺序追加，并沿用新列默认显示状态。
+    return [...sortBy(configuredItems, (item) => item.sort), ...newItems];
   }
 
   /** 获取服务端配置 */
   function fetchRemoteConfig() {
     api.getOne(biz, FaEnums.ConfigType.TABLE_COLUMNS).then((res: Fa.Ret<Admin.Config<FaberTable.ColumnsProp<T>[]>>) => {
-      if (isNil(res.data) || res.data.data.length === 0) return;
-      const config = res.data;
+      if (isNil(res.data) || isNil(res.data.data) || res.data.data.length === 0) return;
+      const config = {...res.data, data: filterValidConfigColumns(res.data.data)};
       if (onConfigChange) {
         onConfigChange(config.data);
       }

@@ -78,15 +78,29 @@ export default function BaseBizTable<RecordType extends object = any>({
     // 解析自定义配置
     let parseColumns:FaberTable.ColumnsProp<RecordType>[] = [];
     if (config) {
-      // 取自定义配置
-      parseColumns = config.map((c) => {
+      const currentColumnKeys = new Set(columns.map((c) => dataIndexToString(c.dataIndex)));
+      // 仅合并当前仍存在的列，避免历史配置中的失效列进入 antd Table。
+      const validConfig = config.filter((c) => {
+        if (!c || c.dataIndex == null) return false;
+        return currentColumnKeys.has(dataIndexToString(c.dataIndex));
+      });
+      const configColumnKeys = new Set(validConfig.map((c) => dataIndexToString(c.dataIndex)));
+
+      // 保留远程配置中的顺序、显示状态和宽度。
+      const configuredColumns = validConfig.map((c) => {
         const col = find(columns, (d) => dataIndexToString(d.dataIndex) === dataIndexToString(c.dataIndex));
         let width = undefined
         if (c.width && isNumber(c.width) && c.width > 0) {
           width = Number(c.width)
         }
-        return { tcChecked: true, ...col, ...c, width };
-      });
+        return { ...col, ...c, tcChecked: c.tcChecked === true, width };
+      }).filter((c) => c.tcRequired || c.tcChecked);
+
+      // 新增列追加到远程配置之后，并沿用列定义中的默认显示状态。
+      const newColumns = columns.filter((c) =>
+        !configColumnKeys.has(dataIndexToString(c.dataIndex)) && (c.tcRequired || c.tcChecked),
+      );
+      parseColumns = [...configuredColumns, ...newColumns];
     } else {
       // 取默认值
       parseColumns = columns.filter((c) => c.tcRequired || c.tcChecked);
@@ -120,8 +134,11 @@ export default function BaseBizTable<RecordType extends object = any>({
 
   /** 表格配置变更 */
   function handleTableColConfigChange(tableColumns: FaberTable.ColumnsProp<RecordType>[]) {
-    const c = tableColumns.filter((col) => col.tcRequired || col.tcChecked);
-    setConfig(c);
+    const currentColumnKeys = new Set(columns.map((c) => dataIndexToString(c.dataIndex)));
+    setConfig(tableColumns.filter((col) => {
+      if (!col || col.dataIndex == null) return false;
+      return currentColumnKeys.has(dataIndexToString(col.dataIndex));
+    }));
   }
 
   /** 批量删除Item */
