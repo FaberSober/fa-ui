@@ -43,11 +43,14 @@ const SceneManageModal = React.forwardRef<HTMLElement, SceneManageModalProps<any
   /** 处理-增加item */
   async function handleSave() {
     setLoading(true);
-    const params = configList.map((item, index) => ({ ...item, sort: index + 1 }));
-    const res = await configSceneApi.updateBatch(params);
-    showResponse(res, '更新场景配置');
-    if (onOk) onOk();
-    setLoading(false);
+    try {
+      const params = configList.map((item, index) => ({ ...item, sort: index + 1 }));
+      const res = await configSceneApi.updateBatch(params);
+      showResponse(res, '更新场景配置');
+      if (onOk) onOk();
+    } finally {
+      setLoading(false);
+    }
   }
 
   /** 删除Item */
