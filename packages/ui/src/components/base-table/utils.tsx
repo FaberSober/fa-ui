@@ -37,6 +37,7 @@ export function getSorter(sorter: boolean | Fa.Sorter) {
     return null;
   }
   if (isNil(sorter.field) || trim(sorter.field) === '') return null;
+  if (isNil(sorter.order)) return null;
   const order = sorter.order === 'descend' ? 'DESC' : 'ASC';
   const column = toLine(sorter.field);
   return `${column} ${order}`;
