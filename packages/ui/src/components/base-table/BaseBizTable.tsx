@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {find, get, isNumber, sumBy} from 'lodash';
 import { ClearOutlined, DeleteOutlined, SettingOutlined } from '@ant-design/icons';
 import { Button, Modal, Table } from 'antd';
@@ -7,7 +7,6 @@ import { showResponse } from '@ui/utils/utils';
 import { dataIndexToString, useScrollY } from './utils';
 import ComplexQuery from '@ui/components/condition-query/ComplexQuery';
 import type { TableRowSelection } from 'antd/es/table/interface';
-import { v4 } from 'uuid';
 import TableColConfigModal from '../modal/TableColConfigModal';
 import { FaFlexRestLayout } from "@ui/components/base-layout";
 
@@ -48,8 +47,14 @@ export default function BaseBizTable<RecordType extends object = any>({
   topSecondBtns,
   ...props
 }: FaberTable.BaseTableProps<RecordType>) {
-  const [id] = useState(v4());
-  const [innerScrollY] = useScrollY(id);
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+  const scrollLayoutKey = [
+    get(props, 'pagination.total'),
+    get(props, 'pagination.current'),
+    get(props, 'pagination.pageSize'),
+    scrollY,
+  ].join('|');
+  const [innerScrollY] = useScrollY(tableContainerRef, scrollLayoutKey);
 
   const [config, setConfig] = useState<FaberTable.ColumnsProp<RecordType>[]>();
 
@@ -170,8 +175,8 @@ export default function BaseBizTable<RecordType extends object = any>({
   }
 
   return (
-    <div style={{ flex: 1, position:'relative' }}>
-      <div className="fa-flex-column fa-full-content">
+    <div style={{ flex: 1, minHeight: 0, minWidth: 0, position:'relative', overflow: 'hidden' }}>
+      <div className="fa-flex-column fa-full-content" style={{ minHeight: 0, minWidth: 0, overflow: 'hidden' }}>
         {showTopDiv && (
           <div className='fa-flex-row-center'>
             {topBtns}
@@ -224,12 +229,11 @@ export default function BaseBizTable<RecordType extends object = any>({
           </div>
         )}
 
-        <FaFlexRestLayout id={id}>
+        <FaFlexRestLayout ref={tableContainerRef} style={{ overflow: 'hidden' }}>
           <Table
-            id={id}
             columns={parseColumns}
             rowSelection={showCheckbox ? myRowSelection : undefined}
-            scroll={{x: scrollWidthX, y: innerScrollY || scrollY}}
+            scroll={{x: scrollWidthX, y: innerScrollY ?? scrollY}}
             onRow={(record) => ({
               onClick: () => {
                 // 点击row选中功能实现

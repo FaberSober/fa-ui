@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {getDateStr, optionsToLabel, toLine, tryToFixed} from '@ui/utils/utils';
 import { Badge, Tooltip } from 'antd';
 import { find, isBoolean, isEmpty, isNil, trim } from 'lodash';
@@ -489,33 +489,34 @@ export function genUpdateColumns(sorter: boolean | Fa.Sorter): FaberTable.Column
 
 /**
  * 滚动Y轴
- * @param id
+ * @param containerRef 表格布局容器
+ * @param layoutKey 表格分页或滚动配置变化标识
  */
-export function useScrollY(id: string): [scrollY: number | undefined] {
-  const size = useSize(document.getElementById(id));
+export function useScrollY(
+  containerRef: React.RefObject<HTMLElement | null>,
+  layoutKey?: string | number,
+): [scrollY: number | undefined] {
+  const size = useSize(containerRef);
   const [innerScrollY, setInnerScrollY] = useState<number | undefined>(undefined);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+    if (!container || !container.clientHeight) return;
+
     let delta = 18;
-    try {
-      const headerDoms = document.getElementsByClassName('ant-table-header');
-      if (headerDoms && headerDoms[0]) {
-        const rect = headerDoms[0].getBoundingClientRect();
-        delta += rect.height;
-      }
-      const paginationDoms = document.getElementsByClassName('ant-table-pagination');
-      if (paginationDoms && paginationDoms[0]) {
-        const rect = paginationDoms[0].getBoundingClientRect();
-        delta += rect.height;
-      }
-    } catch (e) {
-      console.log(e)
+    const headerDom = container.querySelector<HTMLElement>('.ant-table-header, .ant-table-thead');
+    if (headerDom) {
+      delta += headerDom.getBoundingClientRect().height;
     }
-    const y = size ? size.height - delta : undefined;
+    const paginationDom = container.querySelector<HTMLElement>('.ant-table-pagination');
+    if (paginationDom) {
+      delta += paginationDom.getBoundingClientRect().height;
+    }
+    const y = Math.max(container.clientHeight - delta, 0);
     if (innerScrollY !== y) {
       setInnerScrollY(y);
     }
-  }, [size]);
+  }, [containerRef, size, layoutKey, innerScrollY]);
 
   return [innerScrollY];
 }
