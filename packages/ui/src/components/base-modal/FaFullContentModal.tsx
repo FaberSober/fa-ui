@@ -1,7 +1,10 @@
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Button, Space } from 'antd';
-import { cloneElement, isValidElement, type MouseEvent, type ReactNode, useCallback, useLayoutEffect, useRef, useState } from 'react';
+import { type AnimationEvent, cloneElement, isValidElement, type MouseEvent, type ReactNode, useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import './FaFullContentModal.css';
+
+const MOTION_DURATION = 180;
 
 export interface FaFullContentModalProps {
   title?: ReactNode;
@@ -24,7 +27,7 @@ type TriggerElementProps = {
 };
 
 /**
- * 覆盖 MenuLayout .fa-main 主体区域的大面积弹框，适合承载复杂表单。
+ * 覆盖 MenuLayout .fa-main 主体区域的大面积弹框，并自动跟随调用方所在的 Tab 面板。
  */
 export default function FaFullContentModal({
   title,
@@ -45,6 +48,8 @@ export default function FaFullContentModal({
   const open = openProp ?? openInternal;
   const portalAnchorRef = useRef<HTMLSpanElement>(null);
   const [mountNode, setMountNode] = useState<HTMLElement | null>(null);
+  const [rendered, setRendered] = useState(false);
+  const [closing, setClosing] = useState(false);
 
   useLayoutEffect(() => {
     const anchor = portalAnchorRef.current;
@@ -54,6 +59,20 @@ export default function FaFullContentModal({
       anchor.closest<HTMLElement>('[data-fa-tab-panel]') ?? anchor.closest<HTMLElement>('.fa-main') ?? document.querySelector<HTMLElement>('.fa-main');
     setMountNode(nextMountNode);
   }, []);
+
+  useLayoutEffect(() => {
+    if (open) {
+      setRendered(true);
+      setClosing(false);
+      return;
+    }
+
+    if (!rendered) return;
+
+    setClosing(true);
+    const timer = window.setTimeout(() => setRendered(false), MOTION_DURATION);
+    return () => window.clearTimeout(timer);
+  }, [open, rendered]);
 
   const updateOpen = useCallback(
     (nextOpen: boolean) => {
@@ -82,6 +101,15 @@ export default function FaFullContentModal({
     updateOpen(false);
   }, [onOk, updateOpen]);
 
+  const handleAnimationEnd = useCallback(
+    (event: AnimationEvent<HTMLDivElement>) => {
+      if (event.target === event.currentTarget && closing && !open) {
+        setRendered(false);
+      }
+    },
+    [closing, open],
+  );
+
   const trigger = isValidElement<TriggerElementProps>(triggerDom)
     ? cloneElement(triggerDom, {
         onClick: (event) => {
@@ -99,10 +127,14 @@ export default function FaFullContentModal({
     <>
       <span ref={portalAnchorRef} aria-hidden="true" style={{ display: 'none' }} />
       {trigger}
-      {open &&
+      {rendered &&
         mountNode &&
         createPortal(
-          <div className="fa-full-content fa-bg-white fa-flex-column" style={{ zIndex, overflow: 'hidden' }}>
+          <div
+            className={`fa-full-content fa-bg-white fa-flex-column fa-full-content-modal ${closing ? 'fa-full-content-modal--exit' : 'fa-full-content-modal--enter'}`}
+            style={{ zIndex, overflow: 'hidden' }}
+            onAnimationEnd={handleAnimationEnd}
+          >
             <div className="fa-flex-row-center fa-border-b fa-p12" style={{ flex: '0 0 auto' }}>
               <Space>
                 <Button color="default" variant="text" onClick={handleCancel} icon={<ArrowLeftOutlined />} aria-label="返回" />
