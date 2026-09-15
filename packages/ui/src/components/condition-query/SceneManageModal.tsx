@@ -15,6 +15,7 @@ export interface SceneManageModalProps<T> extends DragModalProps {
   biz: string;
   columns: FaberTable.ColumnsProp<T>[];
   onOk?: () => void;
+  fetchConfigList?: (force?: boolean) => Promise<Admin.ConfigScene[]>;
 }
 
 /**
@@ -22,21 +23,28 @@ export interface SceneManageModalProps<T> extends DragModalProps {
  * 1. 场景排序；
  * 2. 场景编辑、删除；
  */
-const SceneManageModal = React.forwardRef<HTMLElement, SceneManageModalProps<any>>(function SceneManageModal<T>({ biz, columns, onOk, ...restProps }: SceneManageModalProps<T>, ref: any) {
+const SceneManageModal = React.forwardRef<HTMLElement, SceneManageModalProps<any>>(function SceneManageModal<T>({ biz, columns, onOk, fetchConfigList, ...restProps }: SceneManageModalProps<T>, ref: any) {
   const [loading, setLoading] = useState(false);
   const [configList, setConfigList] = useState<Admin.ConfigScene[]>([]);
 
   useImperativeHandle(ref, () => ({
-    fetchRemoteConfig: () => {
-      fetchRemoteConfig();
+    fetchRemoteConfig: (force?: boolean) => {
+      return fetchRemoteConfig(force);
     },
   }));
 
   /** 获取远程配置 */
-  function fetchRemoteConfig() {
-    if (biz === undefined) return;
-    configSceneApi.findAllScene({ biz }).then((res) => {
+  function fetchRemoteConfig(force = false): Promise<Admin.ConfigScene[]> {
+    if (fetchConfigList) {
+      return fetchConfigList(force).then((list) => {
+        setConfigList(list);
+        return list;
+      });
+    }
+    if (biz === undefined) return Promise.resolve([]);
+    return configSceneApi.findAllScene({ biz }).then((res) => {
       setConfigList(res.data);
+      return res.data;
     });
   }
 
@@ -57,7 +65,7 @@ const SceneManageModal = React.forwardRef<HTMLElement, SceneManageModalProps<any
   function handleDelete(id: number) {
     configSceneApi.remove(id).then((res) => {
       showResponse(res, '删除场景配置');
-      fetchRemoteConfig();
+      fetchRemoteConfig(true);
     });
   }
 
@@ -102,7 +110,7 @@ const SceneManageModal = React.forwardRef<HTMLElement, SceneManageModalProps<any
                       record={item}
                       biz={biz}
                       columns={columns}
-                      onConditionChange={fetchRemoteConfig}
+                      onConditionChange={() => fetchRemoteConfig(true)}
                       showSuffix={false}
                     >
                       <a>
