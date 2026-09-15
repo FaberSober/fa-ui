@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {find, get, isNumber, sumBy} from 'lodash';
 import { ClearOutlined, DeleteOutlined, SettingOutlined } from '@ant-design/icons';
 import { Button, Modal, Table } from 'antd';
@@ -73,7 +73,7 @@ export default function BaseBizTable<RecordType extends object = any>({
    * parseColumns 解析用户配置解析后的自定义字段配置
    * scrollWidthX 解析表格宽度
    */
-  const processColumns = () => {
+  const { parseColumns, scrollWidthX } = useMemo(() => {
     // 表格字段配置
     // 解析自定义配置
     let parseColumns:FaberTable.ColumnsProp<RecordType>[] = [];
@@ -89,7 +89,7 @@ export default function BaseBizTable<RecordType extends object = any>({
       // 保留远程配置中的顺序、显示状态和宽度。
       const configuredColumns = validConfig.map((c) => {
         const col = find(columns, (d) => dataIndexToString(d.dataIndex) === dataIndexToString(c.dataIndex));
-        let width = undefined
+        let width: number | undefined
         if (c.width && isNumber(c.width) && c.width > 0) {
           width = Number(c.width)
         }
@@ -130,7 +130,7 @@ export default function BaseBizTable<RecordType extends object = any>({
     const scrollWidthX = sumBy(parseColumns, (n) => Number(n.width) || 200);
 
     return { parseColumns, scrollWidthX };
-  };
+  }, [config, columns, showRowNum]);
 
   /** 表格配置变更 */
   function handleTableColConfigChange(tableColumns: FaberTable.ColumnsProp<RecordType>[]) {
@@ -162,8 +162,6 @@ export default function BaseBizTable<RecordType extends object = any>({
       },
     });
   }
-
-  const { parseColumns, scrollWidthX } = processColumns();
 
   const myRowSelection: TableRowSelection<RecordType> = {
     fixed: true,

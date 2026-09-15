@@ -1,4 +1,4 @@
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+import { useLayoutEffect, useState, type RefObject } from 'react';
 import {getDateStr, optionsToLabel, toLine, tryToFixed} from '@ui/utils/utils';
 import { Badge, Tooltip } from 'antd';
 import { find, isBoolean, isEmpty, isNil, trim } from 'lodash';
@@ -8,7 +8,7 @@ import {
   renderTimePicker,
   renderTimeRangePicker,
 } from '@ui/components/condition-query/ConditionQueryUtils';
-import {BaseTableUtils, FaberTable} from '@ui/components/base-table/index';
+import type FaberTable from './FaberTable';
 import {BaseBoolSelector, DictDataSelector, DictEnumSelector} from '@ui/components/base-dict';
 import {SortOrder} from 'antd/es/table/interface';
 import {UserSearchSelect} from '@ui/components/biz-user-select';
@@ -493,7 +493,7 @@ export function genUpdateColumns(sorter: boolean | Fa.Sorter): FaberTable.Column
  * @param layoutKey 表格分页或滚动配置变化标识
  */
 export function useScrollY(
-  containerRef: React.RefObject<HTMLElement | null>,
+  containerRef: RefObject<HTMLElement | null>,
   layoutKey?: string | number,
 ): [scrollY: number | undefined] {
   const size = useSize(containerRef);
