@@ -5,7 +5,7 @@
 - 范围：`frontend/fa-ui` 表格基础组件、查询 Hook，以及 Demo 学生表页面的相关调用链
 - 关联页面：`frontend/apps/admin/features/fa-admin-demo-pages/pages/admin/demo/table/table/`
 
-本文基于对学生表页面到 `BaseBizTable` 的静态调用链分析整理，不包含代码修改。后续按功能清单逐项实施，并在完成后更新进度。
+本文基于对学生表页面到 `BaseBizTable` 的静态调用链分析整理，后续按功能清单逐项实施，并在完成后更新进度。
 
 ## 1. 背景
 
@@ -25,7 +25,7 @@
 | 查询参数 | 修正清除排序 | `order=null` 时不转换为升序 | 执行开发 | ✅已完成 |
 | 查询参数 | 防止查询请求竞态 | 最后一次查询结果生效，loading 与当前请求一致 | 执行开发 | ✅已完成 |
 | BaseBizTable | 修正行点击多选取消 | 取消当前行时只移除当前 key，不丢失其他已选行 | 执行开发 | ✅已完成 |
-| 查询参数 | 统一分页状态来源 | 处理 `queryParams.pagination` 与 `ret.showPagination` 的重复状态 | 执行开发 | ❌未完成 |
+| 查询参数 | 统一分页状态来源 | 处理 `queryParams.pagination` 与 `ret.showPagination` 的重复状态 | 执行开发 | ✅已完成 |
 | 高级查询 | 保存失败恢复 loading | 场景保存失败后弹窗仍可重试或关闭 | 执行开发 | ❌未完成 |
 | 列配置 | 兼容历史远程配置 | 过滤失效列，明确新增列的合并策略 | 执行开发 | ❌未完成 |
 | 表格布局 | 验证滚动高度作用域 | 核对重复 `id`、多表格和全局 DOM 查询影响 | 先验证后决定 | 🔍验证中 |
@@ -58,7 +58,8 @@
 ### FBT-04 统一分页状态来源
 
 - 位置：`frontend/fa-ui/packages/ui/src/hooks/useTableQueryParams.tsx`。
-- 明确查询分页和展示分页的单一事实来源，避免 `total` 长期使用初始值。
+- 以 `queryParams.pagination` 作为查询与展示分页的唯一来源，服务端分页元数据请求成功后回写该状态。
+- 查询 effect 只依赖当前页、分页大小及其他请求条件，避免同步展示元数据时重复请求。
 - 保持当前分页展示和导出“按条件导出全部数据”的语义不变。
 
 ### FBT-05 高级查询保存失败恢复
