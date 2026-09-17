@@ -46,6 +46,7 @@ export default function BaseBizTable<RecordType extends object = any>({
   scrollY,
   topBtns,
   topSecondBtns,
+  scroll: tableScroll,
   ...props
 }: FaberTable.BaseTableProps<RecordType>) {
   const [id] = useState(v4());
@@ -182,7 +183,7 @@ export default function BaseBizTable<RecordType extends object = any>({
                   已选中&nbsp;<a>{selectedRowKeys.length}</a>&nbsp;条数据
                 </div>
                 {renderCheckBtns && renderCheckBtns(selectedRowKeys)}
-                {showBatchDelBtn && (
+                {showBatchDelBtn && batchDelete && (
                   <Button loading={batchDeleting} onClick={handleBatchDelete} icon={<DeleteOutlined/>} danger>
                     {batchDelBtn || '删除'}
                   </Button>
@@ -229,7 +230,7 @@ export default function BaseBizTable<RecordType extends object = any>({
             id={id}
             columns={parseColumns}
             rowSelection={showCheckbox ? myRowSelection : undefined}
-            scroll={{x: scrollWidthX, y: innerScrollY || scrollY}}
+            scroll={{ ...tableScroll, x: tableScroll?.x ?? scrollWidthX, y: innerScrollY ?? scrollY }}
             onRow={(record) => ({
               onClick: () => {
                 // 点击row选中功能实现
