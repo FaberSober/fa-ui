@@ -1,6 +1,7 @@
 import { FaSortList } from "@ui/components/base-drag";
 import { FaFlexRestLayout } from "@ui/components/base-layout";
 import { FaberTable } from '@ui/components/base-table';
+import { dataIndexToString } from '@ui/components/base-table/utils';
 import { useApiLoading } from '@ui/hooks';
 import { configApi as api } from '@ui/services/base';
 import { Admin, Fa, FaEnums } from '@ui/types';
@@ -8,7 +9,7 @@ import { showResponse } from '@ui/utils/utils';
 import { Button, Checkbox, Drawer, Input, Space } from 'antd';
 import { DrawerProps } from "antd/es/drawer";
 import { find, isNil, sortBy } from 'lodash';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import './TableColConfigModal.css';
 
 
@@ -27,6 +28,24 @@ function TableColConfigModal<T>({columns = [], biz, onConfigChange, children, ..
   const [config, setConfig] = useState<Admin.Config<FaberTable.ColumnsProp<any>[]>>();
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState<FaberTable.ColumnsProp<T>[]>(columns);
+  const currentBizRef = useRef(biz);
+  const loadedBizRef = useRef<string | undefined>(undefined);
+  const requestRef = useRef<{ biz: string; promise: Promise<void> } | undefined>(undefined);
+
+  currentBizRef.current = biz;
+
+  /** 过滤已删除、重复或格式异常的历史列配置。 */
+  function filterValidConfigColumns(configColumns: FaberTable.ColumnsProp<T>[]): FaberTable.ColumnsProp<T>[] {
+    const currentColumnKeys = new Set(columns.map((column) => dataIndexToString(column.dataIndex)));
+    const seenKeys = new Set<string>();
+    return configColumns.filter((column) => {
+      if (!column || column.dataIndex == null) return false;
+      const key = dataIndexToString(column.dataIndex);
+      if (!currentColumnKeys.has(key) || seenKeys.has(key)) return false;
+      seenKeys.add(key);
+      return true;
+    });
+  }
 
   /**
    * 解析columns与远端配置，并排序
@@ -35,35 +54,74 @@ function TableColConfigModal<T>({columns = [], biz, onConfigChange, children, ..
     columnsArgs: FaberTable.ColumnsProp<T>[],
     configColumns: FaberTable.ColumnsProp<T>[],
   ): FaberTable.ColumnsProp<T>[] {
-    const itemList = columnsArgs.map((item) => {
-      const remoteItem = find(configColumns, (col) => {
-        const dIndex = col.dataIndex instanceof Array ? col.dataIndex.join() : col.dataIndex;
-        const cIndex = item.dataIndex instanceof Array ? item.dataIndex.join() : item.dataIndex;
-        return dIndex === cIndex;
-      });
-      return {...item, ...remoteItem};
-    });
-    return sortBy(itemList, (i) => i.sort);
+    const configuredItems = configColumns
+      .map((remoteItem): FaberTable.ColumnsProp<T> | undefined => {
+        const item = find(columnsArgs, (column) => dataIndexToString(column.dataIndex) === dataIndexToString(remoteItem.dataIndex));
+        return item ? {...item, ...remoteItem, tcChecked: remoteItem.tcChecked === true} : undefined;
+      })
+      .filter((item): item is FaberTable.ColumnsProp<T> => item !== undefined);
+    const configuredKeys = new Set(configuredItems.map((item) => dataIndexToString(item.dataIndex)));
+    const newItems = columnsArgs.filter((item) => !configuredKeys.has(dataIndexToString(item.dataIndex)));
+
+    // 保留历史配置顺序，新列按当前列定义顺序追加，并沿用新列默认显示状态。
+    return [...sortBy(configuredItems, (item) => item.sort), ...newItems];
   }
 
   /** 获取服务端配置 */
-  function fetchRemoteConfig() {
-    api.getOne(biz, FaEnums.ConfigType.TABLE_COLUMNS).then((res: Fa.Ret<Admin.Config<FaberTable.ColumnsProp<T>[]>>) => {
-      if (isNil(res.data) || res.data.data.length === 0) return;
-      const config = res.data;
-      if (onConfigChange) {
-        onConfigChange(config.data);
-      }
-      setConfig(config);
-      const newItems = parseItemsSorted(columns, config.data);
-      setItems(newItems);
-    });
+  function fetchRemoteConfig(force = false): Promise<void> {
+    const requestBiz = biz;
+    if (!requestBiz) {
+      loadedBizRef.current = requestBiz;
+      return Promise.resolve();
+    }
+
+    if (!force && loadedBizRef.current === requestBiz) {
+      return Promise.resolve();
+    }
+
+    if (requestRef.current?.biz === requestBiz) {
+      return requestRef.current.promise;
+    }
+
+    const request = api.getOne(requestBiz, FaEnums.ConfigType.TABLE_COLUMNS)
+      .then((res: Fa.Ret<Admin.Config<FaberTable.ColumnsProp<T>[]>>) => {
+        if (currentBizRef.current !== requestBiz) return;
+
+        if (isNil(res.data) || isNil(res.data.data) || res.data.data.length === 0) {
+          setConfig(undefined);
+          setItems(columns);
+          loadedBizRef.current = requestBiz;
+          return;
+        }
+
+        const nextConfig = {...res.data, data: filterValidConfigColumns(res.data.data)};
+        if (onConfigChange) {
+          onConfigChange(nextConfig.data);
+        }
+        setConfig(nextConfig);
+        const newItems = parseItemsSorted(columns, nextConfig.data);
+        setItems(newItems);
+        loadedBizRef.current = requestBiz;
+      })
+      .catch(() => {
+        // 请求失败不标记为已加载，下一次打开抽屉时可以重试。
+      })
+      .finally(() => {
+        if (requestRef.current?.promise === request) {
+          requestRef.current = undefined;
+        }
+      });
+    requestRef.current = { biz: requestBiz, promise: request };
+    return request;
   }
 
   // 初始化加载表格配置
   useEffect(() => {
-    fetchRemoteConfig();
-  }, []);
+    loadedBizRef.current = undefined;
+    setConfig(undefined);
+    setItems(columns);
+    void fetchRemoteConfig();
+  }, [biz]);
 
   /** 展示Modal */
   function showModelHandler(e: React.MouseEvent<HTMLElement>) {
@@ -71,14 +129,15 @@ function TableColConfigModal<T>({columns = [], biz, onConfigChange, children, ..
       e.stopPropagation();
     }
     setOpen(true);
-    fetchRemoteConfig();
+    void fetchRemoteConfig();
   }
 
   function handleReset() {
     if (config && config.id) {
-      api.remove(config.id).then(res => {
+      api.remove(config.id).then(() => {
         setConfig(undefined)
         setItems(columns);
+        loadedBizRef.current = biz;
         if (onConfigChange) onConfigChange(columns);
       })
     }
@@ -104,12 +163,16 @@ function TableColConfigModal<T>({columns = [], biz, onConfigChange, children, ..
         showResponse(res, '保存自定义表格配置')
         setOpen(false);
         if (onConfigChange) onConfigChange(columnsMerge);
+        loadedBizRef.current = undefined;
+        void fetchRemoteConfig(true);
       });
     } else {
       api.update(config.id, {id: config.id, ...params}).then((res) => {
         showResponse(res, '更新自定义表格配置')
         setOpen(false);
         if (onConfigChange) onConfigChange(columnsMerge);
+        setConfig({...config, data: columnsMerge});
+        loadedBizRef.current = biz;
       });
     }
   }

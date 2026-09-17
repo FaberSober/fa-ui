@@ -115,14 +115,17 @@ export default function ConditionQueryModal<T>({
         defaultScene,
       };
       setLoading(true);
-      if (record) {
-        const response = await configSceneApi.update(record.id, { ...record, ...params });
-        showResponse(response, '更新场景');
-      } else {
-        const response = await configSceneApi.save(params);
-        showResponse(response, '新增场景');
+      try {
+        if (record) {
+          const response = await configSceneApi.update(record.id, { ...record, ...params });
+          showResponse(response, '更新场景');
+        } else {
+          const response = await configSceneApi.save(params);
+          showResponse(response, '新增场景');
+        }
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
 
     if (onConditionChange) {

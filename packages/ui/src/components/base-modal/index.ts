@@ -1,6 +1,6 @@
+import BaseModal, { BaseModalProps, CommonModalProps, CommonViewIdModalProps } from './BaseModal';
 import DragModal, { DragModalProps } from './DragModal';
-import BaseModal, { CommonModalProps, CommonViewIdModalProps, BaseModalProps } from './BaseModal';
+import FaFullContentModal, { FaFullContentModalProps } from './FaFullContentModal';
 
-
-export { DragModal, BaseModal };
-export type { DragModalProps, CommonModalProps, CommonViewIdModalProps, BaseModalProps };
+export { DragModal, BaseModal, FaFullContentModal };
+export type { DragModalProps, CommonModalProps, CommonViewIdModalProps, BaseModalProps, FaFullContentModalProps };

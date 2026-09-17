@@ -1,6 +1,6 @@
 
 import {TablePaginationConfig} from "antd";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {get, hasIn, isEqual} from "lodash";
 import {BaseTableUtils} from "@ui/components/base-table";
 import {ConditionQuery, Fa} from "@ui/types";
@@ -26,7 +26,7 @@ export interface UseTableQueryParamsProps<T> {
   fetchPageList: () => void;
   // ------------------------------------------ 表格查询结果更新 ------------------------------------------
   setList: (list: T[]) => void;
-  // ------------------------------------------ 表格展示分页数据 ------------------------------------------
+  // ------------------------------------------ 表格展示分页数据（与 queryParams.pagination 同源） ------------------------------------------
   showPagination: Fa.Pagination;
   // setShowPagination: any;
   // ------------------------------------------ 表格展示 ------------------------------------------
@@ -56,29 +56,40 @@ export default function useTableQueryParams<T>(
   hooks?: tableHooks<T>
 ): UseTableQueryParamsProps<T> {
   const [loading, setLoading] = useState(false);
+  const requestIdRef = useRef(0);
 
   const [queryParams, setQueryParams] = useState<Fa.QueryParams>({
-    pagination: defaultPagination, // 表格分页
     sorter: {field: 'id', order: 'descend'}, // 排序
     formValues: {}, // 查询Form字段
     sceneId: undefined, // 场景ID
     conditionList: [], // 组合查询
     flowFormId: undefined, // 自定义表单ID
     ...initParams, // 自定义字段覆盖
+    pagination: {
+      ...defaultPagination,
+      ...initParams?.pagination,
+    }, // 表格分页
   });
 
-  const [ret, setRet] = useState<{ list: T[]; dicts: Fa.PageDict; showPagination: Fa.Pagination }>({
+  // 查询结果；分页状态统一保存在 queryParams.pagination 中。
+  const [ret, setRet] = useState<{ list: T[]; dicts: Fa.PageDict }>({
     list: [], // 表格List
     dicts: {}, // 字典
-    showPagination: {
-      ...defaultPagination,
-      ...initParams?.pagination
-    },
   });
 
   useEffect(() => {
     fetchPageList();
-  }, [queryParams]);
+  }, [
+    // 分页返回的 total 等元数据只用于展示，不应触发重复查询。
+    queryParams.pagination.current,
+    queryParams.pagination.pageSize,
+    queryParams.sorter,
+    queryParams.formValues,
+    queryParams.sceneId,
+    queryParams.flowFormId,
+    queryParams.conditionList,
+    queryParams.extraParams,
+  ]);
 
   // ------------------------------------------ 表格查询参数更新 ------------------------------------------
   function updateQueryParams(updateParams: Fa.InitQueryParams) {
@@ -129,10 +140,9 @@ export default function useTableQueryParams<T>(
   /** 表格事件处理：分页、过滤、排序 */
   function handleTableChange(paginationArg: TablePaginationConfig, _: any, sorterArg: any) {
     const newPagination: Fa.Pagination = {
-      ...defaultPagination,
+      ...queryParams.pagination,
       current: paginationArg.current || 1,
-      pageSize: paginationArg.pageSize || 10,
-      total: queryParams.pagination?.total || 0,
+      pageSize: paginationArg.pageSize || queryParams.pagination.pageSize || 10,
     };
 
     if (hasIn(sorterArg, 'field')) {
@@ -146,6 +156,7 @@ export default function useTableQueryParams<T>(
   // ------------------------------------------ 表格查询结果更新 ------------------------------------------
   /** 获取分页数据 */
   function fetchPageList() {
+    const requestId = ++requestIdRef.current;
     setLoading(true);
     // 表单中拆出_search关键字，用作搜索
     const { _search, ...restFormValues } = queryParams.formValues;
@@ -165,6 +176,7 @@ export default function useTableQueryParams<T>(
     };
     api(params)
       .then((res) => {
+        if (requestId !== requestIdRef.current) return;
         setLoading(false);
         const {pagination: page} = res.data;
         const pagination: Fa.Pagination = {
@@ -177,12 +189,20 @@ export default function useTableQueryParams<T>(
           hasPreviousPage: page.hasPreviousPage,
           hasNextPage: page.hasNextPage,
         };
-        setRet({list: res.data.rows, dicts: res.data.dicts, showPagination: pagination});
+        setQueryParams((currentQueryParams) => {
+          if (isEqual(currentQueryParams.pagination, pagination)) return currentQueryParams;
+          return {...currentQueryParams, pagination};
+        });
+        setRet({list: res.data.rows, dicts: res.data.dicts});
         if (hooks && hooks.onAfterGetPage) {
           hooks.onAfterGetPage(res.data.rows)
         }
       })
-      .catch(() => setLoading(false));
+      .catch(() => {
+        if (requestId === requestIdRef.current) {
+          setLoading(false);
+        }
+      });
   }
 
   // ------------------------------------------ 表格展示 ------------------------------------------
@@ -197,14 +217,13 @@ export default function useTableQueryParams<T>(
     ),
     onChange: (page, pageSize) => {
       setPagination({
-        ...defaultPagination,
+        ...queryParams.pagination,
         current: page,
         pageSize: pageSize || queryParams.pagination.pageSize,
-        total: queryParams.pagination.total
       });
     },
-    pageSizeOptions: ['10', '17', '20', '30', '50', '100', '500', '1000'],
-    ...ret.showPagination,
+    pageSizeOptions: ['10', '20', '30', '50', '100', '500', '1000'],
+    ...queryParams.pagination,
   };
 
   /**
@@ -212,7 +231,7 @@ export default function useTableQueryParams<T>(
    * @param list
    */
   function setList(list: T[]) {
-    setRet({list, dicts: ret.dicts, showPagination: ret.showPagination});
+    setRet({list, dicts: ret.dicts});
   }
 
   return {
@@ -231,7 +250,7 @@ export default function useTableQueryParams<T>(
     list: ret.list,
     dicts: ret.dicts,
     setList,
-    showPagination: ret.showPagination,
+    showPagination: queryParams.pagination,
     paginationProps,
   };
 }
