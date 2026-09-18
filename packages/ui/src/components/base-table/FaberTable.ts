@@ -59,6 +59,23 @@ namespace FaberTable {
     tcLabel?: string;
   }
 
+  export type TableScrollMode = 'off' | 'auto' | 'fixed';
+
+  export interface TableScrollAxisConfig {
+    mode: TableScrollMode;
+    value?: number;
+  }
+
+  export interface TableScrollConfig {
+    x?: TableScrollAxisConfig;
+    y?: TableScrollAxisConfig;
+  }
+
+  export interface TableConfigData<T> {
+    columns: ColumnsProp<T>[];
+    scroll?: TableScrollConfig;
+  }
+
   /**
    * BaseTable的定义
    */

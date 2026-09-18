@@ -11,6 +11,19 @@ import TableColConfigModal, { type TableColConfigModalRef } from '../modal/Table
 import { FaFlexRestLayout } from "@ui/components/base-layout";
 import ResizableHeaderCell, { DEFAULT_COLUMN_WIDTH } from './ResizableHeaderCell';
 
+function resolveTableScrollValue<T extends number | string | true | undefined>(
+  config: FaberTable.TableScrollAxisConfig | undefined,
+  autoValue: number | undefined,
+  fallbackValue: T,
+): T | number | undefined {
+  if (!config) return fallbackValue;
+  if (config.mode === 'off') return undefined;
+  if (config.mode === 'fixed' && typeof config.value === 'number' && config.value > 0) {
+    return config.value;
+  }
+  return autoValue;
+}
+
 /**
  * 基础业务表格组件
  * 1. 带字段自定义配置展示功能
@@ -54,12 +67,22 @@ export default function BaseBizTable<RecordType extends object = any>({
     get(props, 'pagination.current'),
     get(props, 'pagination.pageSize'),
     scrollY,
+    tableScroll?.x,
+    tableScroll?.y,
   ].join('|');
   const [innerScrollY] = useScrollY(tableContainerRef, scrollLayoutKey);
 
   const [config, setConfig] = useState<FaberTable.ColumnsProp<RecordType>[]>();
+  const [tableScrollConfig, setTableScrollConfig] = useState<FaberTable.TableScrollConfig>();
   const [columnWidths, setColumnWidths] = useState<Record<string, number>>({});
   const tableConfigRef = useRef<TableColConfigModalRef>(null);
+
+  const defaultScrollConfig = useMemo<FaberTable.TableScrollConfig>(() => ({
+    x: typeof tableScroll?.x === 'number' ? {mode: 'fixed', value: tableScroll.x} : {mode: 'auto'},
+    y: typeof scrollY === 'number'
+      ? {mode: 'fixed', value: scrollY}
+      : typeof tableScroll?.y === 'number' ? {mode: 'fixed', value: tableScroll.y} : {mode: 'auto'},
+  }), [scrollY, tableScroll?.x, tableScroll?.y]);
 
   const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([]);
   const [batchDeleting, setBatchDeleting] = useState(false);
@@ -166,13 +189,14 @@ export default function BaseBizTable<RecordType extends object = any>({
   }, [biz, columns, config, columnWidths, handleColumnResize, handleColumnResizeStop, showRowNum, showTableColConfigBtn]);
 
   /** 表格配置变更 */
-  function handleTableColConfigChange(tableColumns: FaberTable.ColumnsProp<RecordType>[]) {
+  function handleTableColConfigChange(tableConfig: FaberTable.TableConfigData<RecordType>) {
     setColumnWidths({});
     const currentColumnKeys = new Set(columns.map((c) => dataIndexToString(c.dataIndex)));
-    setConfig(tableColumns.filter((col) => {
+    setConfig(tableConfig.columns.filter((col) => {
       if (!col || col.dataIndex == null) return false;
       return currentColumnKeys.has(dataIndexToString(col.dataIndex));
     }));
+    setTableScrollConfig(tableConfig.scroll);
   }
 
   /** 批量删除Item */
@@ -222,6 +246,23 @@ export default function BaseBizTable<RecordType extends object = any>({
       onDeleteByQuery();
     }
   }
+
+  const resolvedTableScroll = (() => {
+    const fallbackX = tableScroll?.x ?? scrollWidthX;
+    const fallbackY = scrollY ?? tableScroll?.y ?? innerScrollY;
+    if (!tableScrollConfig) {
+      return {...tableScroll, x: fallbackX, y: fallbackY};
+    }
+
+    const {x: _tableScrollX, y: _tableScrollY, ...otherScroll} = tableScroll || {};
+    const x = resolveTableScrollValue(tableScrollConfig.x, scrollWidthX, fallbackX);
+    const y = resolveTableScrollValue(tableScrollConfig.y, innerScrollY, fallbackY);
+    return {
+      ...otherScroll,
+      ...(x !== undefined ? {x} : {}),
+      ...(y !== undefined ? {y} : {}),
+    };
+  })();
 
   return (
     <div style={{ flex: 1, minHeight: 0, minWidth: 0, position:'relative', overflow: 'hidden' }}>
@@ -282,7 +323,7 @@ export default function BaseBizTable<RecordType extends object = any>({
           <Table
             columns={parseColumns}
             rowSelection={showCheckbox ? myRowSelection : undefined}
-            scroll={{ ...tableScroll, x: tableScroll?.x ?? scrollWidthX, y: innerScrollY ?? scrollY }}
+            scroll={resolvedTableScroll}
             onRow={(record) => ({
               onClick: () => {
                 // 点击row选中功能实现
@@ -318,7 +359,13 @@ export default function BaseBizTable<RecordType extends object = any>({
           {/* 表格自定义配置 */}
           {showTableColConfigBtn ? (
             <div style={{position: 'absolute', right: 14, top: 4, zIndex: 9}}>
-              <TableColConfigModal ref={tableConfigRef} columns={columns} biz={biz} onConfigChange={handleTableColConfigChange}>
+              <TableColConfigModal
+                ref={tableConfigRef}
+                columns={columns}
+                biz={biz}
+                defaultScrollConfig={defaultScrollConfig}
+                onConfigChange={handleTableColConfigChange}
+              >
                 <Button icon={<SettingOutlined/>} type="text"/>
               </TableColConfigModal>
             </div>
