@@ -9,7 +9,7 @@ import { showResponse } from '@ui/utils/utils';
 import { Button, Checkbox, Drawer, Input, Space } from 'antd';
 import { DrawerProps } from "antd/es/drawer";
 import { find, isNil, sortBy } from 'lodash';
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import React, { ReactNode, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import './TableColConfigModal.css';
 
 
@@ -20,19 +20,35 @@ export interface TableColConfigModalProps<T> extends DrawerProps {
   children: ReactNode;
 }
 
+export interface TableColConfigModalRef {
+  updateColumnWidth: (dataIndex: string | string[], width: number) => void;
+}
+
 /**
  * 表格自定义列Modal
  * 1. 操作一栏不进行排序，默认放在最后一排
  */
-function TableColConfigModal<T>({columns = [], biz, onConfigChange, children, ...restProps}: TableColConfigModalProps<T>) {
-  const [config, setConfig] = useState<Admin.Config<FaberTable.ColumnsProp<any>[]>>();
+function TableColConfigModalInner<T>(
+  {columns = [], biz, onConfigChange, children, ...restProps}: TableColConfigModalProps<T>,
+  ref: React.ForwardedRef<TableColConfigModalRef>,
+) {
+  const [config, setConfig] = useState<Admin.Config<FaberTable.ColumnsProp<T>[]>>();
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState<FaberTable.ColumnsProp<T>[]>(columns);
   const currentBizRef = useRef(biz);
   const loadedBizRef = useRef<string | undefined>(undefined);
   const requestRef = useRef<{ biz: string; promise: Promise<void> } | undefined>(undefined);
+  const itemsRef = useRef(items);
+  const configRef = useRef(config);
+  const pendingWidthsRef = useRef(new Map<string, number>());
+  const savingRef = useRef(false);
+  const pendingSaveRef = useRef<FaberTable.ColumnsProp<T>[] | undefined>();
+  const pendingCloseRef = useRef(false);
+  const pendingNotifyParentRef = useRef(false);
 
   currentBizRef.current = biz;
+  itemsRef.current = items;
+  configRef.current = config;
 
   /** 过滤已删除、重复或格式异常的历史列配置。 */
   function filterValidConfigColumns(configColumns: FaberTable.ColumnsProp<T>[]): FaberTable.ColumnsProp<T>[] {
@@ -67,6 +83,100 @@ function TableColConfigModal<T>({columns = [], biz, onConfigChange, children, ..
     return [...sortBy(configuredItems, (item) => item.sort), ...newItems];
   }
 
+  function applyPendingWidths(nextItems: FaberTable.ColumnsProp<T>[]) {
+    if (pendingWidthsRef.current.size === 0) return nextItems;
+    const next = nextItems.map((item) => {
+      const width = pendingWidthsRef.current.get(dataIndexToString(item.dataIndex));
+      return width ? {...item, width} : item;
+    });
+    pendingWidthsRef.current.clear();
+    return next;
+  }
+
+  function getColumnsMerge(source: FaberTable.ColumnsProp<T>[]) {
+    return source.map((item, index) => {
+      const {dataIndex, tcRequired, tcChecked, width} = item;
+      return {dataIndex, tcRequired, tcChecked, width, sort: index};
+    }) as FaberTable.ColumnsProp<T>[];
+  }
+
+  function persistItems(
+    nextItems: FaberTable.ColumnsProp<T>[],
+    {close = false, notifyParent = false, showMessage = false}: { close?: boolean; notifyParent?: boolean; showMessage?: boolean } = {},
+  ) {
+    if (savingRef.current) {
+      pendingSaveRef.current = nextItems;
+      pendingCloseRef.current = pendingCloseRef.current || close;
+      pendingNotifyParentRef.current = pendingNotifyParentRef.current || notifyParent;
+      return;
+    }
+
+    savingRef.current = true;
+    const columnsMerge = getColumnsMerge(nextItems);
+    const currentConfig = configRef.current;
+    const params = {
+      biz,
+      type: FaEnums.ConfigType.TABLE_COLUMNS,
+      data: columnsMerge,
+    };
+    const request = currentConfig
+      ? api.update(currentConfig.id, {id: currentConfig.id, ...params})
+      : api.save(params);
+
+    request
+      .then((res: Fa.Ret<Admin.Config<FaberTable.ColumnsProp<T>[]>>) => {
+        if (showMessage) {
+          showResponse(res, '保存自定义表格配置');
+        }
+        const savedConfig = res.data || (currentConfig ? {...currentConfig, data: columnsMerge} : undefined);
+        if (savedConfig) {
+          configRef.current = savedConfig;
+          setConfig(savedConfig);
+        }
+        loadedBizRef.current = biz;
+        if (close) {
+          setOpen(false);
+        }
+        if (notifyParent && pendingSaveRef.current === undefined) {
+          onConfigChange(columnsMerge);
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        savingRef.current = false;
+        const pendingSave = pendingSaveRef.current;
+        const pendingClose = pendingCloseRef.current;
+        const pendingNotifyParent = pendingNotifyParentRef.current;
+        pendingSaveRef.current = undefined;
+        pendingCloseRef.current = false;
+        pendingNotifyParentRef.current = false;
+        if (pendingSave) {
+          persistItems(pendingSave, {
+            close: pendingClose,
+            notifyParent: pendingNotifyParent,
+            showMessage: pendingClose,
+          });
+        }
+      });
+  }
+
+  function updateColumnWidth(dataIndex: string | string[], width: number) {
+    const key = dataIndexToString(dataIndex);
+    if (loadedBizRef.current !== biz) {
+      pendingWidthsRef.current.set(key, width);
+      return;
+    }
+
+    const nextItems = itemsRef.current.map((item) => (
+      dataIndexToString(item.dataIndex) === key ? {...item, width} : item
+    ));
+    itemsRef.current = nextItems;
+    setItems(nextItems);
+    persistItems(nextItems, {notifyParent: true});
+  }
+
+  useImperativeHandle(ref, () => ({updateColumnWidth}));
+
   /** 获取服务端配置 */
   function fetchRemoteConfig(force = false): Promise<void> {
     const requestBiz = biz;
@@ -88,9 +198,15 @@ function TableColConfigModal<T>({columns = [], biz, onConfigChange, children, ..
         if (currentBizRef.current !== requestBiz) return;
 
         if (isNil(res.data) || isNil(res.data.data) || res.data.data.length === 0) {
+          const nextItems = applyPendingWidths(columns);
           setConfig(undefined);
-          setItems(columns);
+          configRef.current = undefined;
+          itemsRef.current = nextItems;
+          setItems(nextItems);
           loadedBizRef.current = requestBiz;
+          if (pendingWidthsRef.current.size === 0 && nextItems !== columns) {
+            persistItems(nextItems, {notifyParent: true});
+          }
           return;
         }
 
@@ -99,9 +215,16 @@ function TableColConfigModal<T>({columns = [], biz, onConfigChange, children, ..
           onConfigChange(nextConfig.data);
         }
         setConfig(nextConfig);
-        const newItems = parseItemsSorted(columns, nextConfig.data);
+        configRef.current = nextConfig;
+        const sortedItems = parseItemsSorted(columns, nextConfig.data);
+        const hasPendingWidths = pendingWidthsRef.current.size > 0;
+        const newItems = applyPendingWidths(sortedItems);
+        itemsRef.current = newItems;
         setItems(newItems);
         loadedBizRef.current = requestBiz;
+        if (hasPendingWidths) {
+          persistItems(newItems, {notifyParent: true});
+        }
       })
       .catch(() => {
         // 请求失败不标记为已加载，下一次打开抽屉时可以重试。
@@ -118,7 +241,10 @@ function TableColConfigModal<T>({columns = [], biz, onConfigChange, children, ..
   // 初始化加载表格配置
   useEffect(() => {
     loadedBizRef.current = undefined;
+    pendingWidthsRef.current.clear();
     setConfig(undefined);
+    configRef.current = undefined;
+    itemsRef.current = columns;
     setItems(columns);
     void fetchRemoteConfig();
   }, [biz]);
@@ -135,8 +261,11 @@ function TableColConfigModal<T>({columns = [], biz, onConfigChange, children, ..
   function handleReset() {
     if (config && config.id) {
       api.remove(config.id).then(() => {
-        setConfig(undefined)
+        setConfig(undefined);
+        configRef.current = undefined;
+        itemsRef.current = columns;
         setItems(columns);
+        pendingWidthsRef.current.clear();
         loadedBizRef.current = biz;
         if (onConfigChange) onConfigChange(columns);
       })
@@ -145,36 +274,7 @@ function TableColConfigModal<T>({columns = [], biz, onConfigChange, children, ..
 
   /** 保存配置 */
   function handleSave() {
-    // 合并修改配置&之前的配置
-    const columnsMerge: FaberTable.ColumnsProp<T>[] = items.map((item, index) => {
-      const {dataIndex, tcRequired, tcChecked, width} = item;
-      return {dataIndex, tcRequired, tcChecked, width, sort: index};
-    }) as FaberTable.ColumnsProp<T>[];
-
-    // 新增or更新
-    const params = {
-      biz,
-      type: FaEnums.ConfigType.TABLE_COLUMNS,
-      data: columnsMerge,
-    };
-
-    if (config === undefined) {
-      api.save(params).then((res) => {
-        showResponse(res, '保存自定义表格配置')
-        setOpen(false);
-        if (onConfigChange) onConfigChange(columnsMerge);
-        loadedBizRef.current = undefined;
-        void fetchRemoteConfig(true);
-      });
-    } else {
-      api.update(config.id, {id: config.id, ...params}).then((res) => {
-        showResponse(res, '更新自定义表格配置')
-        setOpen(false);
-        if (onConfigChange) onConfigChange(columnsMerge);
-        setConfig({...config, data: columnsMerge});
-        loadedBizRef.current = biz;
-      });
-    }
+    persistItems(items, {close: true, notifyParent: true, showMessage: true});
   }
 
   /** 处理Item勾选 */
@@ -265,5 +365,9 @@ function TableColConfigModal<T>({columns = [], biz, onConfigChange, children, ..
     </span>
   );
 }
+
+const TableColConfigModal = React.forwardRef(TableColConfigModalInner) as <T>(
+  props: TableColConfigModalProps<T> & React.RefAttributes<TableColConfigModalRef>,
+) => React.ReactElement | null;
 
 export default TableColConfigModal;

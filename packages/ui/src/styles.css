@@ -1121,6 +1121,46 @@ ul {
   background: rgba(255, 255, 255, 0.30);
 }
 
+.fa-table-resizable-header {
+    position: relative;
+}
+
+.fa-table-resize-handle {
+    position: absolute;
+    top: 0;
+    right: -4px;
+    z-index: 1;
+    width: 8px;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: col-resize;
+    touch-action: none;
+}
+
+.fa-table-resize-handle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  width: 1px;
+  height: 1.6em;
+  border-radius: 0;
+  background: var(--fa-border-color);
+  transform: translateY(-50%);
+  transition: background-color .15s;
+}
+
+[data-theme=dark] .fa-table-resize-handle::after {
+  background: var(--fa-border-dark-color);
+}
+
+.fa-table-resize-handle:hover::after,
+.fa-table-resize-handle:focus-visible::after {
+  background: var(--primary-color);
+}
+
 /*----------------------------------------- drag -----------------------------------------*/
 /* 拖动区域禁止文本选中事件 */
 .fa-drag-area-no-select {
