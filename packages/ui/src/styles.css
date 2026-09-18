@@ -1006,6 +1006,18 @@ ul {
   height: 100%;
 }
 
+/* antd 6 uses body/body-holder instead of content/content-holder. */
+.fa-tabs .ant-tabs-body-holder,
+.fa-tabs .ant-tabs-content-holder {
+  flex: 1;
+  min-height: 0;
+}
+
+.fa-tabs .ant-tabs-body,
+.fa-tabs .ant-tabs-content {
+  height: 100%;
+}
+
 .fa-tabs .ant-tabs-tabpane {
   height: 100%;
 }
