@@ -173,11 +173,11 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
         onOk={handleConfirm}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
-        width={1200}
+        width={1440}
         {...props}
       >
         <Row className="fa-flex-row" style={{height: 600}} gutter={12}>
-          <Col md={5}>
+          <Col md={4}>
             <BaseTree
               showRoot
               rootName="全部用户"
@@ -192,7 +192,7 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
             />
           </Col>
 
-          <Col md={14}>
+          <Col md={13}>
             <div className="fa-full fa-flex-column">
               <div style={{ display: 'flex', justifyContent: 'flex-end' }} className="fa-mb12">
                 <Form form={form} layout="inline" onFinish={setFormValues}>
@@ -227,7 +227,7 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
             </div>
           </Col>
 
-          <Col md={5} className="fa-flex-column" style={{ height: '100%' }}>
+          <Col md={7} className="fa-flex-column" style={{ height: '100%' }}>
             <FaLabel title="已选择" className="fa-mb12" />
             <FaFlexRestLayout>
               <SelectedUserList selectedUsers={innerUsers} onRemove={handleRemove} />

@@ -1,7 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {userApi} from "@ui/services/base";
 import {Admin} from "@ui/types";
-import {Button, Space, Table} from "antd";
+import {Button, Empty, Space, Table, Tooltip} from "antd";
+import {LockOutlined} from "@ant-design/icons";
 import {SelectedUser} from "./BizUserSelect";
 
 
@@ -61,29 +62,47 @@ export default function SelectedUserList({selectedUsers, onRemove}: SelectedUser
     });
   }, [selectedUsers])
 
-  const disallowRemoveUserIds = (selectedUsers || []).filter(i => !i.allowRemove).map(i => i.id)
+  const disallowRemoveUserIds = new Set((selectedUsers || []).filter(i => !i.allowRemove).map(i => i.id))
   return (
     <Table
       rowKey="id"
       columns={[
-        {dataIndex: 'name', title: '名称'},
+        {dataIndex: 'name', title: '姓名', width: 90, ellipsis: true},
+        {dataIndex: 'username', title: '账号', width: 110, ellipsis: true},
+        {
+          dataIndex: 'departmentName',
+          title: '部门',
+          width: 130,
+          ellipsis: true,
+          render: (value) => value || '未分配部门',
+        },
         {
           title: '操作',
           dataIndex: 'opr',
-          render: (_, record) => (
-            <Space>
-              {disallowRemoveUserIds.indexOf(record.id) === -1 && (
+          render: (_, record) => {
+            if (disallowRemoveUserIds.has(record.id)) {
+              return (
+                <Tooltip title="该用户不可移除">
+                  <span>
+                    <Button disabled type="text" size="small" icon={<LockOutlined />}>锁定</Button>
+                  </span>
+                </Tooltip>
+              );
+            }
+            return (
+              <Space>
                 <Button onClick={() => onRemove && onRemove(record)} type="dashed" size="small" danger>删除</Button>
-              )}
-            </Space>
-          ),
-          width: 80,
-          fixed: 'right',
+              </Space>
+            );
+          },
+          width: 90,
         },
       ]}
       dataSource={array}
       pagination={false}
       size="small"
+      tableLayout="fixed"
+      locale={{emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无已选用户" />}}
     />
   )
 }
