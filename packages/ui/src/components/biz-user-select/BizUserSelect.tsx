@@ -68,7 +68,7 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
   }, [dept])
 
   function onTreeDeptSelect(keys: any[], event: any) {
-    setDept(keys.length > 0 ? event.node.sourceData : undefined);
+    setDept(keys.length > 0 ? event?.node?.sourceData : undefined);
   }
 
   function dedupeUsers(users: SelectedUser[]) {
@@ -179,8 +179,10 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
         <Row className="fa-flex-row" style={{height: 600}} gutter={12}>
           <Col md={5}>
             <BaseTree
-              rootName="全部"
+              showRoot
+              rootName="全部用户"
               onSelect={onTreeDeptSelect}
+              draggable={false}
               // 自定义配置
               serviceName="部门"
               serviceApi={departmentApi}
