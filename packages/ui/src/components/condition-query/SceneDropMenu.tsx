@@ -25,23 +25,66 @@ const SceneDropMenu = React.forwardRef<HTMLElement, SceneDropMenuProps<any>>(fun
   const [manageModalVisible, setManageModalVisible] = useState(false);
   const [value, setValue] = useState<string>('0');
   const [label, setLabel] = useState<string>(allSceneLabel);
+  const [sceneLoading, setSceneLoading] = useState(false);
+  const currentBizRef = useRef(biz);
+  const loadedBizRef = useRef<string | undefined>(undefined);
+  const configListRef = useRef<Admin.ConfigScene[]>([]);
+  const requestRef = useRef<{ biz: string; promise: Promise<Admin.ConfigScene[]> } | undefined>(undefined);
+
+  currentBizRef.current = biz;
 
   useImperativeHandle(ref, () => ({
-    refreshConfigList: () => {
-      refreshConfigList();
-    },
+    refreshConfigList: () => refreshConfigList(true),
   }));
 
-  function refreshConfigList() {
-    if (biz) {
-      configSceneApi.findAllScene({ biz }).then((res) => {
-        setConfigList(res.data);
-      });
+  function refreshConfigList(force = false): Promise<Admin.ConfigScene[]> {
+    const requestBiz = biz;
+    if (!requestBiz) {
+      loadedBizRef.current = requestBiz;
+      configListRef.current = [];
+      setConfigList([]);
+      return Promise.resolve([]);
     }
+
+    if (!force && loadedBizRef.current === requestBiz) {
+      return Promise.resolve(configListRef.current);
+    }
+
+    if (requestRef.current?.biz === requestBiz) {
+      return requestRef.current.promise;
+    }
+
+    setSceneLoading(true);
+    const request = configSceneApi.findAllScene({ biz: requestBiz })
+      .then((res) => {
+        const list = res.data || [];
+        if (currentBizRef.current === requestBiz) {
+          configListRef.current = list;
+          loadedBizRef.current = requestBiz;
+          setConfigList(list);
+        }
+        return list;
+      })
+      .catch(() => {
+        // 请求失败不标记为已加载，下一次展开时可以重试。
+        return [];
+      })
+      .finally(() => {
+        if (requestRef.current?.promise === request) {
+          requestRef.current = undefined;
+          setSceneLoading(false);
+        }
+      });
+    requestRef.current = { biz: requestBiz, promise: request };
+    return request;
   }
 
   useEffect(() => {
-    refreshConfigList();
+    loadedBizRef.current = undefined;
+    configListRef.current = [];
+    setConfigList([]);
+    setValue('0');
+    setLabel(allSceneLabel);
   }, [biz]);
 
   function handleMenuClick(e: any) {
@@ -75,16 +118,23 @@ const SceneDropMenu = React.forwardRef<HTMLElement, SceneDropMenuProps<any>>(fun
 
   return (
     <div>
-      <Dropdown menu={{ items, onClick: handleMenuClick, selectedKeys: [value] }} trigger={['click']}>
-        <Button icon={<DownOutlined />} type="text" style={{ paddingLeft: 1, paddingRight: 1 }}>{label}</Button>
+      <Dropdown
+        menu={{ items, onClick: handleMenuClick, selectedKeys: [value] }}
+        trigger={['click']}
+        onOpenChange={(open) => {
+          if (open) void refreshConfigList();
+        }}
+      >
+        <Button loading={sceneLoading} icon={<DownOutlined />} type="text" style={{ paddingLeft: 1, paddingRight: 1 }}>{label}</Button>
       </Dropdown>
       <SceneManageModal
         ref={manageModalRef}
         biz={biz}
         columns={columns as any[]}
+        fetchConfigList={refreshConfigList}
         open={manageModalVisible}
         onOk={() => {
-          refreshConfigList();
+          void refreshConfigList(true);
           setManageModalVisible(false);
         }}
         onCancel={() => setManageModalVisible(false)}
