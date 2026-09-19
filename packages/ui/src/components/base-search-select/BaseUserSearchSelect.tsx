@@ -248,6 +248,7 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
       <BizUserSelect
         onChange={handleAddUsers}
         selectedUsers={innerUsers}
+        multiple={multiple}
       >
         <Button icon={<SearchOutlined />} />
       </BizUserSelect>

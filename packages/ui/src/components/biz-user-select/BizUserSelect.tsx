@@ -10,6 +10,7 @@ import {BaseTree} from "@ui/components/base-tree";
 import {FaLabel} from "@ui/components/decorator";
 import {CommonModalProps, DragModal} from '../base-modal';
 import {FaFlexRestLayout} from "@ui/components";
+import type {TableRowSelection} from 'antd/es/table/interface';
 
 
 export interface SelectedUser {
@@ -20,6 +21,7 @@ export interface SelectedUser {
 
 export interface BizUserSelectProps extends CommonModalProps<any> {
   selectedUsers?: SelectedUser[]; // 已经选中的用户ID
+  multiple?: boolean;
   onChange?: (v: SelectedUser[], callback: () => void, error?: any) => void;
 }
 
@@ -28,7 +30,7 @@ export interface BizUserSelectProps extends CommonModalProps<any> {
  * @author xu.pengfei
  * @date 2022/12/28 14:38
  */
-export default function BizUserSelect({children, record, fetchFinish, selectedUsers, onChange, ...props}: BizUserSelectProps) {
+export default function BizUserSelect({children, record, fetchFinish, selectedUsers, multiple = true, onChange, ...props}: BizUserSelectProps) {
   const [form] = Form.useForm();
 
   const [open, setOpen] = useState(false);
@@ -38,8 +40,9 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
 
   useEffect(() => {
     // console.log('selectedUsers', selectedUsers)
-    setInnerUsers(selectedUsers || [])
-  }, [selectedUsers])
+    const users = dedupeUsers(selectedUsers || []);
+    setInnerUsers(multiple ? users : users.slice(0, 1))
+  }, [selectedUsers, multiple])
 
   const {
     queryParams,
@@ -64,9 +67,34 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
     setDept(keys.length > 0 ? event.node.sourceData : undefined);
   }
 
-  function handleAdd(item: Admin.UserWeb) {
-    const newSel = [ ...innerUsers||[], { id: item.id, label: item.name, allowRemove: true } ]
-    setInnerUsers(newSel)
+  function dedupeUsers(users: SelectedUser[]) {
+    const seen = new Set<string>();
+    return users.filter((user) => {
+      if (seen.has(user.id)) return false;
+      seen.add(user.id);
+      return true;
+    });
+  }
+
+  function toSelectedUser(item: Admin.UserWeb): SelectedUser {
+    return { id: item.id, label: item.name, allowRemove: true };
+  }
+
+  function handleRowSelect(record: Admin.UserWeb, selected: boolean) {
+    setInnerUsers((current) => {
+      if (!multiple) return selected ? [toSelectedUser(record)] : [];
+      if (!selected) return current.filter((user) => user.id !== record.id);
+      return dedupeUsers([...current, toSelectedUser(record)]);
+    });
+  }
+
+  function handleSelectAll(selected: boolean, selectedRows: Admin.UserWeb[]) {
+    if (!multiple) return;
+    const pageIds = new Set(list.map((item) => item.id));
+    setInnerUsers((current) => {
+      const retainedUsers = current.filter((user) => !pageIds.has(user.id));
+      return dedupeUsers(selected ? [...retainedUsers, ...selectedRows.map(toSelectedUser)] : retainedUsers);
+    });
   }
 
   function handleRemove(item: Admin.User) {
@@ -83,23 +111,19 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
         ...BaseTableUtils.genSimpleSorterColumn('部门', 'departmentId', 130, sorter),
         render: (_, r) => r.departmentName,
       },
-      {
-        title: '操作',
-        dataIndex: 'opr',
-        render: (_, record) => (
-          <Space>
-            {innerUsers.map(i => i.id).indexOf(record.id) === -1 && (
-              <Button type="dashed" size="small" onClick={() => handleAdd(record)}>添加</Button>
-            )}
-          </Space>
-        ),
-        width: 80,
-        fixed: 'right',
-        tcRequired: true,
-        tcType: 'menu',
-      },
     ] as FaberTable.ColumnsProp<Admin.UserWeb>[];
   }
+
+  const rowSelection: TableRowSelection<Admin.UserWeb> = {
+    type: multiple ? 'checkbox' : 'radio',
+    selectedRowKeys: innerUsers.map((user) => user.id),
+    preserveSelectedRowKeys: true,
+    onSelect: handleRowSelect,
+    onSelectAll: handleSelectAll,
+    getCheckboxProps: (record) => ({
+      disabled: innerUsers.some((user) => user.id === record.id && user.allowRemove === false),
+    }),
+  };
 
   function handleConfirm() {
     if (onChange) {
@@ -166,12 +190,13 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
                 dataSource={list}
                 rowKey={(item) => item.id}
                 onChange={handleTableChange}
+                rowSelection={rowSelection}
                 refreshList={() => fetchPageList()}
                 batchDelete={(ids) => userApi.removeBatchByIds(ids)}
                 showComplexQuery={false}
                 showBatchDelBtn={false}
                 showTableColConfigBtn={false}
-                showCheckbox={false}
+                showCheckbox
                 showTopDiv={false}
               />
             </div>
