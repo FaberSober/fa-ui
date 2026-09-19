@@ -48,33 +48,34 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
   const multiple = props.mode === 'multiple';
 
   useEffect(() => {
-    // console.log('listValueFlag', listValueFlag, value, extraParams)
     if (multiple) {
-      // 多选数据
-      if (value === undefined || value === null || value.length === 0) {
+      const selectedValues = Array.isArray(value) ? value.filter((item) => !isEmptyValue(item)) : [];
+      if (selectedValues.length === 0) {
+        setInnerUsers([]);
         searchNow();
-        // if (onChange) {
-        //   onChange([])
-        // }
       } else {
-        updateValue(value);
-        setInnerUsers(value.map((i:any) => ({ id: i, allowRemove: true })))
+        updateValue(selectedValues);
+        setInnerUsers(selectedValues.map((item: any) => ({ id: item, allowRemove: true })));
       }
     } else {
-      if (value === undefined || value === null) {
+      if (isEmptyValue(value)) {
+        setInnerUsers([]);
         searchNow();
-        if (onChange) {
-          onChange(undefined)
-        }
       } else {
         updateValue(value);
-        setInnerUsers([{ id: value, allowRemove: true }])
+        setInnerUsers([{ id: value, allowRemove: true }]);
       }
     }
-  }, [value, extraParams]);
+  }, [value, extraParams, multiple]);
+
+  function isEmptyValue(target: any) {
+    if (target === undefined || target === null) return true;
+    if (Array.isArray(target)) return target.length === 0;
+    return typeof target === 'string' && trim(target) === '';
+  }
 
   function updateValue(outValue: any) {
-    if (outValue === undefined || outValue === null || trim(outValue) === '') return;
+    if (isEmptyValue(outValue)) return;
     if (multiple) {
       if (serviceApi?.findList) {
         serviceApi?.findList(outValue).then((res) => {
@@ -155,12 +156,12 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
 
   function handleAddUsers(users: SelectedUser[], callback: any, error: any) {
     if (multiple) {
-      onChange && onChange(users.map(i => i.id), users)
+      onChange?.(users.map(i => i.id), users)
     } else {
       if (users && users[0]) {
-        onChange && onChange(users[0].id, users[0])
+        onChange?.(users[0].id, users[0])
       } else {
-        onChange && onChange(undefined, undefined)
+        onChange?.(undefined, undefined)
       }
     }
     callback()
