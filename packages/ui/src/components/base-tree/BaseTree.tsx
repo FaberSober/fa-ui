@@ -242,13 +242,15 @@ const BaseTree = React.forwardRef<BaseTreeRef, BaseTreeProp<any, any>>(function 
     // console.log('treePath', treePath)
     const keys: any[] = treePath.map(i => i.id)
 
-    const newEks = [...expandedKeys]
-    each(keys, v => {
-      if (!newEks.includes(v)) {
-        newEks.push(v)
-      }
+    setExpandedKeys((currentKeys) => {
+      const newEks = [...currentKeys]
+      each(keys, v => {
+        if (!newEks.includes(v)) {
+          newEks.push(v)
+        }
+      })
+      return newEks
     })
-    setExpandedKeys(newEks)
   }
 
   function afterAddItem(r?: any) {
