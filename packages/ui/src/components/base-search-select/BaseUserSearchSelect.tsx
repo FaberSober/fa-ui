@@ -205,11 +205,15 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
   }
 
   function handleAddUsers(users: SelectedUser[], callback: any, error: any) {
+    const options = users.map((user) => ({
+      value: user.id,
+      label: user.label ?? array.find((item: any) => item.value === user.id)?.label ?? user.id,
+    }));
     if (multiple) {
-      onChange?.(users.map(i => i.id), users)
+      onChange?.(options.map((option) => option.value), options)
     } else {
-      if (users && users[0]) {
-        onChange?.(users[0].id, users[0])
+      if (options[0]) {
+        onChange?.(options[0].value, options[0])
       } else {
         onChange?.(undefined, undefined)
       }

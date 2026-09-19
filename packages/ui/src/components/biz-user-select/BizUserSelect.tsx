@@ -14,6 +14,7 @@ import {FaFlexRestLayout} from "@ui/components";
 
 export interface SelectedUser {
   id: string;
+  label?: string;
   allowRemove?: boolean;
 }
 
@@ -64,7 +65,7 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
   }
 
   function handleAdd(item: Admin.UserWeb) {
-    const newSel = [ ...innerUsers||[], { id: item.id, allowRemove: true } ]
+    const newSel = [ ...innerUsers||[], { id: item.id, label: item.name, allowRemove: true } ]
     setInnerUsers(newSel)
   }
 
