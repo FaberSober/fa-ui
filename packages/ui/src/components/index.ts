@@ -28,6 +28,7 @@ export * from './container';
 export * from './context';
 export * from './decorator';
 export * from './fa-json-view';
+export * from './fa-json-edit';
 export * from './modal';
 
 export { default as FaButton } from './FaButton';

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {find, get, isNumber, sumBy} from 'lodash';
 import { ClearOutlined, DeleteOutlined, SettingOutlined } from '@ant-design/icons';
 import { Button, Modal, Table } from 'antd';
@@ -7,9 +7,22 @@ import { showResponse } from '@ui/utils/utils';
 import { dataIndexToString, useScrollY } from './utils';
 import ComplexQuery from '@ui/components/condition-query/ComplexQuery';
 import type { TableRowSelection } from 'antd/es/table/interface';
-import TableColConfigModal from '../modal/TableColConfigModal';
+import TableColConfigModal, { type TableColConfigModalRef } from '../modal/TableColConfigModal';
 import { FaFlexRestLayout } from "@ui/components/base-layout";
+import ResizableHeaderCell, { DEFAULT_COLUMN_WIDTH } from './ResizableHeaderCell';
 
+function resolveTableScrollValue<T extends number | string | true | undefined>(
+  config: FaberTable.TableScrollAxisConfig | undefined,
+  autoValue: number | undefined,
+  fallbackValue: T,
+): T | number | undefined {
+  if (!config) return fallbackValue;
+  if (config.mode === 'off') return undefined;
+  if (config.mode === 'fixed' && typeof config.value === 'number' && config.value > 0) {
+    return config.value;
+  }
+  return autoValue;
+}
 
 /**
  * 基础业务表格组件
@@ -54,10 +67,22 @@ export default function BaseBizTable<RecordType extends object = any>({
     get(props, 'pagination.current'),
     get(props, 'pagination.pageSize'),
     scrollY,
+    tableScroll?.x,
+    tableScroll?.y,
   ].join('|');
   const [innerScrollY] = useScrollY(tableContainerRef, scrollLayoutKey);
 
   const [config, setConfig] = useState<FaberTable.ColumnsProp<RecordType>[]>();
+  const [tableScrollConfig, setTableScrollConfig] = useState<FaberTable.TableScrollConfig>();
+  const [columnWidths, setColumnWidths] = useState<Record<string, number>>({});
+  const tableConfigRef = useRef<TableColConfigModalRef>(null);
+
+  const defaultScrollConfig = useMemo<FaberTable.TableScrollConfig>(() => ({
+    x: typeof tableScroll?.x === 'number' ? {mode: 'fixed', value: tableScroll.x} : {mode: 'auto'},
+    y: typeof scrollY === 'number'
+      ? {mode: 'fixed', value: scrollY}
+      : typeof tableScroll?.y === 'number' ? {mode: 'fixed', value: tableScroll.y} : {mode: 'auto'},
+  }), [scrollY, tableScroll?.x, tableScroll?.y]);
 
   const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([]);
   const [batchDeleting, setBatchDeleting] = useState(false);
@@ -67,6 +92,16 @@ export default function BaseBizTable<RecordType extends object = any>({
   useEffect(() => {
     setSelectedRowKeys([]);
   }, [get(props, 'pagination.total'), get(props, 'pagination.current'), get(props, 'pagination.pageSize')]);
+
+  const handleColumnResize = useCallback((dataIndex: string | string[], width: number) => {
+    const key = dataIndexToString(dataIndex);
+    setColumnWidths((current) => current[key] === width ? current : {...current, [key]: width});
+  }, []);
+
+  const handleColumnResizeStop = useCallback((dataIndex: string | string[], width: number) => {
+    handleColumnResize(dataIndex, width);
+    tableConfigRef.current?.updateColumnWidth(dataIndex, width);
+  }, [handleColumnResize]);
 
   /**
    * 解析表格自定义配置
@@ -127,19 +162,41 @@ export default function BaseBizTable<RecordType extends object = any>({
       ]
     }
 
-    // 计算table滚动width
-    const scrollWidthX = sumBy(parseColumns, (n) => Number(n.width) || 200);
+    // 应用拖动后的本地列宽
+    const resizedColumns = parseColumns.map((column, index) => {
+      const key = showRowNum && index === 0 ? null : dataIndexToString(column.dataIndex);
+      const resizedWidth = key ? columnWidths[key] : undefined;
+      const nextColumn = resizedWidth ? {...column, width: resizedWidth} : column;
 
-    return { parseColumns, scrollWidthX };
-  }, [config, columns, showRowNum]);
+      if (!showTableColConfigBtn || !biz || !key) return nextColumn;
+
+      const onHeaderCell = nextColumn.onHeaderCell;
+      return {
+        ...nextColumn,
+        onHeaderCell: (headerColumn: any, headerIndex?: number) => ({
+          ...onHeaderCell?.(headerColumn, headerIndex),
+          width: nextColumn.width,
+          onResize: (nextWidth: number) => handleColumnResize(nextColumn.dataIndex, nextWidth),
+          onResizeStop: (nextWidth: number) => handleColumnResizeStop(nextColumn.dataIndex, nextWidth),
+        } as any),
+      };
+    });
+
+    // 计算table滚动width
+    const scrollWidthX = sumBy(resizedColumns, (n) => Number(n.width) || DEFAULT_COLUMN_WIDTH);
+
+    return { parseColumns: resizedColumns, scrollWidthX };
+  }, [biz, columns, config, columnWidths, handleColumnResize, handleColumnResizeStop, showRowNum, showTableColConfigBtn]);
 
   /** 表格配置变更 */
-  function handleTableColConfigChange(tableColumns: FaberTable.ColumnsProp<RecordType>[]) {
+  function handleTableColConfigChange(tableConfig: FaberTable.TableConfigData<RecordType>) {
+    setColumnWidths({});
     const currentColumnKeys = new Set(columns.map((c) => dataIndexToString(c.dataIndex)));
-    setConfig(tableColumns.filter((col) => {
+    setConfig(tableConfig.columns.filter((col) => {
       if (!col || col.dataIndex == null) return false;
       return currentColumnKeys.has(dataIndexToString(col.dataIndex));
     }));
+    setTableScrollConfig(tableConfig.scroll);
   }
 
   /** 批量删除Item */
@@ -189,6 +246,23 @@ export default function BaseBizTable<RecordType extends object = any>({
       onDeleteByQuery();
     }
   }
+
+  const resolvedTableScroll = (() => {
+    const fallbackX = tableScroll?.x ?? scrollWidthX;
+    const fallbackY = scrollY ?? tableScroll?.y ?? innerScrollY;
+    if (!tableScrollConfig) {
+      return {...tableScroll, x: fallbackX, y: fallbackY};
+    }
+
+    const {x: _tableScrollX, y: _tableScrollY, ...otherScroll} = tableScroll || {};
+    const x = resolveTableScrollValue(tableScrollConfig.x, scrollWidthX, fallbackX);
+    const y = resolveTableScrollValue(tableScrollConfig.y, innerScrollY, fallbackY);
+    return {
+      ...otherScroll,
+      ...(x !== undefined ? {x} : {}),
+      ...(y !== undefined ? {y} : {}),
+    };
+  })();
 
   return (
     <div style={{ flex: 1, minHeight: 0, minWidth: 0, position:'relative', overflow: 'hidden' }}>
@@ -249,7 +323,7 @@ export default function BaseBizTable<RecordType extends object = any>({
           <Table
             columns={parseColumns}
             rowSelection={showCheckbox ? myRowSelection : undefined}
-            scroll={{ ...tableScroll, x: tableScroll?.x ?? scrollWidthX, y: innerScrollY ?? scrollY }}
+            scroll={resolvedTableScroll}
             onRow={(record) => ({
               onClick: () => {
                 // 点击row选中功能实现
@@ -274,11 +348,24 @@ export default function BaseBizTable<RecordType extends object = any>({
             size="small"
             showSorterTooltip={false}
             {...props}
+            components={{
+              ...props.components,
+              header: {
+                ...props.components?.header,
+                cell: ResizableHeaderCell,
+              },
+            }}
           />
           {/* 表格自定义配置 */}
           {showTableColConfigBtn ? (
-            <div style={{position: 'absolute', right: 4, top: 4, zIndex: 9}}>
-              <TableColConfigModal columns={columns} biz={biz} onConfigChange={handleTableColConfigChange}>
+            <div style={{position: 'absolute', right: 14, top: 4, zIndex: 9}}>
+              <TableColConfigModal
+                ref={tableConfigRef}
+                columns={columns}
+                biz={biz}
+                defaultScrollConfig={defaultScrollConfig}
+                onConfigChange={handleTableColConfigChange}
+              >
                 <Button icon={<SettingOutlined/>} type="text"/>
               </TableColConfigModal>
             </div>

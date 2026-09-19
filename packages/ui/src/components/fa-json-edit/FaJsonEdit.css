@@ -1,0 +1,177 @@
+.fa-json-edit {
+  width: 100%;
+  min-width: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--fa-bg-color);
+  border: 1px solid var(--fa-border-color);
+  border-radius: var(--fa-border-radius);
+  overflow: hidden;
+}
+
+.fa-json-edit-toolbar {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px;
+  background-color: var(--fa-bg-grey);
+  border-bottom: 1px solid var(--fa-border-color);
+}
+
+.fa-json-edit-mode-error {
+  color: var(--fa-error-color, #ff4d4f);
+  font-size: 12px;
+}
+
+.fa-json-edit-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  overflow: auto;
+  padding: 10px 0 6px;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--fa-text-color);
+}
+
+.fa-json-edit-text-body {
+  padding: 0 10px 10px;
+}
+
+.fa-json-edit-textarea,
+.fa-json-edit-textarea textarea {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  resize: vertical;
+}
+
+.fa-json-edit-error {
+  margin-top: 8px;
+}
+
+.fa-json-edit-invalid-tree {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 4px 10px 10px;
+}
+
+.fa-json-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 30px;
+  padding-right: 10px;
+  white-space: nowrap;
+}
+
+.fa-json-edit-text-row,
+.fa-json-edit-text-row .fa-json-edit-scalar {
+  align-items: flex-start;
+}
+
+.fa-json-edit-row-clickable {
+  cursor: pointer;
+}
+
+.fa-json-edit-row-clickable:hover {
+  background-color: var(--fa-hover-bg);
+}
+
+.fa-json-edit-arrow {
+  display: inline-flex;
+  width: 12px;
+  color: var(--fa-subtitle-color);
+}
+
+.fa-json-edit-key {
+  color: #a626a4;
+}
+
+.fa-json-edit-key-editor {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+
+.fa-json-edit-key-editor .ant-input {
+  width: 140px;
+}
+
+.fa-json-edit-key-error {
+  position: absolute;
+  top: 28px;
+  left: 0;
+  z-index: 1;
+  padding: 2px 6px;
+  color: #ff4d4f;
+  background: var(--fa-bg-color);
+  border: 1px solid #ff4d4f;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.fa-json-edit-inline-btn,
+.fa-json-edit-actions .ant-btn {
+  color: var(--fa-subtitle-color);
+}
+
+.fa-json-edit-inline-btn:hover,
+.fa-json-edit-actions .ant-btn:hover {
+  color: var(--fa-text-color-highlight);
+}
+
+.fa-json-edit-colon,
+.fa-json-edit-brace {
+  color: var(--fa-text-color);
+}
+
+.fa-json-edit-scalar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.fa-json-edit-scalar > .ant-input {
+  width: 260px;
+}
+
+.fa-json-edit-scalar > .ant-input-textarea {
+  width: 260px;
+}
+
+.fa-json-edit-scalar > .ant-input-textarea textarea {
+  resize: vertical;
+}
+
+.fa-json-edit-scalar > .ant-input-number {
+  width: 140px;
+}
+
+.fa-json-edit-scalar > .ant-select {
+  width: 82px;
+}
+
+.fa-json-edit-null {
+  color: var(--fa-text-color-light100);
+  font-style: italic;
+}
+
+.fa-json-edit-actions {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+}
+
+.fa-json-edit-truncate {
+  padding: 4px 12px 4px 0;
+  color: var(--fa-text-color-light100);
+  font-size: 12px;
+}
