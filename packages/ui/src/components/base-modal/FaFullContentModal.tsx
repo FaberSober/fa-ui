@@ -16,6 +16,7 @@ export interface FaFullContentModalProps {
   onOk?: () => void;
   onCancel?: () => void;
   okText?: ReactNode;
+  confirmLoading?: boolean;
   cancelText?: ReactNode;
   showOk?: boolean;
   showCancel?: boolean;
@@ -39,6 +40,7 @@ export default function FaFullContentModal({
   onOk,
   onCancel,
   okText = '提交',
+  confirmLoading = false,
   cancelText = '取消',
   showOk = true,
   showCancel = true,
@@ -143,7 +145,7 @@ export default function FaFullContentModal({
               <div className="fa-flex-1" />
               <Space>
                 {showOk && (
-                  <Button type="primary" onClick={handleOk}>
+                  <Button type="primary" loading={confirmLoading} onClick={handleOk}>
                     {okText}
                   </Button>
                 )}
