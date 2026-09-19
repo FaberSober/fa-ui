@@ -177,59 +177,82 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
         {...props}
       >
         <Row className="fa-flex-row" style={{height: 600}} gutter={12}>
-          <Col md={4}>
-            <BaseTree
-              showRoot
-              rootName="全部用户"
-              onSelect={onTreeDeptSelect}
-              draggable={false}
-              // 自定义配置
-              serviceName="部门"
-              serviceApi={departmentApi}
-              showTopBtn={false}
-              treeStyle={{padding: 0}}
-              className="fa-border"
-            />
+          <Col md={4} className="fa-flex-column">
+            <FaLabel title="组织架构" className="fa-mb8" />
+            <FaFlexRestLayout
+              style={{
+                border: '1px solid var(--fa-border-color)',
+                borderRadius: 'var(--fa-border-radius)',
+                overflow: 'hidden',
+              }}
+            >
+              <BaseTree
+                showRoot
+                rootName="全部用户"
+                onSelect={onTreeDeptSelect}
+                draggable={false}
+                // 自定义配置
+                serviceName="部门"
+                serviceApi={departmentApi}
+                showTopBtn={false}
+                treeStyle={{padding: 0}}
+              />
+            </FaFlexRestLayout>
           </Col>
 
-          <Col md={13}>
-            <div className="fa-full fa-flex-column">
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }} className="fa-mb12">
-                <Form form={form} layout="inline" onFinish={setFormValues}>
-                  <Form.Item name="name" label="姓名">
-                    <Input placeholder="请输入姓名" />
-                  </Form.Item>
-                </Form>
+          <Col md={13} className="fa-flex-column">
+            <FaLabel title="用户列表" className="fa-mb8" />
+            <FaFlexRestLayout
+              style={{
+                border: '1px solid var(--fa-border-color)',
+                borderRadius: 'var(--fa-border-radius)',
+                overflow: 'hidden',
+              }}
+            >
+              <div className="fa-full fa-flex-column">
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }} className="fa-mb12">
+                  <Form form={form} layout="inline" onFinish={setFormValues}>
+                    <Form.Item name="name" label="姓名">
+                      <Input placeholder="请输入姓名" />
+                    </Form.Item>
+                  </Form>
 
-                <Space>
-                  <Button onClick={() => form.submit()} loading={loading} icon={<SearchOutlined />}>查询</Button>
-                  <Button onClick={() => clearForm(form)} loading={loading}>重置</Button>
-                </Space>
+                  <Space>
+                    <Button onClick={() => form.submit()} loading={loading} icon={<SearchOutlined />}>查询</Button>
+                    <Button onClick={() => clearForm(form)} loading={loading}>重置</Button>
+                  </Space>
+                </div>
+
+                <BaseBizTable
+                  biz="UserList-Search"
+                  columns={genColumns()}
+                  pagination={{ ...paginationProps, size: 'small' }}
+                  loading={loading}
+                  dataSource={list}
+                  rowKey={(item) => item.id}
+                  onChange={handleTableChange}
+                  rowSelection={rowSelection}
+                  refreshList={() => fetchPageList()}
+                  batchDelete={(ids) => userApi.removeBatchByIds(ids)}
+                  showComplexQuery={false}
+                  showBatchDelBtn={false}
+                  showTableColConfigBtn={false}
+                  showCheckbox
+                  showTopDiv={false}
+                />
               </div>
-
-              <BaseBizTable
-                biz="UserList-Search"
-                columns={genColumns()}
-                pagination={{ ...paginationProps, size: 'small' }}
-                loading={loading}
-                dataSource={list}
-                rowKey={(item) => item.id}
-                onChange={handleTableChange}
-                rowSelection={rowSelection}
-                refreshList={() => fetchPageList()}
-                batchDelete={(ids) => userApi.removeBatchByIds(ids)}
-                showComplexQuery={false}
-                showBatchDelBtn={false}
-                showTableColConfigBtn={false}
-                showCheckbox
-                showTopDiv={false}
-              />
-            </div>
+            </FaFlexRestLayout>
           </Col>
 
           <Col md={7} className="fa-flex-column" style={{ height: '100%' }}>
-            <FaLabel title="已选择" className="fa-mb12" />
-            <FaFlexRestLayout>
+            <FaLabel title="已选择" className="fa-mb8" />
+            <FaFlexRestLayout
+              style={{
+                border: '1px solid var(--fa-border-color)',
+                borderRadius: 'var(--fa-border-radius)',
+                overflow: 'hidden',
+              }}
+            >
               <SelectedUserList selectedUsers={innerUsers} onRemove={handleRemove} />
             </FaFlexRestLayout>
           </Col>
