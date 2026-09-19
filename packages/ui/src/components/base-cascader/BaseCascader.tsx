@@ -115,13 +115,18 @@ export default function BaseCascader<RecordType extends object = any, KeyType = 
     }
   }
 
-  function handleChange(newValue: KeyType[] | KeyType[][], selectedOptions: Fa.TreeNode<RecordType, KeyType>[] | Fa.TreeNode<RecordType, KeyType>[][]) {
-    setInnerValue(newValue);
+  function handleChange(
+    newValue: KeyType[] | KeyType[][] | undefined,
+    selectedOptions?: Fa.TreeNode<RecordType, KeyType>[] | Fa.TreeNode<RecordType, KeyType>[][],
+  ) {
+    const nextValue = newValue || [];
+    const nextSelectedOptions = selectedOptions || [];
+    setInnerValue(nextValue);
 
     if (multiple) {
       // 多选模式
-      const values = (newValue as KeyType[][]).map(path => path[path.length - 1]);
-      const items = (selectedOptions as Fa.TreeNode<RecordType, KeyType>[][]).map(
+      const values = (nextValue as KeyType[][]).map(path => path[path.length - 1]);
+      const items = (nextSelectedOptions as Fa.TreeNode<RecordType, KeyType>[][]).map(
         path => path[path.length - 1]
       );
 
@@ -129,7 +134,7 @@ export default function BaseCascader<RecordType extends object = any, KeyType = 
         onChange(
           values,
           items,
-          newValue as KeyType[][],
+          nextValue as KeyType[][],
           items.map(i => i.sourceData),
         );
       }
@@ -137,31 +142,32 @@ export default function BaseCascader<RecordType extends object = any, KeyType = 
         onChangeWithItem(
           values,
           items.map(i => i.sourceData),
-          newValue as KeyType[][],
-          selectedOptions as Fa.TreeNode<RecordType, KeyType>[][],
+          nextValue as KeyType[][],
+          nextSelectedOptions as Fa.TreeNode<RecordType, KeyType>[][],
         );
       }
     } else {
       // 单选模式
-      const lastValue = newValue && (newValue as KeyType[]).length > 0 ? (newValue as KeyType[])[newValue.length - 1] : undefined;
-      const lastItem = selectedOptions && (selectedOptions as Fa.TreeNode<RecordType, KeyType>[]).length > 0
-        ? (selectedOptions as Fa.TreeNode<RecordType, KeyType>[])[selectedOptions.length - 1]
+      const selectedItems = nextSelectedOptions as Fa.TreeNode<RecordType, KeyType>[];
+      const lastValue = (nextValue as KeyType[]).length > 0 ? (nextValue as KeyType[])[nextValue.length - 1] : undefined;
+      const lastItem = selectedItems.length > 0
+        ? selectedItems[selectedItems.length - 1]
         : undefined;
 
       if (onChange) {
         onChange(
           lastValue,
           lastItem,
-          [newValue as KeyType[]],
-          (selectedOptions as Fa.TreeNode<RecordType, KeyType>[]).map(i => i.sourceData),
+          [nextValue as KeyType[]],
+          selectedItems.map(i => i.sourceData),
         );
       }
       if (onChangeWithItem) {
         onChangeWithItem(
           lastValue,
           lastItem?.sourceData,
-          [newValue as KeyType[]],
-          [(selectedOptions as Fa.TreeNode<RecordType, KeyType>[])],
+          [nextValue as KeyType[]],
+          [selectedItems],
         );
       }
     }
