@@ -11,11 +11,18 @@ export interface BaseDrawerProps extends Omit<DrawerProps, 'bodyStyle'> {
   bodyStyle?: React.CSSProperties;
 }
 
+// Ant Design Table's fixed-column shadows derive their z-index from the
+// column count, so keep the resize handle above that dynamic layer.
+const DRAWER_DRAGGER_Z_INDEX = 10_000;
+
 /**
  * @author xu.pengfei
  * @date 2022/12/28 10:41
  */
-const BaseDrawer = React.forwardRef<HTMLElement, BaseDrawerProps>(function BaseDrawer({ children, hideResize = false, triggerDom, bodyStyle, onClose, size: outSize, ...props }: BaseDrawerProps, ref: any) {
+const BaseDrawer = React.forwardRef<HTMLElement, BaseDrawerProps>(function BaseDrawer(
+  { children, hideResize = false, triggerDom, bodyStyle, onClose, size: outSize, styles: drawerStyles, ...props }: BaseDrawerProps,
+  ref: any,
+) {
   const [open, setOpen] = useState(false);
   const [size, setSize] = useState(outSize || 700);
 
@@ -50,6 +57,17 @@ const BaseDrawer = React.forwardRef<HTMLElement, BaseDrawerProps>(function BaseD
           className="fa-ant-drawer-body0"
           mask={{ enabled: true, blur: false }}
           {...props}
+          styles={(info) => {
+            const resolvedStyles = typeof drawerStyles === 'function' ? drawerStyles(info) : drawerStyles;
+
+            return {
+              ...resolvedStyles,
+              dragger: {
+                ...resolvedStyles?.dragger,
+                zIndex: DRAWER_DRAGGER_Z_INDEX,
+              },
+            };
+          }}
         >
           {(open || props.open || props.forceRender) && (
             <>
