@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {departmentApi, userApi} from "@ui/services/base";
 import {Admin} from "@ui/types";
 import {Button, Col, Form, Input, Row, Space} from "antd";
@@ -37,12 +37,16 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
   const [dept, setDept] = useState<Admin.Department>();
   const [innerUsers, setInnerUsers] = useState<SelectedUser[]>(selectedUsers || [])
+  const originalUsersRef = useRef<SelectedUser[]>([]);
 
   useEffect(() => {
     // console.log('selectedUsers', selectedUsers)
-    const users = dedupeUsers(selectedUsers || []);
-    setInnerUsers(multiple ? users : users.slice(0, 1))
-  }, [selectedUsers, multiple])
+    if (!open) {
+      const users = normalizeUsers(selectedUsers || []);
+      setInnerUsers(users);
+      originalUsersRef.current = users;
+    }
+  }, [selectedUsers, multiple, open])
 
   const {
     queryParams,
@@ -74,6 +78,11 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
       seen.add(user.id);
       return true;
     });
+  }
+
+  function normalizeUsers(users: SelectedUser[]) {
+    const uniqueUsers = dedupeUsers(users);
+    return multiple ? uniqueUsers : uniqueUsers.slice(0, 1);
   }
 
   function toSelectedUser(item: Admin.UserWeb): SelectedUser {
@@ -126,17 +135,31 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
   };
 
   function handleConfirm() {
-    if (onChange) {
-      setConfirmLoading(true)
-      onChange(innerUsers, () => {
-        setConfirmLoading(false)
-        setOpen(false)
-      }, () => setConfirmLoading(false))
+    const submittedUsers = [...innerUsers];
+    const closeModal = () => {
+      originalUsersRef.current = submittedUsers;
+      setConfirmLoading(false)
+      setOpen(false)
+    };
+    if (!onChange) {
+      closeModal();
+      return;
     }
+    setConfirmLoading(true)
+    onChange(submittedUsers, closeModal, () => setConfirmLoading(false))
   }
 
   function showModal() {
+    const users = normalizeUsers(selectedUsers || []);
+    originalUsersRef.current = users;
+    setInnerUsers(users);
     setOpen(true);
+  }
+
+  function handleCancel() {
+    setInnerUsers(originalUsersRef.current);
+    setConfirmLoading(false);
+    setOpen(false);
   }
 
   return (
@@ -149,7 +172,7 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
         open={open}
         onOk={handleConfirm}
         confirmLoading={confirmLoading}
-        onCancel={() => setOpen(false)}
+        onCancel={handleCancel}
         width={1200}
         {...props}
       >
