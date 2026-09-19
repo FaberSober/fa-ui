@@ -1,6 +1,6 @@
-import React, { CSSProperties, ReactNode, useEffect, useState } from 'react';
+import React, { CSSProperties, ReactNode, useEffect, useRef, useState } from 'react';
 import { get, remove, trim } from 'lodash';
-import { Button, Select, SelectProps, Space } from 'antd';
+import { Alert, Button, Empty, Select, SelectProps, Space, Spin } from 'antd';
 import { useDebounce } from 'react-use';
 import { Fa } from '@ui/types';
 import { SearchOutlined } from "@ant-design/icons";
@@ -40,12 +40,18 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
   bodyStyle,
   ...props
 }: BaseUserSearchSelectProps<RecordType, KeyType>) {
-  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState<string>('');
   const [array, setArray] = useState<any>([]);
   const [innerUsers, setInnerUsers] = useState<SelectedUser[]>([])
+  const [searchStatus, setSearchStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const requestIdRef = useRef(0);
 
   const multiple = props.mode === 'multiple';
+  const loading = searchStatus === 'loading';
+
+  useEffect(() => () => {
+    requestIdRef.current += 1;
+  }, []);
 
   useEffect(() => {
     if (multiple) {
@@ -76,9 +82,12 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
 
   function updateValue(outValue: any) {
     if (isEmptyValue(outValue)) return;
+    const requestId = ++requestIdRef.current;
+    setSearchStatus('idle');
     if (multiple) {
       if (serviceApi?.findList) {
         serviceApi?.findList(outValue).then((res) => {
+          if (requestId !== requestIdRef.current) return;
           const newList = res.data.map((d) => ({
             label: parseLabel(d),
             value: parseValue(d),
@@ -88,6 +97,7 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
           serviceApi
             ?.search(search)
             .then((res1) => {
+              if (requestId !== requestIdRef.current) return;
               const newListAdd = res1.data.rows.map((c) => ({
                 label: parseLabel(c),
                 value: parseValue(c),
@@ -96,13 +106,20 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
               remove(newListAdd, (v) => newListValues.indexOf(v.value) > -1);
               setArray([...newList, ...newListAdd]);
             })
-            .catch(() => setArray(newList));
+            .catch(() => {
+              if (requestId === requestIdRef.current) setArray(newList);
+            });
+        }).catch(() => {
+          if (requestId === requestIdRef.current) setArray([]);
         });
       }
     } else {
       serviceApi?.getById(outValue).then((res) => {
+        if (requestId !== requestIdRef.current) return;
         const newList = [{ label: parseLabel(res.data), value: parseValue(res.data) }];
         setArray(newList);
+      }).catch(() => {
+        if (requestId === requestIdRef.current) setArray([]);
       });
     }
   }
@@ -122,18 +139,50 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
   }
 
   function searchNow() {
-    setLoading(true);
+    const requestId = ++requestIdRef.current;
+    setSearchStatus('loading');
     serviceApi
       ?.search(search)
       .then((res) => {
+        if (requestId !== requestIdRef.current) return;
         const newList = res.data.rows.map((c) => ({
           label: parseLabel(c),
           value: parseValue(c),
         }));
         setArray(newList);
-        setLoading(false);
+        setSearchStatus('success');
       })
-      .catch(() => setLoading(false));
+      .catch(() => {
+        if (requestId !== requestIdRef.current) return;
+        setArray([]);
+        setSearchStatus('error');
+      });
+  }
+
+  function renderNotFoundContent() {
+    if (searchStatus === 'loading') {
+      return (
+        <Space size="small">
+          <Spin size="small" />
+          <span>搜索中...</span>
+        </Space>
+      );
+    }
+    if (searchStatus === 'error') {
+      return (
+        <Alert
+          type="error"
+          showIcon
+          message="搜索失败"
+          action={
+            <Button type="link" size="small" onClick={searchNow}>
+              重试
+            </Button>
+          }
+        />
+      );
+    }
+    return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={search ? '未找到匹配用户' : '暂无用户'} />;
   }
 
   const [,] = useDebounce(
@@ -146,6 +195,7 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
 
   function handleValueChange(v: any, item: any) {
     // console.log('handleValueChange', v, item)
+    requestIdRef.current += 1;
     if (onChange) {
       onChange(v, item);
     }
@@ -178,10 +228,11 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
         filterOption={false}
         searchValue={search}
         onSearch={(v) => {
-          setLoading(true);
+          requestIdRef.current += 1;
+          setSearchStatus('loading');
           setSearch(v);
         }}
-        notFoundContent={null}
+        notFoundContent={renderNotFoundContent()}
         placeholder="搜索..."
         options={array}
         value={value}
