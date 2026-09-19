@@ -64,13 +64,19 @@ export interface BaseTreeProp<T, KeyType = number> extends TreeProps {
   onAfterEditItem?: (item: T) => void; // 修改节点后回调
 }
 
+export interface BaseTreeRef<KeyType = any> {
+  expandKeys: (key: KeyType) => void;
+  expandAll: () => void;
+  collapseAll: () => void;
+}
+
 let menuClickItem: any = undefined;
 
 /**
  * @author xu.pengfei
  * @date 2020/12/25
  */
-const BaseTree = React.forwardRef<HTMLElement, BaseTreeProp<any, any>>(function BaseTree<RecordType extends object = any, KeyType = number>({
+const BaseTree = React.forwardRef<BaseTreeRef, BaseTreeProp<any, any>>(function BaseTree<RecordType extends object = any, KeyType = number>({
   showRoot = false,
   showTopBtn = true,
   showTopAddBtn = true,
@@ -127,6 +133,8 @@ const BaseTree = React.forwardRef<HTMLElement, BaseTreeProp<any, any>>(function 
      * @param key
      */
     expandKeys: (key: KeyType) => handleExpandKey(key),
+    expandAll: handleExpandAll,
+    collapseAll: () => setExpandedKeys([]),
   }));
 
   // ------------------------------------------ context menu ------------------------------------------
