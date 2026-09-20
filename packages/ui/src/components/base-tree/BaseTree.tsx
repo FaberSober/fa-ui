@@ -113,6 +113,7 @@ const BaseTree = React.forwardRef<BaseTreeRef, BaseTreeProp<any, any>>(function 
   const [treeData, setTreeData] = useState<Fa.TreeNode<RecordType, KeyType>[]>([]);
   const [clickItem, setClickItem] = useState<BaseTreeProps.TreeNode<RecordType, KeyType>>();
   const [expandedKeys, setExpandedKeys] = useState<any[]>([]);
+  const [treeRenderKey, setTreeRenderKey] = useState(0);
 
   useEffect(() => {
     fetchTree();
@@ -279,6 +280,8 @@ const BaseTree = React.forwardRef<BaseTreeRef, BaseTreeProp<any, any>>(function 
   }
 
   function onDrop(info: any) {
+    setTreeRenderKey((key) => key + 1);
+
     const dropKey = info.node.key;
     const dragKey = info.dragNode.key;
     const dropPos = info.node.pos.split('-');
@@ -370,6 +373,7 @@ const BaseTree = React.forwardRef<BaseTreeRef, BaseTreeProp<any, any>>(function 
         <div style={{...treeStyle}}>
           <Spin spinning={loading}>
             <Tree
+              key={treeRenderKey}
               blockNode
               showLine={{showLeafIcon: false}}
               treeData={treeData as any[]}
