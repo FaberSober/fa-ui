@@ -59,7 +59,8 @@ export default function DragModal({ defaultFullScreen, width, bodyStyle, ...prop
             icon={fullScreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
             onClick={toggleFullScreen}
             type="text"
-            style={{ marginRight: 0, position: 'absolute', top: 12, right: 50, color: 'rgba(0,0,0,0.45)' }} // 调整样式
+            aria-label={fullScreen ? '退出全屏' : '全屏'}
+            style={{ marginRight: 0, position: 'absolute', top: 12, right: 50, color: 'var(--fa-text-color-light100)' }} // 调整样式
             title={fullScreen ? '退出全屏' : '全屏'}
           />
         </div>

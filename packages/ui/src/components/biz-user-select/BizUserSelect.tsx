@@ -23,6 +23,7 @@ export interface SelectedUser {
 export interface BizUserSelectProps extends CommonModalProps<any> {
   selectedUsers?: SelectedUser[]; // 已经选中的用户ID
   multiple?: boolean;
+  disabled?: boolean;
   onChange?: (v: SelectedUser[], callback: () => void, error?: any) => void;
 }
 
@@ -31,7 +32,7 @@ export interface BizUserSelectProps extends CommonModalProps<any> {
  * @author xu.pengfei
  * @date 2022/12/28 14:38
  */
-export default function BizUserSelect({children, record, fetchFinish, selectedUsers, multiple = true, onChange, ...props}: BizUserSelectProps) {
+export default function BizUserSelect({children, record, fetchFinish, selectedUsers, multiple = true, disabled = false, onChange, ...props}: BizUserSelectProps) {
   const [form] = Form.useForm();
 
   const [open, setOpen] = useState(false);
@@ -151,10 +152,17 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
   }
 
   function showModal() {
+    if (disabled) return;
     const users = normalizeUsers(selectedUsers || []);
     originalUsersRef.current = users;
     setInnerUsers(users);
     setOpen(true);
+  }
+
+  function handleTriggerKeyDown(event: React.KeyboardEvent<HTMLSpanElement>) {
+    if (disabled || (event.key !== 'Enter' && event.key !== ' ')) return;
+    event.preventDefault();
+    showModal();
   }
 
   function handleCancel() {
@@ -165,7 +173,15 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
 
   return (
     <span>
-      <span onClick={showModal}>
+      <span
+        className="fa-user-picker__trigger"
+        role="button"
+        tabIndex={disabled ? -1 : 0}
+        aria-label="打开用户选择器"
+        aria-disabled={disabled || undefined}
+        onClick={disabled ? undefined : showModal}
+        onKeyDown={handleTriggerKeyDown}
+      >
         {children}
       </span>
       <DragModal
@@ -183,10 +199,11 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
           ...props.bodyStyle,
         }}
       >
-        <Row className="fa-flex-row fa-user-picker" style={{height: 600}} gutter={12}>
-          <Col md={4} className="fa-flex-column">
+        <Row className="fa-flex-row fa-user-picker" style={{height: 600, alignItems: 'stretch'}} gutter={12}>
+          <Col md={4} className="fa-flex-column" style={{height: '100%', minHeight: 0}}>
             <FaLabel title="组织架构" className="fa-mb8" />
             <FaFlexRestLayout
+              className="fa-user-picker__surface"
               style={{
                 border: '1px solid var(--fa-border-color)',
                 borderRadius: 'var(--fa-border-radius)',
@@ -208,9 +225,10 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
             </FaFlexRestLayout>
           </Col>
 
-          <Col md={13} className="fa-flex-column">
+          <Col md={13} className="fa-flex-column" style={{height: '100%', minHeight: 0}}>
             <FaLabel title="用户列表" className="fa-mb8" />
             <FaFlexRestLayout
+              className="fa-user-picker__surface"
               style={{
                 border: '1px solid var(--fa-border-color)',
                 borderRadius: 'var(--fa-border-radius)',
@@ -253,9 +271,10 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
             </FaFlexRestLayout>
           </Col>
 
-          <Col md={7} className="fa-flex-column" style={{ height: '100%' }}>
+          <Col md={7} className="fa-flex-column" style={{height: '100%', minHeight: 0}}>
             <FaLabel title="已选择" className="fa-mb8" />
             <FaFlexRestLayout
+              className="fa-user-picker__surface"
               style={{
                 border: '1px solid var(--fa-border-color)',
                 borderRadius: 'var(--fa-border-radius)',

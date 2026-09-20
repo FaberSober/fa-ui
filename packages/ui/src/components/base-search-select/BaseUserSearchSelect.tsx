@@ -83,7 +83,7 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
   function updateValue(outValue: any) {
     if (isEmptyValue(outValue)) return;
     const requestId = ++requestIdRef.current;
-    setSearchStatus('idle');
+    setSearchStatus('loading');
     if (multiple) {
       if (serviceApi?.findList) {
         serviceApi?.findList(outValue).then((res) => {
@@ -105,21 +105,32 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
               const newListValues = newList.map((v1) => v1.value);
               remove(newListAdd, (v) => newListValues.indexOf(v.value) > -1);
               setArray([...newList, ...newListAdd]);
+              setSearchStatus('success');
             })
             .catch(() => {
-              if (requestId === requestIdRef.current) setArray(newList);
+              if (requestId !== requestIdRef.current) return;
+              setArray(newList);
+              setSearchStatus('success');
             });
         }).catch(() => {
-          if (requestId === requestIdRef.current) setArray([]);
+          if (requestId !== requestIdRef.current) return;
+          setArray([]);
+          setSearchStatus('error');
         });
+      } else {
+        setArray([]);
+        setSearchStatus('success');
       }
     } else {
       serviceApi?.getById(outValue).then((res) => {
         if (requestId !== requestIdRef.current) return;
         const newList = [{ label: parseLabel(res.data), value: parseValue(res.data) }];
         setArray(newList);
+        setSearchStatus('success');
       }).catch(() => {
-        if (requestId === requestIdRef.current) setArray([]);
+        if (requestId !== requestIdRef.current) return;
+        setArray([]);
+        setSearchStatus('error');
       });
     }
   }
@@ -160,16 +171,16 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
   }
 
   function renderNotFoundContent() {
+    let content: ReactNode;
     if (searchStatus === 'loading') {
-      return (
+      content = (
         <Space size="small">
           <Spin size="small" />
           <span>搜索中...</span>
         </Space>
       );
-    }
-    if (searchStatus === 'error') {
-      return (
+    } else if (searchStatus === 'error') {
+      content = (
         <Alert
           type="error"
           showIcon
@@ -181,8 +192,10 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
           }
         />
       );
+    } else {
+      content = <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={search ? '未找到匹配用户' : '暂无用户'} />;
     }
-    return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={search ? '未找到匹配用户' : '暂无用户'} />;
+    return <div aria-live="polite">{content}</div>;
   }
 
   const [,] = useDebounce(
@@ -244,13 +257,19 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
         style={{ minWidth: 138 }}
         onChange={handleValueChange}
         {...props}
+        status={searchStatus === 'error' ? 'error' : props.status}
       />
       <BizUserSelect
         onChange={handleAddUsers}
         selectedUsers={innerUsers}
         multiple={multiple}
+        disabled={props.disabled}
       >
-        <Button icon={<SearchOutlined />} />
+        <Button
+          icon={<SearchOutlined />}
+          disabled={props.disabled}
+          aria-label="打开用户选择器"
+        />
       </BizUserSelect>
     </Space.Compact>
   );

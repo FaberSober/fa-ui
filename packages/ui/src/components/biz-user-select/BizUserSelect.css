@@ -1,3 +1,44 @@
+.fa-user-picker {
+  align-items: stretch;
+}
+
+.fa-user-picker > .ant-col {
+  height: 100%;
+  min-height: 0;
+}
+
+.fa-user-picker__trigger {
+  display: inline-flex;
+  max-width: 100%;
+  border-radius: var(--fa-border-radius);
+  outline: none;
+}
+
+.fa-user-picker__trigger:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.fa-user-picker__trigger[aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.fa-user-picker__surface {
+  background-color: var(--fa-bg-color);
+  color: var(--fa-text-color);
+}
+
+.fa-user-picker__selected-list {
+  min-height: 100%;
+  color: var(--fa-text-color);
+}
+
+.fa-user-picker__selected-list .ant-alert {
+  margin-bottom: 8px;
+}
+
 .fa-full-screen-modal-wrap .fa-user-picker {
   height: 100% !important;
   min-height: 0;
