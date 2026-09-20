@@ -150,6 +150,10 @@ export function requestGet<R>(api: string, config?: AxiosRequestConfig): Promise
   return requestProcess(instance.get(api, config));
 }
 
+export function requestGetBlob(api: string, config?: AxiosRequestConfig): Promise<Blob> {
+  return instance.get<Blob>(api, { responseType: 'blob', ...config }).then((res) => res.data);
+}
+
 export function requestDelete<R>(api: string, config?: AxiosRequestConfig): Promise<Fa.Ret<R>> {
   return requestProcess(instance.delete(api, config));
 }

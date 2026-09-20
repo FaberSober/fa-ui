@@ -1,4 +1,4 @@
-import { requestDelete, requestDownload, requestGet, requestPost, requestPut } from '@ui/utils/request';
+import { requestDelete, requestDownload, requestGet, requestGetBlob, requestPost, requestPut } from '@ui/utils/request';
 import { AxiosRequestConfig } from 'axios';
 
 export default class BaseZeroApi {
@@ -14,6 +14,9 @@ export default class BaseZeroApi {
   protected get = <E>(api: string, params?: any, config?: AxiosRequestConfig) =>
     requestGet<E>(`${this.apiPrefix}/${this.apiModal}/${api}`, { ...config, params })
       // .catch(e => {console.log('get', e)});
+
+  protected getBlob = (api: string, params?: any, config?: AxiosRequestConfig) =>
+    requestGetBlob(`${this.apiPrefix}/${this.apiModal}/${api}`, { ...config, params });
 
   protected delete = <E>(api: string, config?: AxiosRequestConfig) =>
     requestDelete<E>(`${this.apiPrefix}/${this.apiModal}/${api}`, config)
