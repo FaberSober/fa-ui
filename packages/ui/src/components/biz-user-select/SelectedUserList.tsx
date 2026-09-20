@@ -67,14 +67,13 @@ export default function SelectedUserList({selectedUsers, onRemove}: SelectedUser
     <Table
       rowKey="id"
       columns={[
-        {dataIndex: 'name', title: '姓名', width: 90, ellipsis: true},
-        {dataIndex: 'username', title: '账号', width: 110, ellipsis: true},
+        {dataIndex: 'name', title: '姓名', ellipsis: true},
+        {dataIndex: 'username', title: '账号', ellipsis: true},
         {
           dataIndex: 'departmentName',
           title: '部门',
-          width: 130,
           ellipsis: true,
-          render: (value) => value || '未分配部门',
+          render: (value) => value || '-',
         },
         {
           title: '操作',

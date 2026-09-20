@@ -11,6 +11,7 @@ import {FaLabel} from "@ui/components/decorator";
 import {CommonModalProps, DragModal} from '../base-modal';
 import {FaFlexRestLayout} from "@ui/components";
 import type {TableRowSelection} from 'antd/es/table/interface';
+import './BizUserSelect.css';
 
 
 export interface SelectedUser {
@@ -175,8 +176,14 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
         onCancel={handleCancel}
         width={1440}
         {...props}
+        bodyStyle={{
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: 0,
+          ...props.bodyStyle,
+        }}
       >
-        <Row className="fa-flex-row" style={{height: 600}} gutter={12}>
+        <Row className="fa-flex-row fa-user-picker" style={{height: 600}} gutter={12}>
           <Col md={4} className="fa-flex-column">
             <FaLabel title="组织架构" className="fa-mb8" />
             <FaFlexRestLayout
@@ -184,6 +191,7 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
                 border: '1px solid var(--fa-border-color)',
                 borderRadius: 'var(--fa-border-radius)',
                 overflow: 'hidden',
+                overflowY: 'hidden',
               }}
             >
               <BaseTree
@@ -207,6 +215,7 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
                 border: '1px solid var(--fa-border-color)',
                 borderRadius: 'var(--fa-border-radius)',
                 overflow: 'hidden',
+                overflowY: 'hidden',
               }}
             >
               <div className="fa-full fa-flex-column">
@@ -250,7 +259,8 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
               style={{
                 border: '1px solid var(--fa-border-color)',
                 borderRadius: 'var(--fa-border-radius)',
-                overflow: 'hidden',
+                overflow: 'auto',
+                overflowY: 'auto',
               }}
             >
               <SelectedUserList selectedUsers={innerUsers} onRemove={handleRemove} />
