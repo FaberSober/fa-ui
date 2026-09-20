@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { isNil } from 'lodash';
+import React, { useEffect, useMemo, useState } from 'react';
+import { cloneDeep, isNil } from 'lodash';
 import { Fa } from '@ui/types';
 import { CascaderProps, BaseOptionType } from 'antd/es/cascader';
 import { Cascader } from 'antd';
@@ -57,6 +57,11 @@ export default function BaseCascader<RecordType extends object = any, KeyType = 
 }: BaseCascaderProps<RecordType, KeyType>) {
   const [innerValue, setInnerValue] = useState<any[]>([]);
   const [options, setOptions] = useState<Fa.TreeNode<RecordType, KeyType>[] | undefined>([]);
+  const optionsWithDisabled = useMemo(() => {
+    const nextOptions = cloneDeep(options);
+    setTreeDisabled(nextOptions, disabledIds);
+    return nextOptions;
+  }, [options, disabledIds]);
 
   const multiple = props.multiple || false;
 
@@ -68,20 +73,12 @@ export default function BaseCascader<RecordType extends object = any, KeyType = 
     fetchTreeData();
   }, [maxLevel, ...extraParams]);
 
-  useEffect(() => {
-    if (isNil(options) || options.length === 0) return;
-
-    setTreeDisabled(options, disabledIds);
-    setOptions(options);
-  }, [disabledIds]);
-
   function fetchTreeData() {
     serviceApi.allTree({ level: maxLevel }).then((res) => {
       let treeArr = res.data;
       if (showRoot) {
         treeArr = [{ ...Fa.ROOT_DEFAULT, id: rootId, name: rootName, level: 0, children: res.data } as any];
       }
-      setTreeDisabled(treeArr, disabledIds);
       // 自定义value转换
       if (getValue) {
         filterNode(treeArr, (d: any) => {
@@ -181,7 +178,7 @@ export default function BaseCascader<RecordType extends object = any, KeyType = 
       style={{minWidth: 170}}
       {...props}
       value={innerValue}
-      options={options}
+      options={optionsWithDisabled}
       onChange={(v: any, s: any) => handleChange(v, s)}
     />
   );
