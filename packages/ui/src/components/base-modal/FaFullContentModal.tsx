@@ -20,6 +20,8 @@ export interface FaFullContentModalProps {
   cancelText?: ReactNode;
   showOk?: boolean;
   showCancel?: boolean;
+  headerCenter?: ReactNode;
+  headerExtra?: ReactNode;
   zIndex?: number;
 }
 
@@ -44,6 +46,8 @@ export default function FaFullContentModal({
   cancelText = '取消',
   showOk = true,
   showCancel = true,
+  headerCenter,
+  headerExtra,
   zIndex = 999,
 }: FaFullContentModalProps) {
   const [openInternal, setOpenInternal] = useState(defaultOpen);
@@ -137,13 +141,16 @@ export default function FaFullContentModal({
             style={{ zIndex, overflow: 'hidden' }}
             onAnimationEnd={handleAnimationEnd}
           >
-            <div className="fa-flex-row-center fa-border-b fa-p12" style={{ flex: '0 0 auto' }}>
-              <Space>
+            <div className={`fa-full-content-modal-header fa-flex-row-center fa-border-b fa-p12 ${headerCenter ? 'fa-full-content-modal-header--centered' : ''}`} style={{ flex: '0 0 auto', minWidth: 0 }}>
+              <Space className="fa-full-content-modal-heading" style={{ flex: '0 0 auto' }}>
                 <Button color="default" variant="text" onClick={handleCancel} icon={<ArrowLeftOutlined />} aria-label="返回" />
                 <div className="fa-h3">{title}</div>
               </Space>
-              <div className="fa-flex-1" />
-              <Space>
+              <div className="fa-full-content-modal-center fa-flex-1 fa-flex-center" style={{ minWidth: 0 }}>
+                {headerCenter}
+              </div>
+              <Space className="fa-full-content-modal-actions" style={{ flex: '0 0 auto' }}>
+                {headerExtra}
                 {showOk && (
                   <Button type="primary" loading={confirmLoading} onClick={handleOk}>
                     {okText}

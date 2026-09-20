@@ -1,8 +1,27 @@
 .fa-full-content-modal {
+  container-type: inline-size;
   animation-duration: 180ms;
   animation-fill-mode: both;
   animation-timing-function: ease-out;
   will-change: opacity;
+}
+
+.fa-full-content-modal .fa-full-content-modal-header--centered {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 450px) minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+}
+
+.fa-full-content-modal-heading { min-width: 0; }
+.fa-full-content-modal-actions { justify-content: flex-end; }
+
+@container (max-width: 840px) {
+  .fa-full-content-modal .fa-full-content-modal-header--centered { grid-template-columns: minmax(0, 1fr) auto; }
+  .fa-full-content-modal-header--centered .fa-full-content-modal-center {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
 }
 
 .fa-full-content-modal--enter {
