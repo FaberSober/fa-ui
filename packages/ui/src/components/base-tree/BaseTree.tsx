@@ -64,13 +64,19 @@ export interface BaseTreeProp<T, KeyType = number> extends TreeProps {
   onAfterEditItem?: (item: T) => void; // 修改节点后回调
 }
 
+export interface BaseTreeRef<KeyType = any> {
+  expandKeys: (key: KeyType) => void;
+  expandAll: () => void;
+  collapseAll: () => void;
+}
+
 let menuClickItem: any = undefined;
 
 /**
  * @author xu.pengfei
  * @date 2020/12/25
  */
-const BaseTree = React.forwardRef<HTMLElement, BaseTreeProp<any, any>>(function BaseTree<RecordType extends object = any, KeyType = number>({
+const BaseTree = React.forwardRef<BaseTreeRef, BaseTreeProp<any, any>>(function BaseTree<RecordType extends object = any, KeyType = number>({
   showRoot = false,
   showTopBtn = true,
   showTopAddBtn = true,
@@ -107,6 +113,7 @@ const BaseTree = React.forwardRef<HTMLElement, BaseTreeProp<any, any>>(function 
   const [treeData, setTreeData] = useState<Fa.TreeNode<RecordType, KeyType>[]>([]);
   const [clickItem, setClickItem] = useState<BaseTreeProps.TreeNode<RecordType, KeyType>>();
   const [expandedKeys, setExpandedKeys] = useState<any[]>([]);
+  const [treeRenderKey, setTreeRenderKey] = useState(0);
 
   useEffect(() => {
     fetchTree();
@@ -127,6 +134,8 @@ const BaseTree = React.forwardRef<HTMLElement, BaseTreeProp<any, any>>(function 
      * @param key
      */
     expandKeys: (key: KeyType) => handleExpandKey(key),
+    expandAll: handleExpandAll,
+    collapseAll: () => setExpandedKeys([]),
   }));
 
   // ------------------------------------------ context menu ------------------------------------------
@@ -234,13 +243,15 @@ const BaseTree = React.forwardRef<HTMLElement, BaseTreeProp<any, any>>(function 
     // console.log('treePath', treePath)
     const keys: any[] = treePath.map(i => i.id)
 
-    const newEks = [...expandedKeys]
-    each(keys, v => {
-      if (!newEks.includes(v)) {
-        newEks.push(v)
-      }
+    setExpandedKeys((currentKeys) => {
+      const newEks = [...currentKeys]
+      each(keys, v => {
+        if (!newEks.includes(v)) {
+          newEks.push(v)
+        }
+      })
+      return newEks
     })
-    setExpandedKeys(newEks)
   }
 
   function afterAddItem(r?: any) {
@@ -269,6 +280,8 @@ const BaseTree = React.forwardRef<HTMLElement, BaseTreeProp<any, any>>(function 
   }
 
   function onDrop(info: any) {
+    setTreeRenderKey((key) => key + 1);
+
     const dropKey = info.node.key;
     const dragKey = info.dragNode.key;
     const dropPos = info.node.pos.split('-');
@@ -360,6 +373,7 @@ const BaseTree = React.forwardRef<HTMLElement, BaseTreeProp<any, any>>(function 
         <div style={{...treeStyle}}>
           <Spin spinning={loading}>
             <Tree
+              key={treeRenderKey}
               blockNode
               showLine={{showLeafIcon: false}}
               treeData={treeData as any[]}

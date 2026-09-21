@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {departmentApi, userApi} from "@ui/services/base";
 import {Admin} from "@ui/types";
 import {Button, Col, Form, Input, Row, Space} from "antd";
@@ -10,15 +10,20 @@ import {BaseTree} from "@ui/components/base-tree";
 import {FaLabel} from "@ui/components/decorator";
 import {CommonModalProps, DragModal} from '../base-modal';
 import {FaFlexRestLayout} from "@ui/components";
+import type {TableRowSelection} from 'antd/es/table/interface';
+import './BizUserSelect.css';
 
 
 export interface SelectedUser {
   id: string;
+  label?: string;
   allowRemove?: boolean;
 }
 
 export interface BizUserSelectProps extends CommonModalProps<any> {
   selectedUsers?: SelectedUser[]; // 已经选中的用户ID
+  multiple?: boolean;
+  disabled?: boolean;
   onChange?: (v: SelectedUser[], callback: () => void, error?: any) => void;
 }
 
@@ -27,18 +32,23 @@ export interface BizUserSelectProps extends CommonModalProps<any> {
  * @author xu.pengfei
  * @date 2022/12/28 14:38
  */
-export default function BizUserSelect({children, record, fetchFinish, selectedUsers, onChange, ...props}: BizUserSelectProps) {
+export default function BizUserSelect({children, record, fetchFinish, selectedUsers, multiple = true, disabled = false, onChange, ...props}: BizUserSelectProps) {
   const [form] = Form.useForm();
 
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
   const [dept, setDept] = useState<Admin.Department>();
   const [innerUsers, setInnerUsers] = useState<SelectedUser[]>(selectedUsers || [])
+  const originalUsersRef = useRef<SelectedUser[]>([]);
 
   useEffect(() => {
     // console.log('selectedUsers', selectedUsers)
-    setInnerUsers(selectedUsers || [])
-  }, [selectedUsers])
+    if (!open) {
+      const users = normalizeUsers(selectedUsers || []);
+      setInnerUsers(users);
+      originalUsersRef.current = users;
+    }
+  }, [selectedUsers, multiple, open])
 
   const {
     queryParams,
@@ -60,12 +70,42 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
   }, [dept])
 
   function onTreeDeptSelect(keys: any[], event: any) {
-    setDept(keys.length > 0 ? event.node.sourceData : undefined);
+    setDept(keys.length > 0 ? event?.node?.sourceData : undefined);
   }
 
-  function handleAdd(item: Admin.UserWeb) {
-    const newSel = [ ...innerUsers||[], { id: item.id, allowRemove: true } ]
-    setInnerUsers(newSel)
+  function dedupeUsers(users: SelectedUser[]) {
+    const seen = new Set<string>();
+    return users.filter((user) => {
+      if (seen.has(user.id)) return false;
+      seen.add(user.id);
+      return true;
+    });
+  }
+
+  function normalizeUsers(users: SelectedUser[]) {
+    const uniqueUsers = dedupeUsers(users);
+    return multiple ? uniqueUsers : uniqueUsers.slice(0, 1);
+  }
+
+  function toSelectedUser(item: Admin.UserWeb): SelectedUser {
+    return { id: item.id, label: item.name, allowRemove: true };
+  }
+
+  function handleRowSelect(record: Admin.UserWeb, selected: boolean) {
+    setInnerUsers((current) => {
+      if (!multiple) return selected ? [toSelectedUser(record)] : [];
+      if (!selected) return current.filter((user) => user.id !== record.id);
+      return dedupeUsers([...current, toSelectedUser(record)]);
+    });
+  }
+
+  function handleSelectAll(selected: boolean, selectedRows: Admin.UserWeb[]) {
+    if (!multiple) return;
+    const pageIds = new Set(list.map((item) => item.id));
+    setInnerUsers((current) => {
+      const retainedUsers = current.filter((user) => !pageIds.has(user.id));
+      return dedupeUsers(selected ? [...retainedUsers, ...selectedRows.map(toSelectedUser)] : retainedUsers);
+    });
   }
 
   function handleRemove(item: Admin.User) {
@@ -82,41 +122,66 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
         ...BaseTableUtils.genSimpleSorterColumn('部门', 'departmentId', 130, sorter),
         render: (_, r) => r.departmentName,
       },
-      {
-        title: '操作',
-        dataIndex: 'opr',
-        render: (_, record) => (
-          <Space>
-            {innerUsers.map(i => i.id).indexOf(record.id) === -1 && (
-              <Button type="dashed" size="small" onClick={() => handleAdd(record)}>添加</Button>
-            )}
-          </Space>
-        ),
-        width: 80,
-        fixed: 'right',
-        tcRequired: true,
-        tcType: 'menu',
-      },
     ] as FaberTable.ColumnsProp<Admin.UserWeb>[];
   }
 
+  const rowSelection: TableRowSelection<Admin.UserWeb> = {
+    type: multiple ? 'checkbox' : 'radio',
+    selectedRowKeys: innerUsers.map((user) => user.id),
+    preserveSelectedRowKeys: true,
+    onSelect: handleRowSelect,
+    onSelectAll: handleSelectAll,
+    getCheckboxProps: (record) => ({
+      disabled: innerUsers.some((user) => user.id === record.id && user.allowRemove === false),
+    }),
+  };
+
   function handleConfirm() {
-    if (onChange) {
-      setConfirmLoading(true)
-      onChange(innerUsers, () => {
-        setConfirmLoading(false)
-        setOpen(false)
-      }, () => setConfirmLoading(false))
+    const submittedUsers = [...innerUsers];
+    const closeModal = () => {
+      originalUsersRef.current = submittedUsers;
+      setConfirmLoading(false)
+      setOpen(false)
+    };
+    if (!onChange) {
+      closeModal();
+      return;
     }
+    setConfirmLoading(true)
+    onChange(submittedUsers, closeModal, () => setConfirmLoading(false))
   }
 
   function showModal() {
+    if (disabled) return;
+    const users = normalizeUsers(selectedUsers || []);
+    originalUsersRef.current = users;
+    setInnerUsers(users);
     setOpen(true);
+  }
+
+  function handleTriggerKeyDown(event: React.KeyboardEvent<HTMLSpanElement>) {
+    if (disabled || (event.key !== 'Enter' && event.key !== ' ')) return;
+    event.preventDefault();
+    showModal();
+  }
+
+  function handleCancel() {
+    setInnerUsers(originalUsersRef.current);
+    setConfirmLoading(false);
+    setOpen(false);
   }
 
   return (
     <span>
-      <span onClick={showModal}>
+      <span
+        className="fa-user-picker__trigger"
+        role="button"
+        tabIndex={disabled ? -1 : 0}
+        aria-label="打开用户选择器"
+        aria-disabled={disabled || undefined}
+        onClick={disabled ? undefined : showModal}
+        onKeyDown={handleTriggerKeyDown}
+      >
         {children}
       </span>
       <DragModal
@@ -124,61 +189,99 @@ export default function BizUserSelect({children, record, fetchFinish, selectedUs
         open={open}
         onOk={handleConfirm}
         confirmLoading={confirmLoading}
-        onCancel={() => setOpen(false)}
-        width={1200}
+        onCancel={handleCancel}
+        width={1440}
         {...props}
+        bodyStyle={{
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: 0,
+          ...props.bodyStyle,
+        }}
       >
-        <Row className="fa-flex-row" style={{height: 600}} gutter={12}>
-          <Col md={5}>
-            <BaseTree
-              rootName="全部"
-              onSelect={onTreeDeptSelect}
-              // 自定义配置
-              serviceName="部门"
-              serviceApi={departmentApi}
-              showTopBtn={false}
-              treeStyle={{padding: 0}}
-              className="fa-border"
-            />
-          </Col>
-
-          <Col md={14}>
-            <div className="fa-full fa-flex-column">
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }} className="fa-mb12">
-                <Form form={form} layout="inline" onFinish={setFormValues}>
-                  <Form.Item name="name" label="姓名">
-                    <Input placeholder="请输入姓名" />
-                  </Form.Item>
-                </Form>
-
-                <Space>
-                  <Button onClick={() => form.submit()} loading={loading} icon={<SearchOutlined />}>查询</Button>
-                  <Button onClick={() => clearForm(form)} loading={loading}>重置</Button>
-                </Space>
-              </div>
-
-              <BaseBizTable
-                biz="UserList-Search"
-                columns={genColumns()}
-                pagination={{ ...paginationProps, size: 'small' }}
-                loading={loading}
-                dataSource={list}
-                rowKey={(item) => item.id}
-                onChange={handleTableChange}
-                refreshList={() => fetchPageList()}
-                batchDelete={(ids) => userApi.removeBatchByIds(ids)}
-                showComplexQuery={false}
-                showBatchDelBtn={false}
-                showTableColConfigBtn={false}
-                showCheckbox={false}
-                showTopDiv={false}
+        <Row className="fa-flex-row fa-user-picker" style={{height: 600, alignItems: 'stretch'}} gutter={12}>
+          <Col md={4} className="fa-flex-column" style={{height: '100%', minHeight: 0}}>
+            <FaLabel title="组织架构" className="fa-mb8" />
+            <FaFlexRestLayout
+              className="fa-user-picker__surface"
+              style={{
+                border: '1px solid var(--fa-border-color)',
+                borderRadius: 'var(--fa-border-radius)',
+                overflow: 'hidden',
+                overflowY: 'hidden',
+              }}
+            >
+              <BaseTree
+                showRoot
+                rootName="全部用户"
+                onSelect={onTreeDeptSelect}
+                draggable={false}
+                // 自定义配置
+                serviceName="部门"
+                serviceApi={departmentApi}
+                showTopBtn={false}
+                treeStyle={{padding: 0}}
               />
-            </div>
+            </FaFlexRestLayout>
           </Col>
 
-          <Col md={5} className="fa-flex-column" style={{ height: '100%' }}>
-            <FaLabel title="已选择" className="fa-mb12" />
-            <FaFlexRestLayout>
+          <Col md={13} className="fa-flex-column" style={{height: '100%', minHeight: 0}}>
+            <FaLabel title="用户列表" className="fa-mb8" />
+            <FaFlexRestLayout
+              className="fa-user-picker__surface"
+              style={{
+                border: '1px solid var(--fa-border-color)',
+                borderRadius: 'var(--fa-border-radius)',
+                overflow: 'hidden',
+                overflowY: 'hidden',
+              }}
+            >
+              <div className="fa-full fa-flex-column">
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }} className="fa-mb12">
+                  <Form form={form} layout="inline" onFinish={setFormValues}>
+                    <Form.Item name="name" label="姓名">
+                      <Input placeholder="请输入姓名" />
+                    </Form.Item>
+                  </Form>
+
+                  <Space>
+                    <Button onClick={() => form.submit()} loading={loading} icon={<SearchOutlined />}>查询</Button>
+                    <Button onClick={() => clearForm(form)} loading={loading}>重置</Button>
+                  </Space>
+                </div>
+
+                <BaseBizTable
+                  biz="UserList-Search"
+                  columns={genColumns()}
+                  pagination={{ ...paginationProps, size: 'small' }}
+                  loading={loading}
+                  dataSource={list}
+                  rowKey={(item) => item.id}
+                  onChange={handleTableChange}
+                  rowSelection={rowSelection}
+                  refreshList={() => fetchPageList()}
+                  batchDelete={(ids) => userApi.removeBatchByIds(ids)}
+                  showComplexQuery={false}
+                  showBatchDelBtn={false}
+                  showTableColConfigBtn={false}
+                  showCheckbox
+                  showTopDiv={false}
+                />
+              </div>
+            </FaFlexRestLayout>
+          </Col>
+
+          <Col md={7} className="fa-flex-column" style={{height: '100%', minHeight: 0}}>
+            <FaLabel title="已选择" className="fa-mb8" />
+            <FaFlexRestLayout
+              className="fa-user-picker__surface"
+              style={{
+                border: '1px solid var(--fa-border-color)',
+                borderRadius: 'var(--fa-border-radius)',
+                overflow: 'auto',
+                overflowY: 'auto',
+              }}
+            >
               <SelectedUserList selectedUsers={innerUsers} onRemove={handleRemove} />
             </FaFlexRestLayout>
           </Col>

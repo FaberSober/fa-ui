@@ -1,6 +1,6 @@
-import React, { CSSProperties, ReactNode, useEffect, useState } from 'react';
+import React, { CSSProperties, ReactNode, useEffect, useRef, useState } from 'react';
 import { get, remove, trim } from 'lodash';
-import { Button, Select, SelectProps, Space } from 'antd';
+import { Alert, Button, Empty, Select, SelectProps, Space, Spin } from 'antd';
 import { useDebounce } from 'react-use';
 import { Fa } from '@ui/types';
 import { SearchOutlined } from "@ant-design/icons";
@@ -40,44 +40,54 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
   bodyStyle,
   ...props
 }: BaseUserSearchSelectProps<RecordType, KeyType>) {
-  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState<string>('');
   const [array, setArray] = useState<any>([]);
   const [innerUsers, setInnerUsers] = useState<SelectedUser[]>([])
+  const [searchStatus, setSearchStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const requestIdRef = useRef(0);
 
   const multiple = props.mode === 'multiple';
+  const loading = searchStatus === 'loading';
+
+  useEffect(() => () => {
+    requestIdRef.current += 1;
+  }, []);
 
   useEffect(() => {
-    // console.log('listValueFlag', listValueFlag, value, extraParams)
     if (multiple) {
-      // 多选数据
-      if (value === undefined || value === null || value.length === 0) {
+      const selectedValues = Array.isArray(value) ? value.filter((item) => !isEmptyValue(item)) : [];
+      if (selectedValues.length === 0) {
+        setInnerUsers([]);
         searchNow();
-        // if (onChange) {
-        //   onChange([])
-        // }
       } else {
-        updateValue(value);
-        setInnerUsers(value.map((i:any) => ({ id: i, allowRemove: true })))
+        updateValue(selectedValues);
+        setInnerUsers(selectedValues.map((item: any) => ({ id: item, allowRemove: true })));
       }
     } else {
-      if (value === undefined || value === null) {
+      if (isEmptyValue(value)) {
+        setInnerUsers([]);
         searchNow();
-        if (onChange) {
-          onChange(undefined)
-        }
       } else {
         updateValue(value);
-        setInnerUsers([{ id: value, allowRemove: true }])
+        setInnerUsers([{ id: value, allowRemove: true }]);
       }
     }
-  }, [value, extraParams]);
+  }, [value, extraParams, multiple]);
+
+  function isEmptyValue(target: any) {
+    if (target === undefined || target === null) return true;
+    if (Array.isArray(target)) return target.length === 0;
+    return typeof target === 'string' && trim(target) === '';
+  }
 
   function updateValue(outValue: any) {
-    if (outValue === undefined || outValue === null || trim(outValue) === '') return;
+    if (isEmptyValue(outValue)) return;
+    const requestId = ++requestIdRef.current;
+    setSearchStatus('loading');
     if (multiple) {
       if (serviceApi?.findList) {
         serviceApi?.findList(outValue).then((res) => {
+          if (requestId !== requestIdRef.current) return;
           const newList = res.data.map((d) => ({
             label: parseLabel(d),
             value: parseValue(d),
@@ -87,6 +97,7 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
           serviceApi
             ?.search(search)
             .then((res1) => {
+              if (requestId !== requestIdRef.current) return;
               const newListAdd = res1.data.rows.map((c) => ({
                 label: parseLabel(c),
                 value: parseValue(c),
@@ -94,14 +105,32 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
               const newListValues = newList.map((v1) => v1.value);
               remove(newListAdd, (v) => newListValues.indexOf(v.value) > -1);
               setArray([...newList, ...newListAdd]);
+              setSearchStatus('success');
             })
-            .catch(() => setArray(newList));
+            .catch(() => {
+              if (requestId !== requestIdRef.current) return;
+              setArray(newList);
+              setSearchStatus('success');
+            });
+        }).catch(() => {
+          if (requestId !== requestIdRef.current) return;
+          setArray([]);
+          setSearchStatus('error');
         });
+      } else {
+        setArray([]);
+        setSearchStatus('success');
       }
     } else {
       serviceApi?.getById(outValue).then((res) => {
+        if (requestId !== requestIdRef.current) return;
         const newList = [{ label: parseLabel(res.data), value: parseValue(res.data) }];
         setArray(newList);
+        setSearchStatus('success');
+      }).catch(() => {
+        if (requestId !== requestIdRef.current) return;
+        setArray([]);
+        setSearchStatus('error');
       });
     }
   }
@@ -121,18 +150,52 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
   }
 
   function searchNow() {
-    setLoading(true);
+    const requestId = ++requestIdRef.current;
+    setSearchStatus('loading');
     serviceApi
       ?.search(search)
       .then((res) => {
+        if (requestId !== requestIdRef.current) return;
         const newList = res.data.rows.map((c) => ({
           label: parseLabel(c),
           value: parseValue(c),
         }));
         setArray(newList);
-        setLoading(false);
+        setSearchStatus('success');
       })
-      .catch(() => setLoading(false));
+      .catch(() => {
+        if (requestId !== requestIdRef.current) return;
+        setArray([]);
+        setSearchStatus('error');
+      });
+  }
+
+  function renderNotFoundContent() {
+    let content: ReactNode;
+    if (searchStatus === 'loading') {
+      content = (
+        <Space size="small">
+          <Spin size="small" />
+          <span>搜索中...</span>
+        </Space>
+      );
+    } else if (searchStatus === 'error') {
+      content = (
+        <Alert
+          type="error"
+          showIcon
+          message="搜索失败"
+          action={
+            <Button type="link" size="small" onClick={searchNow}>
+              重试
+            </Button>
+          }
+        />
+      );
+    } else {
+      content = <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={search ? '未找到匹配用户' : '暂无用户'} />;
+    }
+    return <div aria-live="polite">{content}</div>;
   }
 
   const [,] = useDebounce(
@@ -145,6 +208,7 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
 
   function handleValueChange(v: any, item: any) {
     // console.log('handleValueChange', v, item)
+    requestIdRef.current += 1;
     if (onChange) {
       onChange(v, item);
     }
@@ -154,13 +218,17 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
   }
 
   function handleAddUsers(users: SelectedUser[], callback: any, error: any) {
+    const options = users.map((user) => ({
+      value: user.id,
+      label: user.label ?? array.find((item: any) => item.value === user.id)?.label ?? user.id,
+    }));
     if (multiple) {
-      onChange && onChange(users.map(i => i.id), users)
+      onChange?.(options.map((option) => option.value), options)
     } else {
-      if (users && users[0]) {
-        onChange && onChange(users[0].id, users[0])
+      if (options[0]) {
+        onChange?.(options[0].value, options[0])
       } else {
-        onChange && onChange(undefined, undefined)
+        onChange?.(undefined, undefined)
       }
     }
     callback()
@@ -177,10 +245,11 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
         filterOption={false}
         searchValue={search}
         onSearch={(v) => {
-          setLoading(true);
+          requestIdRef.current += 1;
+          setSearchStatus('loading');
           setSearch(v);
         }}
-        notFoundContent={null}
+        notFoundContent={renderNotFoundContent()}
         placeholder="搜索..."
         options={array}
         value={value}
@@ -188,12 +257,19 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
         style={{ minWidth: 138 }}
         onChange={handleValueChange}
         {...props}
+        status={searchStatus === 'error' ? 'error' : props.status}
       />
       <BizUserSelect
         onChange={handleAddUsers}
         selectedUsers={innerUsers}
+        multiple={multiple}
+        disabled={props.disabled}
       >
-        <Button icon={<SearchOutlined />} />
+        <Button
+          icon={<SearchOutlined />}
+          disabled={props.disabled}
+          aria-label="打开用户选择器"
+        />
       </BizUserSelect>
     </Space.Compact>
   );

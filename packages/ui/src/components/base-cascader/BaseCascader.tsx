@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { isNil } from 'lodash';
+import React, { useEffect, useMemo, useState } from 'react';
+import { cloneDeep, isNil } from 'lodash';
 import { Fa } from '@ui/types';
 import { CascaderProps, BaseOptionType } from 'antd/es/cascader';
 import { Cascader } from 'antd';
@@ -57,6 +57,11 @@ export default function BaseCascader<RecordType extends object = any, KeyType = 
 }: BaseCascaderProps<RecordType, KeyType>) {
   const [innerValue, setInnerValue] = useState<any[]>([]);
   const [options, setOptions] = useState<Fa.TreeNode<RecordType, KeyType>[] | undefined>([]);
+  const optionsWithDisabled = useMemo(() => {
+    const nextOptions = cloneDeep(options);
+    setTreeDisabled(nextOptions, disabledIds);
+    return nextOptions;
+  }, [options, disabledIds]);
 
   const multiple = props.multiple || false;
 
@@ -68,20 +73,12 @@ export default function BaseCascader<RecordType extends object = any, KeyType = 
     fetchTreeData();
   }, [maxLevel, ...extraParams]);
 
-  useEffect(() => {
-    if (isNil(options) || options.length === 0) return;
-
-    setTreeDisabled(options, disabledIds);
-    setOptions(options);
-  }, [disabledIds]);
-
   function fetchTreeData() {
     serviceApi.allTree({ level: maxLevel }).then((res) => {
       let treeArr = res.data;
       if (showRoot) {
         treeArr = [{ ...Fa.ROOT_DEFAULT, id: rootId, name: rootName, level: 0, children: res.data } as any];
       }
-      setTreeDisabled(treeArr, disabledIds);
       // 自定义value转换
       if (getValue) {
         filterNode(treeArr, (d: any) => {
@@ -115,13 +112,18 @@ export default function BaseCascader<RecordType extends object = any, KeyType = 
     }
   }
 
-  function handleChange(newValue: KeyType[] | KeyType[][], selectedOptions: Fa.TreeNode<RecordType, KeyType>[] | Fa.TreeNode<RecordType, KeyType>[][]) {
-    setInnerValue(newValue);
+  function handleChange(
+    newValue: KeyType[] | KeyType[][] | undefined,
+    selectedOptions?: Fa.TreeNode<RecordType, KeyType>[] | Fa.TreeNode<RecordType, KeyType>[][],
+  ) {
+    const nextValue = newValue || [];
+    const nextSelectedOptions = selectedOptions || [];
+    setInnerValue(nextValue);
 
     if (multiple) {
       // 多选模式
-      const values = (newValue as KeyType[][]).map(path => path[path.length - 1]);
-      const items = (selectedOptions as Fa.TreeNode<RecordType, KeyType>[][]).map(
+      const values = (nextValue as KeyType[][]).map(path => path[path.length - 1]);
+      const items = (nextSelectedOptions as Fa.TreeNode<RecordType, KeyType>[][]).map(
         path => path[path.length - 1]
       );
 
@@ -129,7 +131,7 @@ export default function BaseCascader<RecordType extends object = any, KeyType = 
         onChange(
           values,
           items,
-          newValue as KeyType[][],
+          nextValue as KeyType[][],
           items.map(i => i.sourceData),
         );
       }
@@ -137,31 +139,32 @@ export default function BaseCascader<RecordType extends object = any, KeyType = 
         onChangeWithItem(
           values,
           items.map(i => i.sourceData),
-          newValue as KeyType[][],
-          selectedOptions as Fa.TreeNode<RecordType, KeyType>[][],
+          nextValue as KeyType[][],
+          nextSelectedOptions as Fa.TreeNode<RecordType, KeyType>[][],
         );
       }
     } else {
       // 单选模式
-      const lastValue = newValue && (newValue as KeyType[]).length > 0 ? (newValue as KeyType[])[newValue.length - 1] : undefined;
-      const lastItem = selectedOptions && (selectedOptions as Fa.TreeNode<RecordType, KeyType>[]).length > 0
-        ? (selectedOptions as Fa.TreeNode<RecordType, KeyType>[])[selectedOptions.length - 1]
+      const selectedItems = nextSelectedOptions as Fa.TreeNode<RecordType, KeyType>[];
+      const lastValue = (nextValue as KeyType[]).length > 0 ? (nextValue as KeyType[])[nextValue.length - 1] : undefined;
+      const lastItem = selectedItems.length > 0
+        ? selectedItems[selectedItems.length - 1]
         : undefined;
 
       if (onChange) {
         onChange(
           lastValue,
           lastItem,
-          [newValue as KeyType[]],
-          (selectedOptions as Fa.TreeNode<RecordType, KeyType>[]).map(i => i.sourceData),
+          [nextValue as KeyType[]],
+          selectedItems.map(i => i.sourceData),
         );
       }
       if (onChangeWithItem) {
         onChangeWithItem(
           lastValue,
           lastItem?.sourceData,
-          [newValue as KeyType[]],
-          [(selectedOptions as Fa.TreeNode<RecordType, KeyType>[])],
+          [nextValue as KeyType[]],
+          [selectedItems],
         );
       }
     }
@@ -175,7 +178,7 @@ export default function BaseCascader<RecordType extends object = any, KeyType = 
       style={{minWidth: 170}}
       {...props}
       value={innerValue}
-      options={options}
+      options={optionsWithDisabled}
       onChange={(v: any, s: any) => handleChange(v, s)}
     />
   );

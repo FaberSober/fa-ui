@@ -158,8 +158,8 @@ namespace Admin {
     name: string;
     /** 描述 */
     description: string;
-    /** 排序ID */
-    sortId: number;
+    /** 排序 */
+    sort: number;
     /** 类型  */
     type: FaEnums.DepartmentType;
     /** 负责人ID  */
