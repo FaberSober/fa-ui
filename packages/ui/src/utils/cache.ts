@@ -2,6 +2,31 @@ import { Fa } from '@ui/types';
 import { each, isNil } from "lodash";
 import { getCookie } from './utils';
 
+const CLIENT_INSTANCE_ID_KEY = 'fa.client.instance-id';
+let fallbackClientInstanceId: string | undefined;
+
+/** 返回当前浏览器安装的稳定标识。该标识仅用于客户端识别，不是可信凭据。 */
+export function getClientInstanceId(): string {
+  try {
+    const stored = localStorage.getItem(CLIENT_INSTANCE_ID_KEY);
+    if (stored) return stored;
+  } catch {
+    // 存储不可用时，在当前页面生命周期内复用内存标识。
+  }
+
+  if (!fallbackClientInstanceId) {
+    fallbackClientInstanceId = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}`;
+  }
+
+  try {
+    localStorage.setItem(CLIENT_INSTANCE_ID_KEY, fallbackClientInstanceId);
+  } catch {
+    // 存储不可用时仍返回当前会话内稳定的标识。
+  }
+
+  return fallbackClientInstanceId;
+}
+
 export function getToken(): string | null {
   let token = localStorage.getItem(Fa.Constant.TOKEN_KEY);
   if (isNil(token)) {
@@ -79,6 +104,7 @@ export function genAuthHeaders() {
   headers[Fa.Constant.FA_FROM] = window.FaFrom;
   headers[Fa.Constant.FA_VERSION_CODE] = window.FaVersionCode;
   headers[Fa.Constant.FA_VERSION_NAME] = window.FaVersionName;
+  headers.FaClientInstanceId = getClientInstanceId();
 
   // 读取window.faHeader中配置的
   if (window.faHeader) {
