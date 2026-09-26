@@ -8,6 +8,8 @@ namespace Tn {
     id: string;
     /** 租户名称 */
     name: string;
+    /** 租户图标文件ID */
+    icon?: string | null;
     /** 租户状态[1-正常2-停用] */
     status: TnEnums.TenantStatusEnum;
     /** 所属用户ID */
@@ -38,6 +40,8 @@ namespace Tn {
     corpName: string;
     /** 租户ID */
     tenantName: string;
+    /** 租户图标文件ID */
+    tenantIcon?: string | null;
   }
 
   /** 租户-企业表 */
