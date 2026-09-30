@@ -263,6 +263,8 @@ namespace Admin {
   // -------------------------------------------- 系统-通知与公告 --------------------------------------------
   /** BASE-通知与公告 */
   export interface Notice extends Fa.BaseDelEntity {
+    /** 所属租户，仅服务端赋值 */
+    readonly tenantId?: string | null;
     /** ID */
     id: number;
     /** 标题  */
