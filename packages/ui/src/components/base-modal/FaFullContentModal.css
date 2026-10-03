@@ -1,9 +1,14 @@
 .fa-full-content-modal {
+  color: var(--fa-text-color);
   container-type: inline-size;
   animation-duration: 180ms;
   animation-fill-mode: both;
   animation-timing-function: ease-out;
   will-change: opacity;
+}
+
+.fa-full-content-modal-body {
+  overscroll-behavior: contain;
 }
 
 .fa-full-content-modal .fa-full-content-modal-header--centered {

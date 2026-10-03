@@ -5,8 +5,52 @@ import { createPortal } from 'react-dom';
 import './FaFullContentModal.css';
 
 const MOTION_DURATION = 180;
+const scrollLocks = new WeakMap<HTMLElement, { count: number; restore: () => void }>();
+
+function lockScroll(element: HTMLElement, resetPosition = false) {
+  let lock = scrollLocks.get(element);
+  if (!lock) {
+    const properties = ['overflow-x', 'overflow-y'];
+    const originalStyles = properties.map((property) => ({
+      property,
+      value: element.style.getPropertyValue(property),
+      priority: element.style.getPropertyPriority(property),
+    }));
+    const { scrollTop, scrollLeft } = element;
+    for (const property of properties) element.style.setProperty(property, 'hidden');
+    // 绝对定位的弹窗从容器原点铺满；打开时将背景滚动位置暂时归零。
+    if (resetPosition) {
+      element.scrollTop = 0;
+      element.scrollLeft = 0;
+    }
+    lock = {
+      count: 0,
+      restore: () => {
+        for (const { property, value, priority } of originalStyles) {
+          if (value) element.style.setProperty(property, value, priority);
+          else element.style.removeProperty(property);
+        }
+        if (resetPosition) {
+          element.scrollTop = scrollTop;
+          element.scrollLeft = scrollLeft;
+        }
+      },
+    };
+    scrollLocks.set(element, lock);
+  }
+  lock.count += 1;
+  return () => {
+    lock.count -= 1;
+    if (lock.count === 0) {
+      lock.restore();
+      scrollLocks.delete(element);
+    }
+  };
+}
 
 export interface FaFullContentModalProps {
+  /** content 覆盖当前 Tab 主体；fullscreen 覆盖整个浏览器视口。 */
+  displayMode?: 'content' | 'fullscreen';
   title?: ReactNode;
   children?: ReactNode;
   triggerDom?: ReactNode;
@@ -30,9 +74,10 @@ type TriggerElementProps = {
 };
 
 /**
- * 覆盖 MenuLayout .fa-main 主体区域的大面积弹框，并自动跟随调用方所在的 Tab 面板。
+ * 默认覆盖当前 Tab 主体，也可覆盖整个视口；自动跟随调用方所在的 Tab 面板显隐。
  */
 export default function FaFullContentModal({
+  displayMode = 'content',
   title,
   children,
   triggerDom,
@@ -54,6 +99,7 @@ export default function FaFullContentModal({
   const open = openProp ?? openInternal;
   const portalAnchorRef = useRef<HTMLSpanElement>(null);
   const [mountNode, setMountNode] = useState<HTMLElement | null>(null);
+  const [tabVisible, setTabVisible] = useState(true);
   const [rendered, setRendered] = useState(false);
   const [closing, setClosing] = useState(false);
 
@@ -61,10 +107,35 @@ export default function FaFullContentModal({
     const anchor = portalAnchorRef.current;
     if (!anchor) return;
 
-    const nextMountNode =
-      anchor.closest<HTMLElement>('[data-fa-tab-panel]') ?? anchor.closest<HTMLElement>('.fa-main') ?? document.querySelector<HTMLElement>('.fa-main');
-    setMountNode(nextMountNode);
-  }, []);
+    const tabPanel = anchor.closest<HTMLElement>('[data-fa-tab-panel]');
+    setMountNode(
+      displayMode === 'fullscreen'
+        ? document.body
+        : tabPanel ?? anchor.closest<HTMLElement>('.fa-main') ?? document.querySelector<HTMLElement>('.fa-main'),
+    );
+    if (displayMode !== 'fullscreen' || !tabPanel) {
+      setTabVisible(true);
+      return;
+    }
+
+    const updateTabVisible = () => setTabVisible(tabPanel.getAttribute('aria-hidden') !== 'true' && tabPanel.style.display !== 'none');
+    updateTabVisible();
+    const observer = new MutationObserver(updateTabVisible);
+    observer.observe(tabPanel, { attributes: true, attributeFilter: ['aria-hidden', 'style'] });
+    return () => observer.disconnect();
+  }, [displayMode]);
+
+  useLayoutEffect(() => {
+    if (!rendered || !tabVisible || !mountNode) return;
+
+    // 同一容器上的多层弹窗共享锁，保留退出动画期间的锁定状态。
+    const unlock = displayMode === 'fullscreen'
+      ? [lockScroll(document.documentElement), lockScroll(document.body)]
+      : [lockScroll(mountNode, true)];
+    return () => {
+      for (const release of unlock) release();
+    };
+  }, [displayMode, rendered, tabVisible, mountNode]);
 
   useLayoutEffect(() => {
     if (open) {
@@ -138,7 +209,11 @@ export default function FaFullContentModal({
         createPortal(
           <div
             className={`fa-full-content fa-bg-white fa-flex-column fa-full-content-modal ${closing ? 'fa-full-content-modal--exit' : 'fa-full-content-modal--enter'}`}
-            style={{ zIndex, overflow: 'hidden' }}
+            style={{
+              zIndex,
+              overflow: 'hidden',
+              ...(displayMode === 'fullscreen' ? { position: 'fixed', inset: 0, display: tabVisible ? undefined : 'none' } : {}),
+            }}
             onAnimationEnd={handleAnimationEnd}
           >
             <div className={`fa-full-content-modal-header fa-flex-row-center fa-border-b fa-p12 ${headerCenter ? 'fa-full-content-modal-header--centered' : ''}`} style={{ flex: '0 0 auto', minWidth: 0 }}>
@@ -160,7 +235,7 @@ export default function FaFullContentModal({
               </Space>
             </div>
 
-            <div className="fa-flex-1 fa-relative fa-p12 fa-bg-grey fa-scroll-auto-y" style={{ minHeight: 0, minWidth: 0 }}>
+            <div className="fa-full-content-modal-body fa-flex-1 fa-relative fa-p12 fa-bg-grey fa-scroll-auto-y" style={{ minHeight: 0, minWidth: 0 }}>
               {children}
             </div>
           </div>,
