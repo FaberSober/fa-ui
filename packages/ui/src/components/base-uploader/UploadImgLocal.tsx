@@ -27,11 +27,16 @@ export default function UploadImgLocal({ value, onChange, style, ...props }: Upl
   const [previewImage, setPreviewImage] = useState('');
 
   useEffect(() => {
-    if (value === undefined || value == null) return;
+    const fileId = value?.trim();
+    if (!fileId) {
+      setArray([]);
+      setLoading(false);
+      return;
+    }
 
     setLoading(true);
     fileSaveApi
-      .getById(value)
+      .getById(fileId)
       .then((res) => {
         setLoading(false);
         const fileData = res.data;
