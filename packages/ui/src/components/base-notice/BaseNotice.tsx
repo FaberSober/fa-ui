@@ -20,7 +20,7 @@ export default function BaseNotice() {
   return (
     <div>
       {array.map((item) => (
-        <Alert key={item.id} message={`${item.title}: ${item.content}`} banner />
+        <Alert key={item.id} title={`${item.title}: ${item.content}`} banner />
       ))}
     </div>
   );

@@ -464,7 +464,7 @@ function TableColConfigModalInner<T>(
               <Alert
                 type="warning"
                 showIcon
-                message="当前表格存在固定列，关闭横向滚动可能导致固定列布局异常。"
+                title="当前表格存在固定列，关闭横向滚动可能导致固定列布局异常。"
                 style={{marginTop: 8}}
               />
             ) : null}

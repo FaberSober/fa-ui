@@ -112,7 +112,7 @@ export default function FaJsonView({
       errorRender(norm.error as Error)
     ) : (
       <div className="fa-json-error">
-        <Alert type="error" showIcon message="JSON 解析失败" description={norm.error?.message} />
+        <Alert type="error" showIcon title="JSON 解析失败" description={norm.error?.message} />
       </div>
     );
   } else {

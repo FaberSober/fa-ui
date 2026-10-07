@@ -251,14 +251,14 @@ export default function FaJsonEdit({
           style={{ minHeight: maxHeight - 20 }}
         />
         {parsed.status === 'error' && (
-          <Alert className="fa-json-edit-error" type="error" showIcon message="JSON 解析失败" description={parsed.error?.message} />
+          <Alert className="fa-json-edit-error" type="error" showIcon title="JSON 解析失败" description={parsed.error?.message} />
         )}
       </div>
     );
   } else if (parsed.status === 'error') {
     body = (
       <div className="fa-json-edit-invalid-tree">
-        <Alert type="error" showIcon message="无法进行图形编辑" description={parsed.error?.message} />
+        <Alert type="error" showIcon title="无法进行图形编辑" description={parsed.error?.message} />
         <Button size="small" icon={<FileTextOutlined />} onClick={() => handleModeChange('text')}>
           编辑源文本
         </Button>

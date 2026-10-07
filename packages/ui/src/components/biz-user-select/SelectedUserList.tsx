@@ -85,7 +85,7 @@ export default function SelectedUserList({selectedUsers, onRemove}: SelectedUser
         <Alert
           type="error"
           showIcon
-          message="用户详情加载失败"
+          title="用户详情加载失败"
           action={(
             <Button type="link" size="small" onClick={() => setRetryToken((current) => current + 1)}>
               重试

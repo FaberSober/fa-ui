@@ -184,7 +184,7 @@ export default function BaseUserSearchSelect<RecordType extends object = any, Ke
         <Alert
           type="error"
           showIcon
-          message="搜索失败"
+          title="搜索失败"
           action={
             <Button type="link" size="small" onClick={searchNow}>
               重试
