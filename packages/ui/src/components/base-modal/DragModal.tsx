@@ -15,7 +15,7 @@ export interface DragModalProps extends ModalProps {
  * 1. 本例修改基于dnd-kit实现。减少包的引入
  * 2. 官网基于react-draggable实现。
  */
-export default function DragModal({ defaultFullScreen, width, bodyStyle, ...props }: DragModalProps) {
+export default function DragModal({ defaultFullScreen, width, bodyStyle, style, ...props }: DragModalProps) {
   const [disabled, setDisabled] = useState(true);
   const [fullScreen, setFullScreen] = useState(defaultFullScreen || false);
   const { title, ...restProps } = props;
@@ -80,7 +80,7 @@ export default function DragModal({ defaultFullScreen, width, bodyStyle, ...prop
       // 全屏时可以把宽度设为 100vw，高度设为 100vh
       width={fullScreen ? '100vw' : width || 600}
       // 如果需要，设置全屏时距离顶部的距离为 0
-      style={fullScreen ? { top: 0, padding: 0 } : {}}
+      style={fullScreen ? { ...style, top: 0, padding: 0 } : style}
       // 移除 Modal 自身的 body 内边距，让内容完全铺满
       styles={{
         // 全屏时用 flex 撑满剩余空间（配合 styles.css 中 .fa-full-screen-modal-wrap 的 flex 纵向布局），

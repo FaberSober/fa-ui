@@ -18,9 +18,9 @@ const FormNumber = forwardRef<HTMLInputElement, FormNumberProps>(
 
     return (
       <Space.Compact block>
-        {addonAfter && <div className="ant-input-group-addon">{addonAfter}</div>}
-        {input}
         {addonBefore && <div className="ant-input-group-addon">{addonBefore}</div>}
+        {input}
+        {addonAfter && <div className="ant-input-group-addon">{addonAfter}</div>}
       </Space.Compact>
     );
   },
