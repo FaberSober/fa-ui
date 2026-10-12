@@ -24,6 +24,7 @@ export interface UseTableQueryParamsProps<T> {
   list: T[];
   dicts: Fa.PageDict;
   fetchPageList: () => void;
+  fetchPageListSilently: () => void;
   // ------------------------------------------ 表格查询结果更新 ------------------------------------------
   setList: (list: T[]) => void;
   // ------------------------------------------ 表格展示分页数据（与 queryParams.pagination 同源） ------------------------------------------
@@ -156,8 +157,17 @@ export default function useTableQueryParams<T>(
   // ------------------------------------------ 表格查询结果更新 ------------------------------------------
   /** 获取分页数据 */
   function fetchPageList() {
+    fetchPage();
+  }
+
+  /** 静默刷新，保留当前数据且不显示加载状态。 */
+  function fetchPageListSilently() {
+    fetchPage(false);
+  }
+
+  function fetchPage(showLoading = true) {
     const requestId = ++requestIdRef.current;
-    setLoading(true);
+    if (showLoading) setLoading(true);
     // 表单中拆出_search关键字，用作搜索
     const { _search, ...restFormValues } = queryParams.formValues;
     const params = {
@@ -246,6 +256,7 @@ export default function useTableQueryParams<T>(
     setExtraParams,
     handleTableChange,
     fetchPageList,
+    fetchPageListSilently,
     loading,
     list: ret.list,
     dicts: ret.dicts,
