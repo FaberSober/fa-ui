@@ -125,7 +125,7 @@ instance.interceptors.response.use(
 
     // 普通业务错误：未配置隐藏时统一弹错
     if (!hideErrorMsg) {
-      const msgText = codeMessage[httpStatus] || '未知错误，请联系管理员';
+      const msgText = (httpStatus != null ? codeMessage[httpStatus] : undefined) || '未知错误，请联系管理员';
       const prefix = httpStatus != null ? `${httpStatus} ` : '';
       const errMsg = bizMsg ? `${prefix}${bizMsg}` : `${prefix}${msgText}`;
       message.error(errMsg);
