@@ -2,7 +2,6 @@ import React, {CSSProperties, useState} from 'react';
 import {Button, Upload, UploadProps} from 'antd';
 import {UploadOutlined} from '@ant-design/icons';
 import {fetchUploadImgQiniu} from './utils';
-import { fileSaveApi } from '@ui/services';
 
 // function beforeUpload(file: any) {
 //   const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -52,12 +51,9 @@ export default function UploadFileQiniu({ children, value, onImgUploadSuccess, p
       prefix||'file',
       file.name,
       (path, res) => {
-        // save path to server
-        fileSaveApi.syncUrlQiniu({ url: path }).then((res) => {
-          if (onChange) onChange(res.data.id);
-          onSuccess({ ...res, path }, file);
-          setLoading(false);
-        })
+        if (onChange) onChange(res.fileSave.id);
+        onSuccess({ ...res, path }, file);
+        setLoading(false);
       },
       (res) => {
         const { percent } = res.total;
@@ -65,7 +61,7 @@ export default function UploadFileQiniu({ children, value, onImgUploadSuccess, p
       },
       (res) => {
         setLoading(false);
-        onError(new Error(res), file);
+        onError(res instanceof Error ? res : new Error(String(res)), file);
       }
     );
   }

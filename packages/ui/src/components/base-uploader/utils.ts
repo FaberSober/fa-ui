@@ -2,7 +2,13 @@ import { get, isNil } from 'lodash';
 import dayjs from 'dayjs';
 import { fileSaveApi } from '@ui/services/base';
 import { ApiQiniuLoader } from '@ui/utils';
+import type { Admin } from '@ui/types';
 
+export interface QiniuUploadResult {
+  key: string;
+  hash?: string;
+  fileSave: Admin.FileSave;
+}
 
 /**
  * 上传文件到七牛云
@@ -17,7 +23,7 @@ export async function fetchUploadImgQiniu(
   file: any,
   prefix: string|undefined,
   fileName: string,
-  onFinish?: (path: string, res: any) => void,
+  onFinish?: (path: string, res: QiniuUploadResult) => void,
   onProgress?: (res: any) => void,
   onError?: (res: any) => void,
 ) {
@@ -30,7 +36,7 @@ export async function fetchUploadImgQiniu(
     //   message.error('上传文件失败，获取上传token失败，请联系管理员！');
     //   return;
     // }
-    const { token, domain, basePath } = response.data;
+    const { token, domain, basePath, accessType } = response.data;
     const day = dayjs().format('YYYY/MM/DD');
     const time = dayjs().format('YYYYMMDDHHmmss');
 
@@ -62,10 +68,16 @@ export async function fetchUploadImgQiniu(
         // console.log('error', res);
         if (onError) onError(res);
       },
-      (res: any) => {
+      async (res: any) => {
         // console.log('complete', res);
-        const path = `${domain}${res.key}`;
-        if (onFinish) onFinish(path, res);
+        try {
+          const url = `${domain}${res.key.split('/').map(encodeURIComponent).join('/')}`;
+          const registered = await fileSaveApi.syncUrlQiniu({ url });
+          const path = accessType === 'PRIVATE' ? fileSaveApi.genLocalGetFile(registered.data.id) : url;
+          if (onFinish) onFinish(path, { ...res, fileSave: registered.data });
+        } catch (error) {
+          if (onError) onError(error);
+        }
       },
     );
   } catch (error) {

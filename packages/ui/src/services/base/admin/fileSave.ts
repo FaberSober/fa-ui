@@ -8,6 +8,7 @@ interface UploadToken {
   domain: string;
   bucketName: string;
   basePath: string;
+  accessType?: 'PUBLIC' | 'PRIVATE';
 }
 
 const serviceModule = 'fileSave';

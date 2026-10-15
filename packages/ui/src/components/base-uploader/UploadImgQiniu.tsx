@@ -52,13 +52,15 @@ export default function UploadImgQiniu({ value, onImgUploadSuccess, prefix, onCh
       (path, res) => {
         if (onChange) onChange(path);
         onSuccess({ ...res, path }, file);
+        setLoading(false);
       },
       (res) => {
         const { percent } = res.total;
         onProgress({ percent }, file);
       },
       (res) => {
-        onError(new Error(res), file);
+        setLoading(false);
+        onError(res instanceof Error ? res : new Error(String(res)), file);
       }
     );
   }
@@ -75,7 +77,7 @@ export default function UploadImgQiniu({ value, onImgUploadSuccess, prefix, onCh
       style={style}
     >
       {value ? (
-        <img style={{ width: 200 }} src={`${value}?imageView2/1/w/100/h/100`} alt="" />
+        <img style={{ width: 200 }} src={value.includes('/api/base/admin/fileSave/') ? value : `${value}?imageView2/1/w/100/h/100`} alt="" />
       ) : (
         <div>
           {loading ? <LoadingOutlined /> : <PlusOutlined />}
