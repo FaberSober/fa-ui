@@ -4,7 +4,13 @@
   "main": "./index.tsx",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./dist"
+    ".": "./dist",
+    "./crypto": "./src/crypto.ts"
+  },
+  "typesVersions": {
+    "*": {
+      "crypto": ["src/crypto.ts"]
+    }
   },
   "license": "MIT",
   "scripts": {
