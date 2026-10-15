@@ -20,22 +20,48 @@ export function showResponse(response: Fa.Ret, prefix: string) {
  * 复制文本到剪贴板
  */
 export function copyToClipboard(text: string, successMsg = '') {
-  handleClipboard(text, successMsg)
+  return handleClipboard(text, successMsg)
 }
 
 /**
  * 复制文本到剪贴板
  */
-export function handleClipboard(text: string, successMsg = '') {
+export async function handleClipboard(text: string, successMsg = '') {
   if (trim(text) === '') {
     return;
   }
+  if (navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+      message.success(`${isNil(successMsg) ? text : successMsg} 复制成功, Ctrl + V 使用`);
+      return;
+    } catch {
+      // 浏览器不允许 Clipboard API 时，回退到当前对话框内选中文本复制。
+    }
+  }
+  const activeElement = document.activeElement as HTMLElement | null;
   const textField = document.createElement('textarea');
-  textField.innerText = text;
-  document.body.appendChild(textField);
-  textField.select();
-  document.execCommand('copy');
-  textField.remove();
+  textField.value = text;
+  textField.readOnly = true;
+  textField.style.position = 'fixed';
+  textField.style.left = '-9999px';
+  // 抽屉/弹窗会限制焦点，复制文本框必须放在当前对话框内。
+  const container = activeElement?.closest('dialog, [role="dialog"]') || document.body;
+  container.appendChild(textField);
+  try {
+    textField.focus({ preventScroll: true });
+    textField.select();
+    if (document.activeElement !== textField || !document.execCommand('copy')) {
+      message.error('复制失败，请手动选择文本复制');
+      return;
+    }
+  } catch {
+    message.error('复制失败，请手动选择文本复制');
+    return;
+  } finally {
+    textField.remove();
+    activeElement?.focus({ preventScroll: true });
+  }
   if (!isNil(successMsg)) {
     message.success(`${successMsg} 复制成功, Ctrl + V 使用`);
   } else {
