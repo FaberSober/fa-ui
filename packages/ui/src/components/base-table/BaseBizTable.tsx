@@ -166,18 +166,31 @@ export default function BaseBizTable<RecordType extends object = any>({
     const resizedColumns = parseColumns.map((column, index) => {
       const key = showRowNum && index === 0 ? null : dataIndexToString(column.dataIndex);
       const resizedWidth = key ? columnWidths[key] : undefined;
-      const nextColumn = resizedWidth ? {...column, width: resizedWidth} : column;
+      return resizedWidth ? {...column, width: resizedWidth} : column;
+    });
 
+    const tableColumns = resizedColumns.map((nextColumn, index) => {
+      const key = showRowNum && index === 0 ? null : dataIndexToString(nextColumn.dataIndex);
       if (!showTableColConfigBtn || !biz || !key) return nextColumn;
 
+      const previousColumn = resizedColumns[index - 1];
+      // 固定列左侧的把手由固定表头承载，避免前一列变宽后被遮住。
+      const resizeLeft = nextColumn.fixed === 'right' && previousColumn && previousColumn.fixed !== 'right'
+        && !(showRowNum && index === 1) && dataIndexToString(previousColumn.dataIndex);
+      const resizeRight = nextColumn.fixed === 'right' || resizedColumns[index + 1]?.fixed !== 'right';
       const onHeaderCell = nextColumn.onHeaderCell;
       return {
         ...nextColumn,
         onHeaderCell: (headerColumn: any, headerIndex?: number) => ({
           ...onHeaderCell?.(headerColumn, headerIndex),
           width: nextColumn.width,
-          onResize: (nextWidth: number) => handleColumnResize(nextColumn.dataIndex, nextWidth),
+          onResize: resizeRight ? (nextWidth: number) => handleColumnResize(nextColumn.dataIndex, nextWidth) : undefined,
           onResizeStop: (nextWidth: number) => handleColumnResizeStop(nextColumn.dataIndex, nextWidth),
+          resizeLeft: resizeLeft ? {
+            width: previousColumn.width,
+            onResize: (nextWidth: number) => handleColumnResize(previousColumn.dataIndex, nextWidth),
+            onResizeStop: (nextWidth: number) => handleColumnResizeStop(previousColumn.dataIndex, nextWidth),
+          } : undefined,
         } as any),
       };
     });
@@ -185,7 +198,7 @@ export default function BaseBizTable<RecordType extends object = any>({
     // 计算table滚动width
     const scrollWidthX = sumBy(resizedColumns, (n) => Number(n.width) || DEFAULT_COLUMN_WIDTH);
 
-    return { parseColumns: resizedColumns, scrollWidthX };
+    return { parseColumns: tableColumns, scrollWidthX };
   }, [biz, columns, config, columnWidths, handleColumnResize, handleColumnResizeStop, showRowNum, showTableColConfigBtn]);
 
   /** 表格配置变更 */

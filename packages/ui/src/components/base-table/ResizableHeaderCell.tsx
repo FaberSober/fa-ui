@@ -10,14 +10,19 @@ import {
 export const DEFAULT_COLUMN_WIDTH = 200;
 const MIN_COLUMN_WIDTH = 80;
 
-export type ResizableHeaderCellProps = Omit<HTMLAttributes<HTMLTableCellElement>, 'onResize'> & {
+type ColumnResizeHandleProps = {
   width?: number;
   onResize?: (width: number) => void;
   onResizeStop?: (width: number) => void;
+  placement?: 'left' | 'right';
+};
+
+export type ResizableHeaderCellProps = Omit<HTMLAttributes<HTMLTableCellElement>, 'onResize'> & ColumnResizeHandleProps & {
+  resizeLeft?: ColumnResizeHandleProps;
   children?: ReactNode;
 };
 
-export default function ResizableHeaderCell({ width, onResize, onResizeStop, style, className, children, ...props }: ResizableHeaderCellProps) {
+function ColumnResizeHandle({ width, onResize, onResizeStop, placement = 'right' }: ColumnResizeHandleProps) {
   const resizeRef = useRef<{ startX: number; startWidth: number; pointerId: number }>();
 
   useEffect(
@@ -33,10 +38,15 @@ export default function ResizableHeaderCell({ width, onResize, onResizeStop, sty
     return Math.max(MIN_COLUMN_WIDTH, Math.round(resize.startWidth + clientX - resize.startX));
   }
 
+  function getCellWidth(button: HTMLButtonElement) {
+    const cell = button.closest('th');
+    return (placement === 'left' ? cell?.previousElementSibling : cell)?.getBoundingClientRect().width;
+  }
+
   function startResize(event: ReactPointerEvent<HTMLButtonElement>) {
     event.preventDefault();
     event.stopPropagation();
-    const cellWidth = event.currentTarget.closest('th')?.getBoundingClientRect().width;
+    const cellWidth = getCellWidth(event.currentTarget);
     resizeRef.current = {
       startX: event.clientX,
       startWidth: Math.max(MIN_COLUMN_WIDTH, cellWidth || width || DEFAULT_COLUMN_WIDTH),
@@ -79,7 +89,7 @@ export default function ResizableHeaderCell({ width, onResize, onResizeStop, sty
     if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
     event.preventDefault();
     event.stopPropagation();
-    const cellWidth = event.currentTarget.closest('th')?.getBoundingClientRect().width;
+    const cellWidth = getCellWidth(event.currentTarget);
     const currentWidth = Math.max(MIN_COLUMN_WIDTH, cellWidth || width || DEFAULT_COLUMN_WIDTH);
     const nextWidth = Math.max(MIN_COLUMN_WIDTH, currentWidth + (event.key === 'ArrowRight' ? 10 : -10));
     onResize?.(nextWidth);
@@ -87,21 +97,26 @@ export default function ResizableHeaderCell({ width, onResize, onResizeStop, sty
   }
 
   return (
+    <button
+      type="button"
+      className={['fa-table-resize-handle', placement === 'left' && 'fa-table-resize-handle-left'].filter(Boolean).join(' ')}
+      aria-label={placement === 'left' ? '调整左侧列宽' : '调整列宽'}
+      onPointerDown={startResize}
+      onPointerMove={moveResize}
+      onPointerUp={finishResize}
+      onPointerCancel={cancelResize}
+      onKeyDown={handleKeyDown}
+      onClick={(event) => event.stopPropagation()}
+    />
+  );
+}
+
+export default function ResizableHeaderCell({ width, onResize, onResizeStop, resizeLeft, style, className, children, ...props }: ResizableHeaderCellProps) {
+  return (
     <th {...props} className={['fa-table-resizable-header', className].filter(Boolean).join(' ')} style={style}>
       {children}
-      {onResize ? (
-        <button
-          type="button"
-          className="fa-table-resize-handle"
-          aria-label="调整列宽"
-          onPointerDown={startResize}
-          onPointerMove={moveResize}
-          onPointerUp={finishResize}
-          onPointerCancel={cancelResize}
-          onKeyDown={handleKeyDown}
-          onClick={(event) => event.stopPropagation()}
-        />
-      ) : null}
+      {resizeLeft ? <ColumnResizeHandle {...resizeLeft} placement="left" /> : null}
+      {onResize ? <ColumnResizeHandle width={width} onResize={onResize} onResizeStop={onResizeStop} /> : null}
     </th>
   );
 }
