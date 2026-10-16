@@ -1164,6 +1164,15 @@ ul {
   transition: background-color .15s;
 }
 
+.fa-table-resize-handle-left {
+  left: 0;
+  right: auto;
+}
+
+.fa-table-resize-handle-left::after {
+  left: 0;
+}
+
 [data-theme=dark] .fa-table-resize-handle::after {
   background: var(--fa-border-dark-color);
 }
