@@ -635,7 +635,7 @@ export function isUrlImg(url: string) {
  * @param type 文件后缀名
  */
 export function isImg(type: string) {
-  return ['png', 'jpg', 'jpeg', 'ico', 'bmp', 'gif'].indexOf(type.toLowerCase()) > -1
+  return ['png', 'jpg', 'jpeg', 'ico', 'bmp', 'gif', 'webp'].indexOf(type.toLowerCase()) > -1
 }
 
 export function isVideo(type: string) {
