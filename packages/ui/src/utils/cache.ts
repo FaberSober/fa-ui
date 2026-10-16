@@ -45,6 +45,8 @@ export function setToken(token: string) {
 
 export function clearToken() {
   localStorage.removeItem(Fa.Constant.TOKEN_KEY);
+  // biome-ignore lint/suspicious/noDocumentCookie: 同步清除 Cookie，避免下一次 getToken 恢复旧登录态。
+  document.cookie = `${Fa.Constant.TOKEN_KEY}=; Max-Age=0; Path=/`;
 }
 
 

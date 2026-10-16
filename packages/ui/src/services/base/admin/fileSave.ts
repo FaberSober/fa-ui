@@ -2,6 +2,16 @@ import {GATE_APP} from '@ui/configs';
 import BaseApi from '@ui/services/core/BaseApi';
 import {trim} from 'lodash';
 import {Admin, Fa} from '@ui/types';
+import type { AxiosRequestConfig } from 'axios';
+import { getToken, getTnCorpId, getTnTenantId } from '@ui/utils/cache';
+
+export interface FilePreviewResource {
+  fileId: string;
+  filename: string;
+  previewUrl: string;
+  downloadUrl: string;
+  downloadAllowed: boolean;
+}
 
 interface UploadToken {
   token: string;
@@ -14,6 +24,20 @@ interface UploadToken {
 const serviceModule = 'fileSave';
 
 class FileSaveApi extends BaseApi<Admin.FileSave, string> {
+  /** 外部预览使用短效会话，不传递登录 Token，也不缓存资源凭证。 */
+  getPreviewResource = async (fileId: string, config?: AxiosRequestConfig): Promise<FilePreviewResource> => {
+    const context = () => JSON.stringify([getToken(), getTnCorpId(), getTnTenantId()]);
+    const initialContext = context();
+    const checkContext = () => {
+      if (config?.signal?.aborted || context() !== initialContext) throw new Error('登录或租户已切换，请重新打开文件');
+    };
+    const ticket = await this.post<{ ticket: string }>('createPreviewTicket', { fileId }, config);
+    checkContext();
+    const resource = await this.post<FilePreviewResource>('exchangePreviewTicket', { ticket: ticket.data.ticket }, config);
+    checkContext();
+    return resource.data;
+  };
+
   /** 获取七牛云上传token */
   getQiniuUploadToken = (): Promise<Fa.Ret<UploadToken>> => this.get('getQiniuUploadToken');
 
