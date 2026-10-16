@@ -63,3 +63,81 @@ export async function encryptRequest(
     rawKey.fill(0);
   }
 }
+
+export interface FieldCryptoPublicKey { v: 2; kid: string; publicKey: string }
+export interface FieldCryptoPreparation {
+  v: 2; kid: string; purpose: string; fields: string[];
+  replayEnabled: boolean; challengeId: string | null; expiresAt: string | null;
+}
+export interface FieldCryptoTarget { method: string; path: string }
+export interface PreparedCryptoRequest {
+  body: Record<string, unknown>;
+  headers: Record<string, string>;
+  preparation: FieldCryptoPreparation;
+}
+
+export function cryptoPreparePath(path: string): string {
+  const login = ['/api/base/admin/auth/loginV2', '/api/portal/auth/loginV2'].includes(path);
+  return '/api/base/security/crypto/' + (login ? 'prepare-login' : 'prepare');
+}
+
+export async function encryptField(value: string, key: FieldCryptoPublicKey, ready: FieldCryptoPreparation,
+  target: FieldCryptoTarget, field: string): Promise<string> {
+  if (!globalThis.crypto?.subtle) throw new Error('当前环境不支持安全加密，请使用 HTTPS 或 localhost');
+  const bytes = new TextEncoder().encode(value);
+  if (bytes.length > 4096) throw new Error('加密字段的 UTF-8 编码不能超过 4096 字节');
+  const rsa = await crypto.subtle.importKey('spki', Uint8Array.from(atob(key.publicKey), c => c.charCodeAt(0)),
+    { name: 'RSA-OAEP', hash: 'SHA-256' }, false, ['encrypt']);
+  const aes = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, ['encrypt']);
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const aad = new TextEncoder().encode(JSON.stringify([2, key.kid, ready.challengeId, ready.purpose, target.method, target.path, field]));
+  const ciphertext = await crypto.subtle.encrypt({ name: 'AES-GCM', iv, additionalData: aad, tagLength: 128 }, aes, bytes);
+  const raw = new Uint8Array(await crypto.subtle.exportKey('raw', aes));
+  try {
+    const encryptedKey = await crypto.subtle.encrypt({ name: 'RSA-OAEP' }, rsa, raw);
+    return [base64(new Uint8Array(encryptedKey)), base64(iv), base64(new Uint8Array(ciphertext))].join('.');
+  } finally { raw.fill(0); }
+}
+
+export function createFieldCryptoClient(transport: {
+  publicKey: () => Promise<FieldCryptoPublicKey>;
+  prepare: (target: FieldCryptoTarget) => Promise<FieldCryptoPreparation>;
+}) {
+  let cached: FieldCryptoPublicKey | undefined;
+  let fetching: Promise<FieldCryptoPublicKey> | undefined;
+  return {
+    async prepare(data: object, fields: string[], target: FieldCryptoTarget): Promise<PreparedCryptoRequest> {
+      if (!data || (Object.getPrototypeOf(data) !== Object.prototype && Object.getPrototypeOf(data) !== null)
+        || !Array.isArray(fields) || fields.length === 0 || new Set(fields).size !== fields.length
+        || fields.some(field => !/^[A-Za-z][A-Za-z0-9_]{0,63}$/.test(field)
+          || !Object.prototype.hasOwnProperty.call(data, field) || typeof (data as Record<string, unknown>)[field] !== 'string')) {
+        throw new Error('字段加密仅支持 JSON 中指定的顶层字符串字段');
+      }
+      if (fields.some(field => new TextEncoder().encode((data as Record<string, string>)[field]).length > 4096)) {
+        throw new Error('加密字段的 UTF-8 编码不能超过 4096 字节');
+      }
+      if (!['POST', 'PUT', 'PATCH'].includes(target.method) || !/^\/api\/[A-Za-z0-9/_-]+$/.test(target.path)) {
+        throw new Error('不支持的字段加密目标');
+      }
+      const ready = await transport.prepare(target);
+      if (!ready || ready.v !== 2 || typeof ready.kid !== 'string' || !/^[A-Za-z0-9._-]{1,64}$/.test(ready.kid)
+        || typeof ready.purpose !== 'string' || !/^[A-Z_]{1,64}$/.test(ready.purpose) || !Array.isArray(ready.fields)
+        || ready.fields.length !== fields.length || fields.some(field => !ready.fields.includes(field))
+        || typeof ready.replayEnabled !== 'boolean'
+        || (ready.replayEnabled ? typeof ready.challengeId !== 'string' || !/^[A-Za-z0-9_-]{43}$/.test(ready.challengeId) : ready.challengeId !== null)) {
+        throw new Error('字段加密准备信息无效，请重新准备请求');
+      }
+      if (!cached || cached.kid !== ready.kid) {
+        fetching ??= transport.publicKey().finally(() => { fetching = undefined; });
+        cached = await fetching;
+      }
+      if (cached.v !== 2 || cached.kid !== ready.kid) throw new Error('加密配置已变化，请重新准备请求');
+      const key = cached;
+      const body = { ...data } as Record<string, unknown>;
+      for (const field of fields) body[field] = await encryptField(body[field] as string, key, ready, target, field);
+      const headers: Record<string, string> = { FaCryptoVersion: '2', FaCryptoKid: key.kid };
+      if (ready.replayEnabled) headers.FaCryptoChallengeId = ready.challengeId!;
+      return { body, headers, preparation: ready };
+    },
+  };
+}

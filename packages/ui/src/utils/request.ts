@@ -5,6 +5,13 @@ import { addAuthHeaders, clearToken } from './cache';
 import { Fa } from '@ui/types';
 import { md5WithSecret } from "@ui/utils/cipher";
 import { useApiLoadingStore } from '@ui/stores';
+import { createFieldCryptoClient, cryptoPreparePath, type FieldCryptoPublicKey,
+  type FieldCryptoPreparation, type PreparedCryptoRequest } from '@fa/core/crypto';
+
+export interface FaRequestConfig extends AxiosRequestConfig {
+  crypto?: { fields: string[] };
+}
+type ManagedRequestConfig = FaRequestConfig & { _faCryptoManaged?: boolean };
 
 // Set config defaults when creating the instance
 const instance = axios.create({
@@ -66,7 +73,7 @@ instance.interceptors.request.use(
 
     // 通知全局api加载状态
     // dispatch({ type: '@@api/CHANGE_URL_LOADING', payload: { url: config.url, loading: true } });
-    useApiLoadingStore.getState().start(config.url || ''); // ← 直接用 url 作为唯一 key
+    if (!(config as ManagedRequestConfig)._faCryptoManaged) useApiLoadingStore.getState().start(config.url || '');
 
     return config;
   },
@@ -78,13 +85,13 @@ instance.interceptors.response.use(
   (response) => {
     // 通知全局api加载状态
     // dispatch({ type: '@@api/CHANGE_URL_LOADING', payload: { url: response.config.url, loading: false } });
-    useApiLoadingStore.getState().end(response.config.url || '');
+    if (!(response.config as ManagedRequestConfig)._faCryptoManaged) useApiLoadingStore.getState().end(response.config.url || '');
 
     return response;
   },
   (error) => {
     // 通知全局api加载状态
-    useApiLoadingStore.getState().end(get(error, 'config.url', '') || '');
+    if (!get(error, 'config._faCryptoManaged')) useApiLoadingStore.getState().end(get(error, 'config.url', '') || '');
 
     const httpStatus: number | undefined = get(error, 'response.status');
     const bizCode: number | undefined = get(error, 'response.data.status') ?? get(error, 'response.data.code');
@@ -146,28 +153,63 @@ export function requestProcess<R>(request: Promise<AxiosResponse<Fa.Ret<R>>>): P
     });
 }
 
-export function requestGet<R>(api: string, config?: AxiosRequestConfig): Promise<Fa.Ret<R>> {
+export function requestGet<R>(api: string, config?: FaRequestConfig): Promise<Fa.Ret<R>> {
+  if (config?.crypto) return Promise.reject(new Error('字段加密仅支持 JSON 请求体'));
   return requestProcess(instance.get(api, config));
 }
 
-export function requestGetBlob(api: string, config?: AxiosRequestConfig): Promise<Blob> {
+export function requestGetBlob(api: string, config?: FaRequestConfig): Promise<Blob> {
+  if (config?.crypto) return Promise.reject(new Error('字段加密仅支持 JSON 请求体'));
   return instance.get<Blob>(api, { responseType: 'blob', ...config }).then((res) => res.data);
 }
 
-export function requestDelete<R>(api: string, config?: AxiosRequestConfig): Promise<Fa.Ret<R>> {
+export function requestDelete<R>(api: string, config?: FaRequestConfig): Promise<Fa.Ret<R>> {
+  if (config?.crypto) return Promise.reject(new Error('字段加密仅支持 JSON 请求体'));
   return requestProcess(instance.delete(api, config));
 }
 
-export function requestPut<R>(api: string, body: object, config?: AxiosRequestConfig): Promise<Fa.Ret<R>> {
-  return requestProcess(instance.put(api, body, config));
+export function requestPut<R>(api: string, body: object, config?: FaRequestConfig): Promise<Fa.Ret<R>> {
+  return requestProcess(sendJson<Fa.Ret<R>>(api, 'PUT', body, config));
 }
 
-export function requestPost<R>(api: string, body: object, config?: AxiosRequestConfig): Promise<Fa.Ret<R>> {
-  return requestProcess(instance.post(api, body, config));
+export function requestPost<R>(api: string, body: object, config?: FaRequestConfig): Promise<Fa.Ret<R>> {
+  return requestProcess(sendJson<Fa.Ret<R>>(api, 'POST', body, config));
 }
 
-export function requestDownload(api: string, body: object, config?: AxiosRequestConfig): Promise<undefined> {
-  return instance.post(api, body, { responseType: 'blob', timeout: 60 * 60000, ...config }).then((res) => {
+const fieldCrypto = createFieldCryptoClient({
+  publicKey: async () => (await instance.get<Fa.Ret<FieldCryptoPublicKey>>('/api/base/security/crypto/public-key')).data.data,
+  prepare: async target => (await instance.post<Fa.Ret<FieldCryptoPreparation>>(cryptoPreparePath(target.path), target)).data.data,
+});
+
+// Demo 显式准备后可以等待、原样重放；普通业务只配置 crypto.fields。
+export function prepareCryptoRequest(api: string, body: object, fields: string[], method = 'POST'): Promise<PreparedCryptoRequest> {
+  const path = new URL(api, window.location.origin).pathname;
+  return fieldCrypto.prepare(body, fields, { method, path });
+}
+
+async function sendJson<T>(api: string, method: string, body: object, config?: FaRequestConfig): Promise<AxiosResponse<T>> {
+  if (!config?.crypto) return instance.request<T>({ ...config, url: api, method, data: body });
+  const loading = useApiLoadingStore.getState();
+  loading.start(api);
+  let sending = false;
+  try {
+    if (config.signal?.aborted) throw new axios.CanceledError();
+    const prepared = await prepareCryptoRequest(api, body, config.crypto.fields, method);
+    const managed: ManagedRequestConfig = { ...config, crypto: undefined, _faCryptoManaged: true,
+      url: api, method, data: prepared.body,
+      headers: axios.mergeConfig({ headers: config.headers }, { headers: prepared.headers }).headers };
+    sending = true;
+    return await instance.request<T>(managed);
+  } catch (error) {
+    if (!sending && !axios.isAxiosError(error) && config.headers?.hideErrorMsg !== '1') {
+      message.error(error instanceof Error ? error.message : '字段加密失败');
+    }
+    throw error;
+  } finally { loading.end(api); }
+}
+
+export function requestDownload(api: string, body: object, config?: FaRequestConfig): Promise<undefined> {
+  return sendJson<Blob>(api, 'POST', body, { responseType: 'blob', timeout: 60 * 60000, ...config }).then((res) => {
     const blob = new Blob([res.data], {
       type: res.headers['content-type'] || 'application/octet-stream',
     });
