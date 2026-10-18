@@ -1,4 +1,4 @@
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
 import { Button, Space } from 'antd';
 import { type AnimationEvent, cloneElement, isValidElement, type MouseEvent, type ReactNode, useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -77,7 +77,7 @@ type TriggerElementProps = {
  * 默认覆盖当前 Tab 主体，也可覆盖整个视口；自动跟随调用方所在的 Tab 面板显隐。
  */
 export default function FaFullContentModal({
-  displayMode = 'content',
+  displayMode: displayModeProp = 'content',
   title,
   children,
   triggerDom,
@@ -97,11 +97,24 @@ export default function FaFullContentModal({
 }: FaFullContentModalProps) {
   const [openInternal, setOpenInternal] = useState(defaultOpen);
   const open = openProp ?? openInternal;
+  const [displayMode, setDisplayMode] = useState(displayModeProp);
   const portalAnchorRef = useRef<HTMLSpanElement>(null);
   const [mountNode, setMountNode] = useState<HTMLElement | null>(null);
+  const [portalNode, setPortalNode] = useState<HTMLDivElement | null>(null);
   const [tabVisible, setTabVisible] = useState(true);
   const [rendered, setRendered] = useState(false);
   const [closing, setClosing] = useState(false);
+
+  useLayoutEffect(() => {
+    setDisplayMode(displayModeProp);
+  }, [displayModeProp]);
+
+  useLayoutEffect(() => {
+    const node = document.createElement('div');
+    node.style.display = 'contents';
+    setPortalNode(node);
+    return () => node.remove();
+  }, []);
 
   useLayoutEffect(() => {
     const anchor = portalAnchorRef.current;
@@ -124,6 +137,14 @@ export default function FaFullContentModal({
     observer.observe(tabPanel, { attributes: true, attributeFilter: ['aria-hidden', 'style'] });
     return () => observer.disconnect();
   }, [displayMode]);
+
+  useLayoutEffect(() => {
+    if (!portalNode || !mountNode) return;
+
+    // 移动同一个 Portal 容器，切换全屏时保留表单等子组件的状态。
+    mountNode.appendChild(portalNode);
+    return () => portalNode.remove();
+  }, [mountNode, portalNode]);
 
   useLayoutEffect(() => {
     if (!rendered || !tabVisible || !mountNode) return;
@@ -206,6 +227,7 @@ export default function FaFullContentModal({
       {trigger}
       {rendered &&
         mountNode &&
+        portalNode &&
         createPortal(
           <div
             className={`fa-full-content fa-bg-white fa-flex-column fa-full-content-modal ${closing ? 'fa-full-content-modal--exit' : 'fa-full-content-modal--enter'}`}
@@ -232,6 +254,13 @@ export default function FaFullContentModal({
                   </Button>
                 )}
                 {showCancel && <Button onClick={handleCancel}>{cancelText}</Button>}
+                <Button
+                  type="text"
+                  icon={displayMode === 'fullscreen' ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+                  onClick={() => setDisplayMode((mode) => (mode === 'fullscreen' ? 'content' : 'fullscreen'))}
+                  aria-label={displayMode === 'fullscreen' ? '退出全屏' : '全屏'}
+                  title={displayMode === 'fullscreen' ? '退出全屏' : '全屏'}
+                />
               </Space>
             </div>
 
@@ -239,7 +268,7 @@ export default function FaFullContentModal({
               {children}
             </div>
           </div>,
-          mountNode,
+          portalNode,
         )}
     </>
   );
