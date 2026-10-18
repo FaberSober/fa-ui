@@ -93,6 +93,9 @@ instance.interceptors.response.use(
     // 通知全局api加载状态
     if (!get(error, 'config._faCryptoManaged')) useApiLoadingStore.getState().end(get(error, 'config.url', '') || '');
 
+    // 组件卸载、切换查询时会主动取消旧请求；仍向调用方拒绝，但不作为业务错误弹窗。
+    if (axios.isCancel(error)) return Promise.reject(error);
+
     const httpStatus: number | undefined = get(error, 'response.status');
     const bizCode: number | undefined = get(error, 'response.data.status') ?? get(error, 'response.data.code');
     const bizMsg: string | undefined = get(error, 'response.data.message');

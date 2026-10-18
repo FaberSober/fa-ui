@@ -22,6 +22,8 @@ function setup({fail,delay}={}) {
       return {status:200,headers:{},config,data:{code:200,data:{v:2,kid:'test',purpose:'ADMIN_LOGIN',fields:['password'],replayEnabled:true,challengeId:Buffer.from(crypto.getRandomValues(new Uint8Array(32))).toString('base64url'),expiresAt:null}}};
     }
     if(config.url.endsWith('/public-key')) return {status:200,headers:{},config,data:{code:200,data:fail==='encrypt'?{...key,publicKey:'invalid'}:key}};
+    if(delay) await delay;
+    if(fail==='network') throw new axios.AxiosError('network failed','ERR_NETWORK',config);
     if(fail==='business') throw new axios.AxiosError('failed','ERR_BAD_REQUEST',config,{}, {status:400,data:{message:'business failed'},config});
     return {status:200,headers:{},config,data:{code:200,data:{tokenValue:'test-token'}}};
   };
@@ -68,4 +70,24 @@ test('ordinary JSON calls keep their existing path and data; FormData cannot sil
   assert.equal(env.calls.length,1);assert.deepEqual(env.calls[0].body,body);assert.equal(env.calls[0].headers.extra,'value');assert.equal(env.counts.size,0);
   await assert.rejects(env.api.requestPost(api,new FormData(),{crypto:{fields:['password']}}));
   assert.equal(env.calls.length,1);assert.equal(env.counts.size,0);
+});
+
+test('canceled requests reject silently, clear loading and allow subsequent requests; real network errors still report',async()=>{
+  const env=setup();const canceled=new AbortController();canceled.abort();
+  await assert.rejects(env.api.requestPost('/api/wordOptions',{}, {signal:canceled.signal}),axios.isCancel);
+  assert.equal(env.calls.length,0);assert.equal(env.errors.length,0);assert.equal(env.counts.size,0);
+
+  let release;const delay=new Promise(resolve=>{release=resolve});const pendingEnv=setup({delay});
+  const controller=new AbortController();
+  const pending=pendingEnv.api.requestPost('/api/wordOptions',{}, {signal:controller.signal});
+  await new Promise(resolve=>setImmediate(resolve));
+  assert.equal(pendingEnv.calls.length,1);assert.equal(pendingEnv.counts.get('/api/wordOptions'),1);
+  controller.abort();release();await assert.rejects(pending,axios.isCancel);
+  assert.equal(pendingEnv.errors.length,0);assert.equal(pendingEnv.counts.size,0);
+  await pendingEnv.api.requestPost('/api/wordOptions',{});
+  assert.equal(pendingEnv.calls.length,2);assert.equal(pendingEnv.counts.size,0);
+
+  const failed=setup({fail:'network'});
+  await assert.rejects(failed.api.requestPost('/api/wordOptions',{}));
+  assert.equal(failed.errors.length,1);assert.equal(failed.counts.size,0);
 });
