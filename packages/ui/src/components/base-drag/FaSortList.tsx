@@ -1,4 +1,4 @@
-import React, { CSSProperties, ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import {
   SortableContext,
@@ -27,6 +27,8 @@ export interface FaSortListProps<T> {
   vertical?: boolean;
   /** true-只变更y坐标，固定x坐标 */
   horizontal?: boolean;
+  /** 父容器缩放比例，将视口中的排序位移换算为容器内位移。 */
+  scale?: number;
 }
 
 /**
@@ -47,6 +49,7 @@ export default function FaSortList<T>({
   type = 'vertical',
   vertical,
   horizontal,
+  scale,
 }: FaSortListProps<T>) {
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -58,9 +61,10 @@ export default function FaSortList<T>({
   function handleDragEnd(event: any) {
     const { active, over } = event;
 
-    if (active.id !== over.id) {
+    if (over && active.id !== over.id) {
       const oldIndex = findIndex(list, (i) => getRowKey(i) === active.id);
       const newIndex = findIndex(list, (i) => getRowKey(i) === over.id);
+      if (oldIndex < 0 || newIndex < 0) return;
 
       // const moveItems = [list[oldIndex], list[newIndex]]
       const newList = arrayMove(list, oldIndex, newIndex);
@@ -96,6 +100,7 @@ export default function FaSortList<T>({
               handleNode={handleNode}
               vertical={vertical}
               horizontal={horizontal}
+              scale={scale}
               style={itemStyle}
               handleStyle={handleStyle}
             >

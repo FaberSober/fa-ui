@@ -15,6 +15,8 @@ export interface FaSortItemProps {
   vertical?: boolean;
   /** true-只变更y坐标，固定x坐标 */
   horizontal?: boolean;
+  /** 父容器缩放比例，碰撞检测仍使用原始视口坐标。 */
+  scale?: number;
   dragging?: boolean;
   onClick?: (e: React.MouseEvent) => void;
 }
@@ -33,14 +35,17 @@ export default function FaSortItem({
   children,
   vertical,
   horizontal,
+  scale = 1,
   dragging,
   onClick,
 }: FaSortItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: id });
+  const translateX = (transform?.x || 0) / scale;
+  const translateY = (transform?.y || 0) / scale;
 
   const styleTrans: CSSProperties = {
     // transform: CSS.Transform.toString(transform),
-    transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : '',
+    transform: transform ? `translate3d(${translateX}px, ${translateY}px, 0)` : '',
     transition,
     cursor: handle ? 'default' : 'grab',
     display: 'flex',
@@ -53,16 +58,17 @@ export default function FaSortItem({
   };
   if (vertical) {
     styleTrans.transform = transform
-      ? `translate3d(${vertical ? 0 : transform.x}px, ${vertical ? transform.y : 0}px, 0)`
+      ? `translate3d(0px, ${translateY}px, 0)`
       : '';
   }
   if (horizontal) {
     styleTrans.transform = transform
-      ? `translate3d(${horizontal ? transform.x : 0}px, ${horizontal ? 0 : transform.y}px, 0)`
+      ? `translate3d(${translateX}px, 0px, 0)`
       : '';
   }
 
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: useSortable 提供 role 和键盘属性，拖拽把手承接交互。
     <div ref={setNodeRef} className={className} style={{ ...styleTrans, ...style }} onClick={onClick} {...(handle ? {} : listeners)} {...attributes}>
       {children}
       {handle && (
