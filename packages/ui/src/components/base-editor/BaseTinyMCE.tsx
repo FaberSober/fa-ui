@@ -89,6 +89,10 @@ const BaseTinyMCE = React.forwardRef<HTMLElement, BaseTinyMCEProps>(function Bas
         onInit={(_: any, editor: any) => {
           console.log('BaseTinyMCE#onInit')
           editorRef.current = editor;
+          // iframe 无法继承父页面主题，显式同步原生滚动条配色。
+          if (!editor.inline) {
+            editor.getDoc().documentElement.style.colorScheme = themeDark ? 'dark' : 'light';
+          }
           setReady(true)
           if (onReady) onReady();
         }}
