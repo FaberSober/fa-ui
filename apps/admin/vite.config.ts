@@ -8,6 +8,10 @@ import * as path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
+  if (mode === 'development') {
+    const sharedEnv = loadEnv(mode, path.resolve(__dirname, '../../../..'), 'SERVER_PORT');
+    process.env.SERVER_PORT = sharedEnv.SERVER_PORT || '80';
+  }
   const env = loadEnv(mode, process.cwd());
   console.log('loadEnv(mode, process.cwd())', env);
   return {
