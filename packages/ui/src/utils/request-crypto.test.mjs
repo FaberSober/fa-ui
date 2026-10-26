@@ -10,7 +10,8 @@ const {outputText} = ts.transpileModule(readFileSync(new URL('./request.ts',impo
 const pair = await crypto.subtle.generateKey({name:'RSA-OAEP',modulusLength:2048,publicExponent:new Uint8Array([1,0,1]),hash:'SHA-256'},true,['encrypt','decrypt']);
 const key = {v:2,kid:'test',publicKey:Buffer.from(await crypto.subtle.exportKey('spki',pair.publicKey)).toString('base64')};
 const api = '/api/base/admin/auth/loginV2';
-function setup({fail,delay}={}) {
+const serverCrypto = crypto;
+function setup({fail,delay,origin='http://localhost'}={}) {
   const calls=[],errors=[],counts=new Map();
   const state={start:url=>counts.set(url,(counts.get(url)??0)+1),end:url=>{const count=(counts.get(url)??0)-1;if(count<=0)counts.delete(url);else counts.set(url,count)}};
   const adapter=async config=>{
@@ -19,7 +20,7 @@ function setup({fail,delay}={}) {
     if(config.url.endsWith('/prepare-login')) {
       if(delay) await delay;
       if(fail==='prepare') throw new axios.AxiosError('failed','ERR_BAD_REQUEST',config,{}, {status:400,data:{message:'prepare failed'},config});
-      return {status:200,headers:{},config,data:{code:200,data:{v:2,kid:'test',purpose:'ADMIN_LOGIN',fields:['password'],replayEnabled:true,challengeId:Buffer.from(crypto.getRandomValues(new Uint8Array(32))).toString('base64url'),expiresAt:null}}};
+      return {status:200,headers:{},config,data:{code:200,data:{v:2,kid:'test',purpose:'ADMIN_LOGIN',fields:['password'],replayEnabled:true,challengeId:Buffer.from(serverCrypto.getRandomValues(new Uint8Array(32))).toString('base64url'),expiresAt:null}}};
     }
     if(config.url.endsWith('/public-key')) return {status:200,headers:{},config,data:{code:200,data:fail==='encrypt'?{...key,publicKey:'invalid'}:key}};
     if(delay) await delay;
@@ -32,7 +33,7 @@ function setup({fail,delay}={}) {
     './cache':{addAuthHeaders:headers=>headers.set('Authorization','test-auth'),clearToken:()=>{}},'@ui/types':{},
     '@ui/utils/cipher':{md5WithSecret:(value,timestamp)=>`${value}@${timestamp}`},'@ui/stores':{useApiLoadingStore:{getState:()=>state}},'@fa/core/crypto':core};
   const exports={};
-  runInNewContext(outputText,{exports,require:name=>{assert.ok(name in deps,name);return deps[name]},window:{location:{origin:'http://localhost',pathname:'/login',search:''}},URL,Blob,setTimeout,console});
+  runInNewContext(outputText,{exports,require:name=>{assert.ok(name in deps,name);return deps[name]},window:{location:{origin,pathname:'/login',search:''}},URL,Blob,setTimeout,console});
   return {api:exports,calls,errors,counts};
 }
 test('request layer encrypts before body signature, merges headers and never mutates caller data',async()=>{
@@ -45,6 +46,33 @@ test('request layer encrypts before body signature, merges headers and never mut
   assert.equal(sent.headers.FaCryptoVersion,'2');assert.equal(sent.headers.Authorization,'test-auth');assert.equal(sent.headers.FaDeviceTrustToken,'test-trust');
   assert.equal(sent.headers.bs,`${JSON.stringify(sent.body)}@${sent.headers.timestamp}`);
   assert.equal(env.calls.length,3);assert.equal(env.counts.size,0);
+});
+test('HTTP IP login keeps encrypted payload, signatures and headers without browser secure context settings',async t=>{
+  const webCrypto=crypto;
+  t.mock.getter(globalThis,'crypto',()=>({getRandomValues:webCrypto.getRandomValues.bind(webCrypto)}));
+  const env=setup({origin:'http://10.7.200.179'});
+  const body={username:'account',password:' 中文🔐 password '};
+  await env.api.requestPost(api,body,{crypto:{fields:['password']},headers:{FaDeviceTrustToken:'test-trust'}});
+  const sent=env.calls.find(call=>call.url===api);
+  const [encryptedKey,iv,ciphertext]=sent.body.password.split('.').map(value=>Buffer.from(value,'base64'));
+  const rawKey=await webCrypto.subtle.decrypt({name:'RSA-OAEP'},pair.privateKey,encryptedKey);
+  const aes=await webCrypto.subtle.importKey('raw',rawKey,'AES-GCM',false,['decrypt']);
+  const aad=new TextEncoder().encode(JSON.stringify([2,'test',sent.headers.FaCryptoChallengeId,'ADMIN_LOGIN','POST',api,'password']));
+  assert.equal(new TextDecoder().decode(await webCrypto.subtle.decrypt({name:'AES-GCM',iv,additionalData:aad,tagLength:128},aes,ciphertext)),body.password);
+  assert.equal(sent.headers.bs,`${JSON.stringify(sent.body)}@${sent.headers.timestamp}`);
+  assert.equal(sent.headers.FaDeviceTrustToken,'test-trust');assert.equal(sent.headers.Authorization,'test-auth');
+  assert.equal(env.calls.length,3);assert.equal(env.counts.size,0);assert.equal(env.errors.length,0);
+});
+test('HTTP encryption failures clean loading and never submit plaintext login',async t=>{
+  const webCrypto=crypto;
+  for(const fail of ['encrypt','random']) {
+    const mock=t.mock.getter(globalThis,'crypto',()=>({getRandomValues:fail==='random'?()=>{throw new Error('random failed')}:webCrypto.getRandomValues.bind(webCrypto)}));
+    const env=setup({fail,origin:'http://10.7.200.179'});
+    await assert.rejects(env.api.requestPost(api,{username:'account',password:'password'},{crypto:{fields:['password']}}));
+    assert.equal(env.calls.some(call=>call.url===api||call.url.endsWith('/login')),false);
+    assert.equal(env.counts.size,0);assert.equal(env.errors.length,1);
+    mock.mock.restore();
+  }
 });
 test('loading covers preparation, parallel requests have distinct challenges and public key is cached',async()=>{
   let release;const delay=new Promise(resolve=>{release=resolve});const env=setup({delay});

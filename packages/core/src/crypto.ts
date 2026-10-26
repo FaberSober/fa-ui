@@ -32,10 +32,47 @@ function base64(bytes: Uint8Array): string {
   return btoa(String.fromCharCode(...bytes));
 }
 
+async function encryptBytes(plaintext: Uint8Array<ArrayBuffer>, publicKey: string, aad: Uint8Array<ArrayBuffer>) {
+  if (!globalThis.crypto?.getRandomValues) throw new Error('当前浏览器不支持安全随机数，请升级浏览器');
+  const subtle = globalThis.crypto.subtle;
+  if (!subtle) {
+    // HTTP 下仍有 getRandomValues；显式提供 OAEP seed，避免密码库自行降级随机源。
+    const { default: forge } = await import('node-forge');
+    const rsa = forge.pki.publicKeyFromAsn1(forge.asn1.fromDer(atob(publicKey)));
+    const rawKey = crypto.getRandomValues(new Uint8Array(32));
+    try {
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const cipher = forge.cipher.createCipher('AES-GCM', String.fromCharCode(...rawKey));
+      cipher.start({ iv: String.fromCharCode(...iv), additionalData: String.fromCharCode(...aad), tagLength: 128 });
+      cipher.update(forge.util.createBuffer(plaintext));
+      if (!cipher.finish()) throw new Error('请求加密失败');
+      const encryptedKey = rsa.encrypt(String.fromCharCode(...rawKey), 'RSA-OAEP', {
+        md: forge.md.sha256.create(), mgf1: { md: forge.md.sha256.create() },
+        seed: String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32))),
+      });
+      return {
+        encryptedKey: btoa(encryptedKey), iv: base64(iv),
+        ciphertext: btoa(cipher.output.getBytes() + cipher.mode.tag.getBytes()),
+      };
+    } finally { rawKey.fill(0); }
+  }
+  const rsa = await subtle.importKey('spki', Uint8Array.from(atob(publicKey), c => c.charCodeAt(0)),
+    { name: 'RSA-OAEP', hash: 'SHA-256' }, false, ['encrypt']);
+  const key = await subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, ['encrypt']);
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ciphertext = await subtle.encrypt({ name: 'AES-GCM', iv, additionalData: aad, tagLength: 128 }, key, plaintext);
+  const rawKey = new Uint8Array(await subtle.exportKey('raw', key));
+  try {
+    const encryptedKey = await subtle.encrypt({ name: 'RSA-OAEP' }, rsa, rawKey);
+    return {
+      encryptedKey: base64(new Uint8Array(encryptedKey)), iv: base64(iv), ciphertext: base64(new Uint8Array(ciphertext)),
+    };
+  } finally { rawKey.fill(0); }
+}
+
 export async function encryptRequest(
   data: object, publicKey: CryptoPublicKey, preparation: CryptoPreparation, target: CryptoTarget,
 ): Promise<CryptoEnvelope> {
-  if (!globalThis.crypto?.subtle) throw new Error('当前环境不支持安全加密，请使用 HTTPS 或 localhost');
   if (publicKey.v !== 1 || preparation.v !== 1 || publicKey.kid !== preparation.kid) {
     throw new Error('加密配置已变化，请重新准备请求');
   }
@@ -44,24 +81,13 @@ export async function encryptRequest(
   }
   const plaintext = new TextEncoder().encode(JSON.stringify(data));
   if (plaintext.length > 4096) throw new Error('业务 JSON 的 UTF-8 编码不能超过 4096 字节');
-  const rsa = await crypto.subtle.importKey('spki', Uint8Array.from(atob(publicKey.publicKey), c => c.charCodeAt(0)),
-    { name: 'RSA-OAEP', hash: 'SHA-256' }, false, ['encrypt']);
-  const key = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, ['encrypt']);
-  const iv = crypto.getRandomValues(new Uint8Array(12));
   const aad = new TextEncoder().encode(JSON.stringify([
     1, publicKey.kid, preparation.challengeId, target.purpose, target.method, target.path,
   ]));
-  const ciphertext = await crypto.subtle.encrypt({ name: 'AES-GCM', iv, additionalData: aad, tagLength: 128 }, key, plaintext);
-  const rawKey = new Uint8Array(await crypto.subtle.exportKey('raw', key));
-  try {
-    const encryptedKey = await crypto.subtle.encrypt({ name: 'RSA-OAEP' }, rsa, rawKey);
-    return {
-      v: 1, kid: publicKey.kid, challengeId: preparation.challengeId, purpose: target.purpose,
-      encryptedKey: base64(new Uint8Array(encryptedKey)), iv: base64(iv), ciphertext: base64(new Uint8Array(ciphertext)),
-    };
-  } finally {
-    rawKey.fill(0);
-  }
+  return {
+    v: 1, kid: publicKey.kid, challengeId: preparation.challengeId, purpose: target.purpose,
+    ...await encryptBytes(plaintext, publicKey.publicKey, aad),
+  };
 }
 
 export interface FieldCryptoPublicKey { v: 2; kid: string; publicKey: string }
@@ -83,20 +109,11 @@ export function cryptoPreparePath(path: string): string {
 
 export async function encryptField(value: string, key: FieldCryptoPublicKey, ready: FieldCryptoPreparation,
   target: FieldCryptoTarget, field: string): Promise<string> {
-  if (!globalThis.crypto?.subtle) throw new Error('当前环境不支持安全加密，请使用 HTTPS 或 localhost');
   const bytes = new TextEncoder().encode(value);
   if (bytes.length > 4096) throw new Error('加密字段的 UTF-8 编码不能超过 4096 字节');
-  const rsa = await crypto.subtle.importKey('spki', Uint8Array.from(atob(key.publicKey), c => c.charCodeAt(0)),
-    { name: 'RSA-OAEP', hash: 'SHA-256' }, false, ['encrypt']);
-  const aes = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, ['encrypt']);
-  const iv = crypto.getRandomValues(new Uint8Array(12));
   const aad = new TextEncoder().encode(JSON.stringify([2, key.kid, ready.challengeId, ready.purpose, target.method, target.path, field]));
-  const ciphertext = await crypto.subtle.encrypt({ name: 'AES-GCM', iv, additionalData: aad, tagLength: 128 }, aes, bytes);
-  const raw = new Uint8Array(await crypto.subtle.exportKey('raw', aes));
-  try {
-    const encryptedKey = await crypto.subtle.encrypt({ name: 'RSA-OAEP' }, rsa, raw);
-    return [base64(new Uint8Array(encryptedKey)), base64(iv), base64(new Uint8Array(ciphertext))].join('.');
-  } finally { raw.fill(0); }
+  const { encryptedKey, iv, ciphertext } = await encryptBytes(bytes, key.publicKey, aad);
+  return [encryptedKey, iv, ciphertext].join('.');
 }
 
 export function createFieldCryptoClient(transport: {

@@ -13,6 +13,9 @@
     }
   },
   "license": "MIT",
+  "dependencies": {
+    "node-forge": "1.4.0"
+  },
   "scripts": {
     "postinstall": "rimraf /s/d dist && rimraf /s/d .turbo",
     "ncu": "ncu -u --timeout 120000 -x react -x react-dom -x @types/react -x @types/react-dom",
@@ -25,6 +28,7 @@
   "devDependencies": {
     "@fa/tsconfig": "workspace:*",
     "@types/lodash": "4.17.20",
+    "@types/node-forge": "1.3.14",
     "@types/react": "18.3.12",
     "@types/uuid": "10.0.0",
     "axios": "1.11.0",
