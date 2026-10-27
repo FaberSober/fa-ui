@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Input, InputNumber, Select, Switch, Tooltip } from 'antd';
-import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Dropdown, Input, InputNumber, Switch, Tooltip } from 'antd';
+import { DeleteOutlined, PlusOutlined, SwapOutlined } from '@ant-design/icons';
 import { buildPath, formatKeyLabel, getContainerKeys, getContainerMeta } from '../fa-json-view/utils';
 
 export type JsonPrimitive = string | number | boolean | null;
@@ -21,6 +21,8 @@ export interface JsonEditContext {
   maxNodes: number;
   count: number;
   truncated: boolean;
+  searchPaths?: Set<string>;
+  activeSearchPath?: string;
 }
 
 export interface FaJsonEditNodeProps {
@@ -55,7 +57,7 @@ function renderTypeOptions() {
   ];
 }
 
-function KeyEditor({ label, onRename }: { label: string; onRename: (value: string) => string | undefined }) {
+function KeyEditor({ label, onRename, readOnly }: { label: string; onRename: (value: string) => string | undefined; readOnly: boolean }) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(label);
   const [error, setError] = useState<string>();
@@ -64,22 +66,22 @@ function KeyEditor({ label, onRename }: { label: string; onRename: (value: strin
     if (!editing) setDraft(label);
   }, [editing, label]);
 
+  if (readOnly) return <span className="fa-json-edit-key">{formatKeyLabel(label)}</span>;
+
   if (!editing) {
     return (
-      <>
-        <span className="fa-json-edit-key">{formatKeyLabel(label)}</span>
         <Button
           type="text"
           size="small"
-          className="fa-json-edit-inline-btn"
-          icon={<EditOutlined />}
+          className="fa-json-edit-key fa-json-edit-key-button"
+          aria-label={`修改属性名 ${label}`}
+          title="点击修改属性名"
           onClick={(event) => {
             event.stopPropagation();
             setError(undefined);
             setEditing(true);
           }}
-        />
-      </>
+        >{formatKeyLabel(label)}</Button>
     );
   }
 
@@ -129,12 +131,12 @@ function NodeActions({
     <span className="fa-json-edit-actions" onClick={(event) => event.stopPropagation()}>
       {isContainerNode && (
         <Tooltip title="新增子项">
-          <Button type="text" size="small" icon={<PlusOutlined />} onClick={() => onAdd(path)} />
+          <Button type="text" size="small" aria-label="新增子项" className={path.length ? 'fa-json-edit-row-control' : undefined} icon={<PlusOutlined />} onClick={() => onAdd(path)} />
         </Tooltip>
       )}
       {path.length > 0 && (
         <Tooltip title="删除">
-          <Button type="text" danger size="small" icon={<DeleteOutlined />} onClick={() => onDelete(path)} />
+          <Button type="text" danger size="small" aria-label="删除属性" className="fa-json-edit-delete fa-json-edit-row-control" icon={<DeleteOutlined />} onClick={() => onDelete(path)} />
         </Tooltip>
       )}
     </span>
@@ -157,17 +159,10 @@ function ScalarEditor({
   const type = getScalarType(value);
   return (
     <span className="fa-json-edit-scalar">
-      {!readOnly && (
-        <Select
-          size="small"
-          value={type}
-          options={renderTypeOptions()}
-          onChange={(nextType) => onChangeType(path, nextType as JsonNodeType)}
-        />
-      )}
       {type === 'string' && (
         <Input.TextArea
           size="small"
+          variant="borderless"
           value={value as string}
           readOnly={readOnly}
           autoSize={{ minRows: 1, maxRows: 6 }}
@@ -177,6 +172,7 @@ function ScalarEditor({
       {type === 'number' && (
         <InputNumber
           size="small"
+          variant="borderless"
           value={value as number}
           disabled={readOnly}
           onChange={(nextValue) => {
@@ -188,6 +184,16 @@ function ScalarEditor({
         <Switch size="small" checked={value as boolean} disabled={readOnly} onChange={(nextValue) => onUpdate(path, nextValue)} />
       )}
       {type === 'null' && <span className="fa-json-edit-null">null</span>}
+      {!readOnly && (
+        <Dropdown trigger={['click']} menu={{
+          items: renderTypeOptions().map(({ value, label }) => ({ key: value, label })),
+          selectable: true,
+          selectedKeys: [type],
+          onClick: ({ key, domEvent }) => { domEvent.stopPropagation(); onChangeType(path, key as JsonNodeType); },
+        }}>
+          <Button type="text" size="small" className="fa-json-edit-row-control" aria-label="修改值类型" title="修改值类型" icon={<SwapOutlined />} />
+        </Dropdown>
+      )}
     </span>
   );
 }
@@ -219,12 +225,13 @@ export default function FaJsonEditNode({
   }
 
   const path = buildPath(segments);
+  const searchClass = ctx.activeSearchPath === path ? ' fa-json-edit-search-active' : ctx.searchPaths?.has(path) ? ' fa-json-edit-search-match' : '';
   const key = typeof label === 'string' ? label : undefined;
-  const keyContent = key !== undefined ? <KeyEditor label={key} onRename={(nextKey) => onRename(segments, nextKey)} /> : null;
+  const keyContent = key !== undefined ? <KeyEditor label={key} readOnly={readOnly} onRename={(nextKey) => onRename(segments, nextKey)} /> : null;
 
   if (!isJsonContainer(value)) {
     return (
-      <div className={`fa-json-edit-row${typeof value === 'string' ? ' fa-json-edit-text-row' : ''}`} style={{ paddingLeft: level * 16 }}>
+      <div className={`fa-json-edit-row${typeof value === 'string' ? ' fa-json-edit-text-row' : ''}${searchClass}`} style={{ paddingLeft: level * 16 }}>
         {keyContent}
         {label !== undefined && <span className="fa-json-edit-colon">: </span>}
         <ScalarEditor value={value} path={segments} readOnly={readOnly} onUpdate={onUpdate} onChangeType={onChangeType} />
@@ -241,7 +248,7 @@ export default function FaJsonEditNode({
   return (
     <div>
       <div
-        className={`fa-json-edit-row fa-json-edit-container-row${isEmpty ? '' : ' fa-json-edit-row-clickable'}`}
+        className={`fa-json-edit-row fa-json-edit-container-row${isEmpty ? '' : ' fa-json-edit-row-clickable'}${searchClass}`}
         style={{ paddingLeft: level * 16 }}
         onClick={() => !isEmpty && onToggle(path)}
       >

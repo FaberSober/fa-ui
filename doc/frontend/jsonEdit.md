@@ -25,7 +25,7 @@ export default function Demo() {
 | defaultMode        | `'tree' \| 'text'`        | `'tree'` | 默认编辑模式                               |
 | defaultExpandDepth | number \| `'all'`         | `'all'`  | 图形模式默认展开层级                       |
 | readOnly           | boolean                   | `false`  | 是否只读                                   |
-| showToolbar        | boolean                   | `true`   | 是否展示模式切换、格式化、压缩和复制工具栏 |
+| showToolbar        | boolean                   | `true`   | 是否展示模式切换、格式化、压缩、复制和搜索工具栏 |
 | maxHeight          | number                    | `400`    | 内容区最大高度（px）                       |
 | indent             | number                    | `2`      | 格式化 JSON 的缩进空格数                   |
 | maxRenderNodes     | number                    | `5000`   | 图形模式节点上限                           |
@@ -35,6 +35,17 @@ export default function Demo() {
 ### 图形模式
 
 图形模式支持修改字符串、数字、布尔值和 null 类型，修改对象 key，新增或删除对象字段，以及新增或删除数组项。
+
+点击属性名进入重命名；值编辑默认无边框，获得焦点时显示编辑提示。悬浮或聚焦行后显示类型切换、新增和删除操作，类型切换收在菜单中；触屏设备保留操作入口，只读模式不提供修改入口。
+
+### 搜索
+
+工具栏输入关键词后按回车或点击搜索，支持不区分大小写的字面查找，显示匹配数量，并通过上下箭头循环定位。
+
+工具栏根据编辑器宽度自适应，窄面板隐藏模式按钮文字，保留图标、提示和无障碍名称；未搜索时隐藏结果计数和翻页按钮，优先保持单行。
+
+- 图形模式匹配属性名和标量值，每行计为一个结果，搜索范围遵守 `maxRenderNodes`。定位时自动展开匹配项的祖先节点并高亮，清空搜索后恢复原有折叠状态。
+- 源文本模式直接匹配文本并选中结果，非法 JSON 也可搜索。搜索不会修改 JSON 或触发 `onChange`。
 
 ### 源文本模式
 

@@ -1,10 +1,11 @@
-import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Alert, Button, Input, Space, Tooltip } from 'antd';
-import { CompressOutlined, CopyOutlined, FileTextOutlined, FormatPainterOutlined, PartitionOutlined } from '@ant-design/icons';
+import { CompressOutlined, CopyOutlined, DownOutlined, FileTextOutlined, FormatPainterOutlined, PartitionOutlined, UpOutlined } from '@ant-design/icons';
 import { copyToClipboard } from '@ui/utils/utils';
 import { buildPath, computeInitialExpanded } from '../fa-json-view/utils';
 import FaJsonEditNode from './FaJsonEditNode';
 import type { JsonEditContext, JsonValue } from './FaJsonEditNode';
+import { findJsonMatches, findTextMatches, type JsonSearchMatch } from './search';
 import './FaJsonEdit.css';
 
 export type { JsonValue };
@@ -131,7 +132,39 @@ export default function FaJsonEdit({
     return parsed.status === 'ok' ? computeInitialExpanded(parsed.value, defaultExpandDepth, maxRenderNodes) : new Set();
   });
   const [modeError, setModeError] = useState<string>();
+  const [search, setSearch] = useState({ query: '', index: 0 });
+  const bodyRef = useRef<HTMLDivElement>(null);
   const parsed = useMemo(() => parseJson(text), [text]);
+  const matches = useMemo<JsonSearchMatch[]>(() => {
+    if (mode === 'text') return findTextMatches(text, search.query);
+    return parsed.status === 'ok' ? findJsonMatches(parsed.value, search.query, maxRenderNodes).map((path) => ({ path })) : [];
+  }, [mode, text, parsed, search.query, maxRenderNodes]);
+  const matchIndex = Math.min(search.index, Math.max(0, matches.length - 1));
+  const activeMatch = matches[matchIndex];
+  const searchPaths = new Set(matches.flatMap((match) => 'path' in match ? [buildPath(match.path)] : []));
+  const visibleExpanded = activeMatch && 'path' in activeMatch ? new Set(expanded) : expanded;
+  if (activeMatch && 'path' in activeMatch) {
+    for (let index = 0; index < activeMatch.path.length; index += 1) {
+      visibleExpanded.add(buildPath(activeMatch.path.slice(0, index)));
+    }
+  }
+
+  // 仅在主动查找或切换模式时定位，避免编辑过程中抢夺光标。
+  useEffect(() => {
+    if (!activeMatch) return;
+    if ('path' in activeMatch) {
+      bodyRef.current?.querySelector('.fa-json-edit-search-active')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    } else {
+      const textarea = bodyRef.current?.querySelector('textarea');
+      textarea?.setSelectionRange(activeMatch.start, activeMatch.end);
+      textarea?.focus();
+    }
+  }, [search, mode]);
+
+  function moveSearch(step: number) {
+    if (!matches.length) return;
+    setSearch({ ...search, index: (matchIndex + step + matches.length) % matches.length });
+  }
 
   useEffect(() => {
     if (!isControlled) return;
@@ -223,7 +256,8 @@ export default function FaJsonEdit({
       const parent = getAtPath(parsed.value, path.slice(0, -1));
       if (!parent || Array.isArray(parent) || !isJsonContainer(parent)) return '字段名无法修改';
       const oldKey = String(path[path.length - 1]);
-      if (nextKey !== oldKey && Object.prototype.hasOwnProperty.call(parent, nextKey)) return '字段名已存在';
+      if (nextKey === oldKey) return;
+      if (Object.prototype.hasOwnProperty.call(parent, nextKey)) return '字段名已存在';
 
       const nextValue = updateAtPath(parsed.value, path.slice(0, -1), (current) => {
         const object = { ...(current as Record<string, JsonValue>) };
@@ -236,7 +270,10 @@ export default function FaJsonEdit({
     [handleTreeChange, parsed],
   );
 
-  const context: JsonEditContext = { maxNodes: maxRenderNodes, count: 0, truncated: false };
+  const context: JsonEditContext = {
+    maxNodes: maxRenderNodes, count: 0, truncated: false, searchPaths,
+    activeSearchPath: activeMatch && 'path' in activeMatch ? buildPath(activeMatch.path) : undefined,
+  };
   let body: React.ReactNode;
 
   if (mode === 'text') {
@@ -270,7 +307,7 @@ export default function FaJsonEdit({
         value={parsed.value}
         segments={[]}
         level={0}
-        expanded={expanded}
+        expanded={visibleExpanded}
         onToggle={(path) =>
           setExpanded((previous) => {
             const next = new Set(previous);
@@ -294,25 +331,27 @@ export default function FaJsonEdit({
     <div className={`fa-json-edit${className ? ` ${className}` : ''}`} style={style}>
       {showToolbar && (
         <div className="fa-json-edit-toolbar">
-          <Space size={4}>
+          <Space size={4} className="fa-json-edit-tools">
             <Tooltip title="图形编辑">
               <Button
                 size="small"
+                aria-label="图形编辑"
                 type={mode === 'tree' ? 'primary' : 'default'}
                 icon={<PartitionOutlined />}
                 onClick={() => handleModeChange('tree')}
               >
-                图形
+                <span className="fa-json-edit-mode-label">图形</span>
               </Button>
             </Tooltip>
             <Tooltip title="源文本编辑">
               <Button
                 size="small"
+                aria-label="源文本编辑"
                 type={mode === 'text' ? 'primary' : 'default'}
                 icon={<FileTextOutlined />}
                 onClick={() => handleModeChange('text')}
               >
-                源文本
+                <span className="fa-json-edit-mode-label">源文本</span>
               </Button>
             </Tooltip>
             <Tooltip title="格式化 JSON">
@@ -325,10 +364,19 @@ export default function FaJsonEdit({
               <Button size="small" icon={<CopyOutlined />} onClick={handleCopy} />
             </Tooltip>
           </Space>
+          <div className="fa-json-edit-search">
+            <Input.Search size="small" placeholder="搜索属性或内容" aria-label="搜索 JSON 属性或内容" allowClear
+              onSearch={(query) => setSearch({ query, index: 0 })} />
+            {search.query && <>
+              <output className="fa-json-edit-search-count" aria-live="polite">{matches.length ? `${matchIndex + 1}/${matches.length}` : '无结果'}</output>
+              <Button size="small" type="text" aria-label="上一个匹配项" title="上一个匹配项" icon={<UpOutlined />} disabled={!matches.length} onClick={() => moveSearch(-1)} />
+              <Button size="small" type="text" aria-label="下一个匹配项" title="下一个匹配项" icon={<DownOutlined />} disabled={!matches.length} onClick={() => moveSearch(1)} />
+            </>}
+          </div>
           {modeError && <span className="fa-json-edit-mode-error">{modeError}</span>}
         </div>
       )}
-      <div className="fa-json-edit-body" style={{ maxHeight }}>
+      <div ref={bodyRef} className="fa-json-edit-body" style={{ maxHeight }}>
         {body}
       </div>
     </div>

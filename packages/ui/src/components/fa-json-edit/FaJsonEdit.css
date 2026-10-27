@@ -8,22 +8,80 @@
   border: 1px solid var(--fa-border-color);
   border-radius: var(--fa-border-radius);
   overflow: hidden;
+  container-type: inline-size;
+  container-name: fa-json-edit;
 }
 
 .fa-json-edit-toolbar {
   min-height: 42px;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
   padding: 6px 8px;
   background-color: var(--fa-bg-grey);
   border-bottom: 1px solid var(--fa-border-color);
+  overflow-x: auto;
+}
+
+.fa-json-edit-tools {
+  white-space: nowrap;
 }
 
 .fa-json-edit-mode-error {
+  grid-column: 1 / -1;
   color: var(--fa-error-color, #ff4d4f);
   font-size: 12px;
+}
+
+.fa-json-edit-search {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 360px;
+  min-width: 0;
+  width: 100%;
+  justify-self: end;
+}
+
+.fa-json-edit-search > .ant-input-search {
+  flex: 1;
+  min-width: 72px;
+  width: 0;
+}
+
+.fa-json-edit-search > .ant-btn {
+  flex-shrink: 0;
+}
+
+.fa-json-edit-search-count {
+  min-width: 36px;
+  font-size: 12px;
+  text-align: center;
+  white-space: nowrap;
+  color: var(--fa-subtitle-color);
+  flex-shrink: 0;
+}
+
+@container fa-json-edit (max-width: 600px) {
+  .fa-json-edit-mode-label {
+    display: none;
+  }
+
+  .fa-json-edit-tools .ant-btn {
+    width: 24px;
+    padding-inline: 0;
+  }
+}
+
+.fa-json-edit-search-match,
+.fa-json-edit-search-active {
+  background-color: var(--fa-hover-bg);
+}
+
+.fa-json-edit-search-active {
+  outline: 1px solid var(--fa-text-color-highlight);
+  outline-offset: -1px;
 }
 
 .fa-json-edit-body {
@@ -80,7 +138,8 @@
   cursor: pointer;
 }
 
-.fa-json-edit-row-clickable:hover {
+.fa-json-edit-row:hover,
+.fa-json-edit-row:focus-within {
   background-color: var(--fa-hover-bg);
 }
 
@@ -92,6 +151,24 @@
 
 .fa-json-edit-key {
   color: #a626a4;
+}
+
+.fa-json-edit-key-button.ant-btn {
+  height: auto;
+  padding: 0;
+  border: 0;
+  color: #a626a4;
+  font: inherit;
+}
+
+.fa-json-edit-key-button:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.fa-json-edit-key-button:focus-visible {
+  outline: 1px solid var(--fa-text-color-highlight);
+  outline-offset: 2px;
 }
 
 .fa-json-edit-key-editor {
@@ -117,12 +194,10 @@
   font-size: 12px;
 }
 
-.fa-json-edit-inline-btn,
 .fa-json-edit-actions .ant-btn {
   color: var(--fa-subtitle-color);
 }
 
-.fa-json-edit-inline-btn:hover,
 .fa-json-edit-actions .ant-btn:hover {
   color: var(--fa-text-color-highlight);
 }
@@ -134,29 +209,39 @@
 
 .fa-json-edit-scalar {
   display: inline-flex;
+  flex: 1;
   align-items: center;
   gap: 6px;
   min-width: 0;
 }
 
-.fa-json-edit-scalar > .ant-input {
-  width: 260px;
+.fa-json-edit-scalar .ant-input,
+.fa-json-edit-scalar .ant-input-number {
+  font: inherit;
+  background: transparent;
 }
 
-.fa-json-edit-scalar > .ant-input-textarea {
-  width: 260px;
+.fa-json-edit-scalar .ant-input:focus,
+.fa-json-edit-scalar .ant-input-number:focus-within {
+  background-color: var(--fa-bg-color);
+  box-shadow: inset 0 -1px 0 var(--fa-text-color-highlight);
+}
+
+.fa-json-edit-scalar > .ant-input,
+.fa-json-edit-scalar > .ant-input-textarea,
+.fa-json-edit-scalar > .ant-input-number {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
 }
 
 .fa-json-edit-scalar > .ant-input-textarea textarea {
   resize: vertical;
 }
 
-.fa-json-edit-scalar > .ant-input-number {
-  width: 140px;
-}
-
-.fa-json-edit-scalar > .ant-select {
-  width: 82px;
+.fa-json-edit-scalar > .ant-dropdown-trigger {
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .fa-json-edit-null {
@@ -166,8 +251,27 @@
 
 .fa-json-edit-actions {
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   margin-left: 4px;
+}
+
+.fa-json-edit-row-control {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.fa-json-edit-row:hover .fa-json-edit-row-control,
+.fa-json-edit-row:focus-within .fa-json-edit-row-control {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (hover: none) {
+  .fa-json-edit-row-control {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 
 .fa-json-edit-truncate {
