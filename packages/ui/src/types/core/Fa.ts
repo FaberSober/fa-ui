@@ -340,6 +340,8 @@ namespace Fa {
     total: number;
     cur: number;
     error: number;
+    status?: 'RUNNING' | 'COMPLETED' | 'FAILED';
+    message?: string;
     startTime: string;
   }
 
