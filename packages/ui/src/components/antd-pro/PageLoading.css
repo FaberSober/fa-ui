@@ -1,0 +1,155 @@
+.fa-page-loading {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 160px;
+  box-sizing: border-box;
+  padding: 24px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.fa-page-loading-indicator {
+  position: relative;
+  display: grid;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  place-items: center;
+}
+
+.fa-page-loading-stars {
+  position: absolute;
+  inset: 3px;
+  overflow: hidden;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.fa-page-loading-star {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--fa-page-loading-color);
+  box-shadow: 0 0 4px color-mix(in srgb, var(--fa-page-loading-color) 45%, transparent);
+  opacity: 0;
+  animation: fa-page-loading-twinkle 10s ease-in-out infinite;
+}
+
+.fa-page-loading-orbit {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  animation: fa-page-loading-spin 2.4s linear infinite;
+}
+
+.fa-page-loading-orbit::before {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: conic-gradient(transparent, var(--fa-page-loading-color) 90deg, transparent 90deg);
+  mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1px));
+  content: '';
+}
+
+.fa-page-loading-orbit::after {
+  position: absolute;
+  top: calc(50% - 2px);
+  right: -1px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--fa-page-loading-color);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--fa-page-loading-color) 35%, transparent);
+  content: '';
+}
+
+.fa-page-loading-orbit-inner {
+  display: none;
+  inset: 10px;
+  opacity: 0.65;
+  animation-duration: 3.2s;
+  animation-direction: reverse;
+  animation-delay: -1s;
+}
+
+.fa-page-loading-orbit-inner::before {
+  background: conic-gradient(from 90deg, var(--fa-page-loading-color), transparent 140deg);
+}
+
+.fa-page-loading-orbit-inner::after {
+  top: calc(50% - 1.5px);
+  right: -0.5px;
+  width: 3px;
+  height: 3px;
+}
+
+.fa-page-loading-core {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--fa-page-loading-color) 45%, transparent), var(--fa-page-loading-color));
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--fa-page-loading-color) 6%, transparent);
+  transform: rotate(45deg);
+}
+
+.fa-page-loading-core::before {
+  position: absolute;
+  inset: -14px;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--fa-page-loading-color), transparent 70%);
+  opacity: 0.12;
+  transform: scale(0.7);
+  animation: fa-page-loading-breathe 2.8s ease-in-out infinite;
+  content: '';
+}
+
+.fa-page-loading .fa-page-loading-tip {
+  font-size: 13px;
+  line-height: 22px;
+}
+
+@keyframes fa-page-loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fa-page-loading-breathe {
+  0%, 100% {
+    opacity: 0.12;
+    transform: scale(0.7);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(1.15);
+  }
+}
+
+@keyframes fa-page-loading-twinkle {
+  0%, 45%, 85%, 100% {
+    opacity: 0;
+  }
+  60% {
+    opacity: 0.75;
+  }
+  70% {
+    opacity: 0.18;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fa-page-loading-orbit,
+  .fa-page-loading-core::before,
+  .fa-page-loading-star {
+    animation: none;
+  }
+
+  .fa-page-loading-star {
+    opacity: 0.2;
+  }
+}
