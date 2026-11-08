@@ -140,12 +140,14 @@ namespace FaEnums {
   export enum JobLogStatusEnum {
     DOING = 1, // 执行中
     DONE = 2, // 成功
+    UNCONFIRMED = 8, // 未确认
     ERROR = 9, // 失败
   }
 
   export const JOB_LOG_STATUS_MAP = {
     [JobLogStatusEnum.DOING]: '执行中',
     [JobLogStatusEnum.DONE]: '成功',
+    [JobLogStatusEnum.UNCONFIRMED]: '未确认',
     [JobLogStatusEnum.ERROR]: '失败',
   };
 
