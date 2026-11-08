@@ -332,7 +332,7 @@ export default function FaJsonEdit({
       {showToolbar && (
         <div className="fa-json-edit-toolbar">
           <Space size={4} className="fa-json-edit-tools">
-            <Tooltip title="图形编辑">
+            <Tooltip title="图形编辑" getPopupContainer={(trigger) => trigger.ownerDocument.body}>
               <Button
                 size="small"
                 aria-label="图形编辑"
@@ -343,7 +343,7 @@ export default function FaJsonEdit({
                 <span className="fa-json-edit-mode-label">图形</span>
               </Button>
             </Tooltip>
-            <Tooltip title="源文本编辑">
+            <Tooltip title="源文本编辑" getPopupContainer={(trigger) => trigger.ownerDocument.body}>
               <Button
                 size="small"
                 aria-label="源文本编辑"
@@ -354,13 +354,13 @@ export default function FaJsonEdit({
                 <span className="fa-json-edit-mode-label">源文本</span>
               </Button>
             </Tooltip>
-            <Tooltip title="格式化 JSON">
+            <Tooltip title="格式化 JSON" getPopupContainer={(trigger) => trigger.ownerDocument.body}>
               <Button size="small" icon={<FormatPainterOutlined />} disabled={parsed.status !== 'ok' || readOnly} onClick={handleFormat} />
             </Tooltip>
-            <Tooltip title="压缩 JSON">
+            <Tooltip title="压缩 JSON" getPopupContainer={(trigger) => trigger.ownerDocument.body}>
               <Button size="small" icon={<CompressOutlined />} disabled={parsed.status !== 'ok' || readOnly} onClick={handleMinify} />
             </Tooltip>
-            <Tooltip title="复制 JSON">
+            <Tooltip title="复制 JSON" getPopupContainer={(trigger) => trigger.ownerDocument.body}>
               <Button size="small" icon={<CopyOutlined />} onClick={handleCopy} />
             </Tooltip>
           </Space>
